@@ -88,12 +88,11 @@ def removeOutputFoldersForSourceFolders = { cp->
 }
 
 def addOtherProjects = { cp->
-  cp.entries.each{
-    println it.class
+  ['/github_depDetect', '/github_fxwrapper'].each{
+    cp.entries.add(
+      new org.gradle.plugins.ide.eclipse.model.SourceFolder(it, null)
+    )
   }
-  
-//  something = new org.gradle.plugins.ide.eclipse.model.SourceFolder(
-//  "/github_depDetect", null);
 }
 
 eclipse {
@@ -101,7 +100,6 @@ eclipse {
     downloadSources=true
     file  {
       whenMerged {cp->
-      println 'Delegate is ' + cp.class
         removeDuplicatedSources(cp)
         removeOutputFoldersForSourceFolders(cp)
         removeAllExcludes(cp)
