@@ -1,12 +1,10 @@
 package com.cm55.depDetect.gui;
 
-import java.util.*;
-import java.util.stream.*;
+import java.io.*;
 
 import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.depDetect.gui.settings.*;
 import com.cm55.fx.*;
-import com.cm55.fx.FxMenu.*;
 import com.cm55.fx.util.*;
 import com.google.inject.*;
 
@@ -26,7 +24,7 @@ public class MainPanel {
   public void execute(Parameters params, HostServices hostServices, FxStage stage)  {
     // データベースオープン
     try {
-      h2Data.open();
+      H2Data.create(new File(System.getProperty("user.home"), AppName.DOT_SYSTEM_NAME));
     } catch (Exception ex) {
       ex.printStackTrace();
       FxAlerts.error(null, 
