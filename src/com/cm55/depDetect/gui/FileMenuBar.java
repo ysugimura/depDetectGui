@@ -7,6 +7,7 @@ import java.util.stream.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.depDetect.gui.projects.*;
 import com.cm55.fx.*;
+import com.cm55.fx.AbstractMenu.*;
 import com.cm55.fx.FxMenu.*;
 import com.google.inject.*;
 
