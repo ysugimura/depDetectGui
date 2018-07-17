@@ -18,6 +18,8 @@ public class MainPanel {
 
   @Inject private Msg msg;
   @Inject private FileMenuBar fileMenuBar;
+  private FxSplitPane splitPane;
+  @Inject private JavaTreePanel javaTreePanel;
   @Inject private Model model;
   FxBorderPane.Ver borderPane;
   
@@ -54,9 +56,12 @@ public class MainPanel {
       
     borderPane = new FxBorderPane.Ver(
       fileMenuBar.menuBar,
-      new FxTitledBorder("test", 
-          new FxLabel("V")
-      ),
+      splitPane = new FxSplitPane.Hor(
+        new FxTitledBorder("test", 
+          javaTreePanel
+        ),
+        new FxLabel("test")
+      ).setResizeFixed(0),
       new FxLabel("C")
     );
 
@@ -72,7 +77,7 @@ public class MainPanel {
   }
   
   private void projectChanged(ModelEvent.ProjectChanged e) {
-    System.out.println("" + model.getRoot().treeString());
+    //ystem.out.println("" + model.getRoot().treeString());
   }
 
 }

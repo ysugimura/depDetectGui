@@ -14,7 +14,11 @@ public class Resources {
 //  private static final String PATH = "/com/cm55/ve/res/";
   
   //private Image iconImage = new Image(Resources.class.getResourceAsStream(PATH + "icon.png"));
-  static String style = Resources.class.getResource("stylesheet.txt").toExternalForm();
+  static final String style;
+  static {
+    style = Resources.class.getResource("stylesheet.txt").toExternalForm();
+    System.out.println(style);
+  }
   
   public static void setStyleToStage(FxStage stage) {
     Stage _stage = stage.getStage();
@@ -26,6 +30,9 @@ public class Resources {
   }
   
   private static void setStyle(Stage stage, ObservableList<String> stylesheets) {
+    
+    //stylesheets.stream().forEach(System.out::println);
+    
     stylesheets.clear();
     Application.setUserAgentStylesheet("MODENA");
     stylesheets.add(style);

@@ -27,7 +27,7 @@ public class Model {
   public void setProject(Project project) throws IOException {   
     root = TreeCreator.create(project.sourcePaths().collect(Collectors.toList()));
     this.project = project;
-    eventBus.dispatchEvent(new ModelEvent.ProjectChanged());
+    eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root));
   }
 
   public PkgNode getRoot() {

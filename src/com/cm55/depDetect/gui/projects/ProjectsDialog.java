@@ -92,7 +92,7 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
   }
 
   private void rowSelection(FxSingleSelection e) {
-    System.out.println("" + e);
+    //ystem.out.println("" + e);
     buttonsEnabled();
   }
   
