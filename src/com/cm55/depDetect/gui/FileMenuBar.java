@@ -23,7 +23,7 @@ public class FileMenuBar {
         listNode = new TreeNode("List")
       )
     );
-    projectMenu.listen(this::menuItemClicked);  
+    projectMenu.listenSelection(this::menuItemClicked);  
     menuBar = new FxMenuBar(projectMenu);    
   }
 

@@ -12,6 +12,7 @@ import com.google.inject.*;
 
 import javafx.application.*;
 import javafx.application.Application.*;
+import javafx.geometry.*;
 
 public class MainPanel {
 
@@ -62,7 +63,7 @@ public class MainPanel {
           javaTreePanel
         ),
         new FxButton("tree", e-> {
-          javaTreeMenu.show(e);
+          javaTreeMenu.show(e, Side.BOTTOM);
         })
       ).setResizeFixed(0),
       new FxLabel("C")
