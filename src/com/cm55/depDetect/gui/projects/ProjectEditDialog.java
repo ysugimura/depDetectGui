@@ -4,10 +4,9 @@ import java.io.*;
 import java.util.stream.*;
 
 import com.cm55.fx.*;
-import com.cm55.fx.FxBorderPane.*;
 import com.cm55.fx.FxTable.*;
 
-import javafx.scene.*;
+import javafx.scene.Node;
 
 /**
  * プロジェクト編集パネル

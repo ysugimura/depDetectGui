@@ -5,10 +5,9 @@ import java.util.stream.*;
 
 import com.cm55.fx.*;
 import com.cm55.fx.FxSingleSelectionModel.*;
-import com.cm55.fx.FxTable.*;
 
 import javafx.beans.property.*;
-import javafx.scene.*;
+import javafx.scene.Node;
 import javafx.scene.layout.*;
 
 /**
