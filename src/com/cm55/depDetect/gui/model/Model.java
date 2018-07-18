@@ -1,6 +1,7 @@
 package com.cm55.depDetect.gui.model;
 
 import java.io.*;
+import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
@@ -25,7 +26,10 @@ public class Model {
   }
 
   public void setProject(Project project) throws IOException {   
-    root = TreeCreator.create(project.sourcePaths().collect(Collectors.toList()));
+    List<String>list = project.sourcePaths().collect(Collectors.toList());
+    list.forEach(System.out::println);
+    
+    root = TreeCreator.create(list);
     this.project = project;
     eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root));
   }
