@@ -4,12 +4,15 @@ import com.cm55.depDetect.*;
 import com.cm55.eventBus.*;
 import com.google.inject.*;
 
+import javafx.beans.property.*;
+import javafx.beans.value.*;
+
 @Singleton
 public class GuiEvent {
 
   public EventBus bus = new EventBus();
   private PkgNode pkgNode = null;
-  private boolean descend = false;
+  public SimpleBooleanProperty descend = new SimpleBooleanProperty();
   
   public static class PackageSelection {
     public final PkgNode node;
@@ -18,17 +21,29 @@ public class GuiEvent {
       this.node = node;
       this.descend = descend;
     }
+    @Override
+    public String toString() {
+      return node.getPath() + "," + descend;
+    }
   }
-  
-  public void setDescend(boolean value) {
-    if (descend == value) return;
-    descend = value;
-    bus.dispatchEvent(new PackageSelection(pkgNode, descend));
+
+  public GuiEvent() {
+    descend.addListener(new ChangeListener<Boolean>() {
+      public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+        firePackageSelection();
+      }      
+    });
   }
   
   public void setPkgNode(PkgNode pkgNode) {
     if (this.pkgNode == pkgNode) return;
     this.pkgNode = pkgNode;
-    bus.dispatchEvent(new PackageSelection(pkgNode, descend));
+    firePackageSelection();
+  }
+
+  private void firePackageSelection() {
+    PackageSelection e = new PackageSelection(pkgNode, descend.get());
+    System.out.println("fire " + e);
+    bus.dispatchEvent(e);
   }
 }

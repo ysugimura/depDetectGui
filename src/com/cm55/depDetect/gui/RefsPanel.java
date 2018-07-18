@@ -22,14 +22,16 @@ public abstract class RefsPanel implements FxNode {
   
   protected RefsPanel(GuiEvent guiEvent, String title) {
     this.guiEvent = guiEvent;
-    titledBorder = new FxTitledBorder("循環依存一覧",
+    titledBorder = new FxTitledBorder(title,
       table = new FxTable<PkgNode>()
     );
-    table.setColumns(new FxTable.TextColumn<PkgNode>("パッケージ", t->FixedValue.w(t.getPath())));    
+    rows = table.getRows();
+    table.setColumns(new FxTable.TextColumn<PkgNode>("パッケージ", t->FixedValue.w(t.getPath())).setPrefWidth(300));    
     guiEvent.bus.listen(GuiEvent.PackageSelection.class, this::packageSelection);
   }
   
   private void packageSelection(GuiEvent.PackageSelection e) {
+    System.out.println("packageSelection " + e);
     rows.clear();
     if (e.node == null) return;    
     Refs refs = getRefs(e.node, e.descend);
@@ -48,7 +50,7 @@ public abstract class RefsPanel implements FxNode {
   public static class DepsToPanel extends RefsPanel {
     @Inject
     public DepsToPanel(GuiEvent guiEvent) {
-      super(guiEvent, "循環一覧");
+      super(guiEvent, "依存一覧");
     }
     protected Refs getRefs(PkgNode node, boolean descend) {
       return node.getDepsTo(descend);
@@ -61,7 +63,7 @@ public abstract class RefsPanel implements FxNode {
   public static class DepsFromPanel extends RefsPanel {
     @Inject
     public DepsFromPanel(GuiEvent guiEvent) {
-      super(guiEvent, "被循環一覧");
+      super(guiEvent, "被依存一覧");
     }
     protected Refs getRefs(PkgNode node, boolean descend) {
       return node.getDepsFrom(descend);

@@ -18,6 +18,7 @@ public class ProjectEditDialog extends FxOkCancelDlg<Project, Project> {
   FxBorderPane.Ver borderPane;
   FxTextField nameField;
   FxTable<String>pathTable;
+  FxObservableList<String>pathRows;
   FxSingleSelectionModel<String>selectionModel;
   FxButton addButton;
   FxButton deleteButton;
@@ -38,16 +39,24 @@ public class ProjectEditDialog extends FxOkCancelDlg<Project, Project> {
     pathTable.setColumns(
       new FxTable.TextColumn<String>("ソースパス", t->FixedValue.w(t))
     );
+    pathRows = pathTable.getRows();
     selectionModel = pathTable.getSelectionModel();  
     selectionModel.listenSelection(l->buttonsEnabled());
   }
 
+  /** ソースパスの追加 */
+  @SuppressWarnings("restriction")
   private void add(FxButton b) {
-    File newPath = new FxDirectoryChooser().setTitle("ソースパスの指定").showDialog(borderPane);    
+    String init = null;
+    if (pathRows.size() > 0) init = pathRows.get(pathRows.size() - 1);
+    FxDirectoryChooser dc = new FxDirectoryChooser().setTitle("ソースパスの指定");
+    if (init != null) dc.setInitDir(init);
+    File newPath = dc.showDialog(borderPane);    
     if (newPath == null) return;
     pathTable.getRows().add(newPath.toString());
   }
-  
+
+  /** ソースパスの削除 */
   private void delete(FxButton b) {    
     int index = selectionModel.getSelectedIndex();
     if (index < 0) return;
