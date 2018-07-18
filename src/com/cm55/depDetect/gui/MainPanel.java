@@ -85,11 +85,11 @@ public class MainPanel {
       null
     ));
     
-    FxTitledBorder refsPane = new FxTitledBorder("依存", new FxSplitPane.Ver(
+    FxNode refsPane =  new FxSplitPane.Ver(
       depsToPanel,
       depsFromPanel,
       cyclicsPanel
-    ));
+    );
     
     borderPane = new FxBorderPane.Ver(
       fileMenuBar.menuBar,

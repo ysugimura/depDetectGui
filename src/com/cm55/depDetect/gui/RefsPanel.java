@@ -5,6 +5,7 @@ import java.util.stream.*;
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.fx.*;
+import com.cm55.fx.FxSplitPane.*;
 import com.cm55.fx.FxTable.*;
 import com.google.inject.*;
 
@@ -23,7 +24,10 @@ public abstract class RefsPanel implements FxNode {
   protected RefsPanel(GuiEvent guiEvent, String title) {
     this.guiEvent = guiEvent;
     titledBorder = new FxTitledBorder(title,
+        new FxBorderPane.Hor(null,
       table = new FxTable<PkgNode>()
+      ,
+      null)
     );
     rows = table.getRows();
     table.setColumns(new FxTable.TextColumn<PkgNode>("パッケージ", t->FixedValue.w(t.getPath())).setPrefWidth(300));    
@@ -31,7 +35,7 @@ public abstract class RefsPanel implements FxNode {
   }
   
   private void packageSelection(GuiEvent.PackageSelection e) {
-    System.out.println("packageSelection " + e);
+    //ystem.out.println("packageSelection " + e);
     rows.clear();
     if (e.node == null) return;    
     Refs refs = getRefs(e.node, e.descend);
