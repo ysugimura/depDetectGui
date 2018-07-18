@@ -28,8 +28,10 @@ public class MainPanel {
   @Inject private DepsToPanel depsToPanel;
   @Inject private DepsFromPanel depsFromPanel;
   @Inject private CyclicsPanel cyclicsPanel;
+  @Inject private AllCyclicsPanel allCyclicsPanel;
   
   FxBorderPane.Ver borderPane;
+  
   
   public MainPanel() {
     // TODO Auto-generated constructor stub
@@ -84,7 +86,8 @@ public class MainPanel {
       fileMenuBar.menuBar,
       splitPane = new FxSplitPane.Hor(
         javaTreePane,
-        refsPane
+        refsPane,
+        allCyclicsPanel
       ).setResizeFixed(0),
       null
     );
@@ -97,6 +100,11 @@ public class MainPanel {
 //    beforeOpen();
     Resources.setStyleToStage(stage);
     stage.show();
+    
+    guiEvent.bus.listen(GuiEvent.PackageSelection.class,  e-> {
+      if (e.node == null) stage.setTitle("");
+      else stage.setTitle(e.node.getPath() + " --- " + e.descend);
+    });
     
   }
   
