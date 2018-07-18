@@ -9,6 +9,9 @@ import com.cm55.depDetect.gui.resources.*;
 import com.cm55.depDetect.gui.settings.*;
 import com.cm55.fx.*;
 import com.cm55.fx.util.*;
+import com.cm55.fx.winBounds.*;
+import com.cm55.miniSerial.*;
+
 import com.google.inject.*;
 
 import javafx.application.*;
@@ -29,8 +32,14 @@ public class MainPanel {
   @Inject private DepsFromPanel depsFromPanel;
   @Inject private CyclicsPanel cyclicsPanel;
   @Inject private AllCyclicsPanel allCyclicsPanel;
+  @Inject private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;
   
   FxBorderPane.Ver borderPane;
+  
+  /** このウインドウの状態セーブ */
+  @Serialized(key=985833802388795844L)
+  public static class MyWindowBounds extends WindowBounds {
+  }
   
   
   public MainPanel() {
@@ -99,6 +108,10 @@ public class MainPanel {
 //    stage.getStage().resizableProperty().setValue(Boolean.FALSE);
 //    beforeOpen();
     Resources.setStyleToStage(stage);
+    stage.setOnCloseRequest(e-> {
+      windowBoundsPersister.finish();
+    });
+    windowBoundsPersister.begin(stage, new WindowBoundsSerializer<MyWindowBounds>(MyWindowBounds.class));
     stage.show();
     
     guiEvent.bus.listen(GuiEvent.PackageSelection.class,  e-> {
