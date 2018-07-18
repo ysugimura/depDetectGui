@@ -8,7 +8,6 @@ import com.cm55.depDetect.gui.model.*;
 import com.cm55.depDetect.gui.projects.*;
 import com.cm55.fx.*;
 import com.cm55.fx.AbstractMenu.*;
-import com.cm55.fx.FxMenu.*;
 import com.google.inject.*;
 
 public class FileMenuBar {
@@ -45,8 +44,8 @@ public class FileMenuBar {
     public String getLabel(TreeNode node) {
       return node.name;
     }
-    public boolean hasChildren(TreeNode node) {
-      return node.children.length > 0;
+    public MenuItemKind getKind(TreeNode node) {
+      return (node.children.length > 0)? MenuItemKind.BRANCH:MenuItemKind.LEAF;
     }
     public Stream<TreeNode> children(TreeNode node) {
       return Arrays.stream(node.children);

@@ -5,10 +5,8 @@ import java.util.stream.*;
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.fx.*;
+import com.cm55.fx.AbstractMenu.*;
 import com.google.inject.*;
-
-import javafx.scene.*;
-import javafx.scene.Node;
 
 public class JavaTreeMenu  {
 
@@ -23,7 +21,11 @@ public class JavaTreeMenu  {
   }
   
   private void projectChanged(ModelEvent.ProjectChanged e) {
-    
+    contextMenu.set(e.root);
+  }
+  
+  public void show(FxNode node) {
+    contextMenu.show(node);
   }
   
   public static class Adapter implements FxContextMenu.Adapter<PkgNode> {
@@ -34,9 +36,10 @@ public class JavaTreeMenu  {
       return node.packageStream();
     }
     @Override
-    public boolean hasChildren(PkgNode node) {
-
-      return false;
+    public MenuItemKind getKind(PkgNode node) {
+      boolean hasChildren = node.packageCount() > 0;
+      if (hasChildren) return MenuItemKind.BRANCH;
+      return MenuItemKind.SELECTABLE_BRANCH;
     }    
   }
 }

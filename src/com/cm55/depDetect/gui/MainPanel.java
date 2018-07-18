@@ -21,6 +21,7 @@ public class MainPanel {
   private FxSplitPane splitPane;
   @Inject private JavaTreePanel javaTreePanel;
   @Inject private Model model;
+  @Inject private JavaTreeMenu javaTreeMenu;
   FxBorderPane.Ver borderPane;
   
   public MainPanel() {
@@ -60,7 +61,9 @@ public class MainPanel {
         new FxTitledBorder("test", 
           javaTreePanel
         ),
-        new FxLabel("test")
+        new FxButton("tree", e-> {
+          javaTreeMenu.show(e);
+        })
       ).setResizeFixed(0),
       new FxLabel("C")
     );
