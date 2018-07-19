@@ -40,7 +40,7 @@ public class AllCyclicsPanel implements FxNode {
     rows.clear();
     if (e.root == null) return;    
     e.root.visitPackages(VisitOrder.PRE, n-> {
-      if (n.getCyclics(false).count() > 0) rows.add(n);
+      if (n.getCyclics(false).size() > 0) rows.add(n);
     });
   }
   

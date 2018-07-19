@@ -34,6 +34,7 @@ public class MainPanel {
   @Inject private AllCyclicsPanel allCyclicsPanel;
   @Inject private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;
   @Inject private CyclicClassesPanel cyclicClassesPanel;
+  @Inject private CyclicFocusingClassPanel cyclicFocusingClassPanel;
   
   FxBorderPane.Ver borderPane;
   
@@ -79,7 +80,7 @@ public class MainPanel {
         new FxButton("tree", e-> {
           javaTreeMenu.show(e, Side.BOTTOM);
         }),
-        new FxCheckBox("Descend").bind(guiEvent.descend),
+        new FxCheckBox("Descend").bind(guiEvent.getDescendProperty()),
         null
       ),
       javaTreePanel,
@@ -98,8 +99,10 @@ public class MainPanel {
           allCyclicsPanel,
 //        javaTreePane,
         refsPane,
-        cyclicClassesPanel
-
+        new FxSplitPane.Ver(
+          cyclicClassesPanel,
+          (FxNode)cyclicFocusingClassPanel
+        )
       ).setResizeFixed(0),
       null
     );

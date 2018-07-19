@@ -12,7 +12,10 @@ public class GuiEvent {
 
   public EventBus bus = new EventBus();
   private PkgNode pkgNode = null;
-  public SimpleBooleanProperty descend = new SimpleBooleanProperty();
+  private SimpleBooleanProperty descend = new SimpleBooleanProperty();  
+  public SimpleBooleanProperty getDescendProperty() { return descend; }
+  
+  private ClsNode cyclicFocusingClass;
   
   public static class PackageSelection {
     public final PkgNode node;
@@ -27,6 +30,13 @@ public class GuiEvent {
     }
   }
 
+  public static class CyclicFocusingClassSelection {
+    public final ClsNode node;
+    private CyclicFocusingClassSelection(ClsNode node) {
+      this.node = node;
+    }
+  }
+  
   public GuiEvent() {
     descend.addListener(new ChangeListener<Boolean>() {
       public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -41,9 +51,19 @@ public class GuiEvent {
     firePackageSelection();
   }
 
+  public void setCyclicFocusingClass(ClsNode node) {
+    this.cyclicFocusingClass = node;
+    fireCyclicFocusingClassSelection();
+  }
+  
   private void firePackageSelection() {
     PackageSelection e = new PackageSelection(pkgNode, descend.get());
-    System.out.println("fire " + e);
+    //ystem.out.println("fire " + e);
+    bus.dispatchEvent(e);
+  }
+  
+  private void fireCyclicFocusingClassSelection() {
+    CyclicFocusingClassSelection e = new CyclicFocusingClassSelection(cyclicFocusingClass);
     bus.dispatchEvent(e);
   }
 }

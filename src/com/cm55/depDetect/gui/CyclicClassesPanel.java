@@ -16,6 +16,8 @@ public class CyclicClassesPanel implements FxNode {
 
   FxTitledBorder titledBorder;
   FxTable<ClsNode>classTable;
+  FxSingleSelectionModel<ClsNode> selectionModel;
+  
   FxObservableList<ClsNode>classRows;
   
   @Inject
@@ -25,6 +27,9 @@ public class CyclicClassesPanel implements FxNode {
       new FxTable.TextColumn<ClsNode>("クラス", t->FixedValue.w(t.getName())).setPrefWidth(300)
     );      
     classRows = classTable.getRows();
+    selectionModel = classTable.getSelectionModel();
+    selectionModel.listenSelection(e-> guiEvent.setCyclicFocusingClass(classTable.getSelection()));
+    
     titledBorder = new FxTitledBorder("循環参照クラス一覧", new FxJustBox(
       classTable
     ));    
@@ -41,9 +46,9 @@ public class CyclicClassesPanel implements FxNode {
     PkgNode pkgNode = e.node;
     if (pkgNode == null) return;
     Refs cyclics = pkgNode.getCyclics(false);    
-    List<ClsNode>list = pkgNode.classStream().filter(clsNode->clsNode.getDepsTo().intersects(cyclics))
+    List<ClsNode>list = pkgNode.classStream().filter(clsNode->clsNode.getDepsTo().containsAny(cyclics))
         .collect(Collectors.toList());
-    System.out.println("" + list.size());
+    //ystem.out.println("" + list.size());
     classRows.addAll(list);
   }
   
