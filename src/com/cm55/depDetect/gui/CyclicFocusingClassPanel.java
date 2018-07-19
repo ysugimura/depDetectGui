@@ -28,9 +28,9 @@ public class CyclicFocusingClassPanel implements FxNode {
     rows.clear();
     if (e.node == null) return;
     ClsNode clsNode = e.node;
-    PkgNode pkgNode = clsNode.getParent();
+    PkgNode pkgNode = clsNode.getParent();    
     rows.addAll(
-      clsNode.getDepsTo().getIntersect(clsNode.getDepsTo()).stream().collect(Collectors.toList())
+      clsNode.getDepsTo().getIntersect(pkgNode.getCyclics(false)).stream().collect(Collectors.toList())
     );
   }
 

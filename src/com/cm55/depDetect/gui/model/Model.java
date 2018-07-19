@@ -25,15 +25,24 @@ public class Model {
   public Model() {
   }
 
+  /** プロジェクトを設定する */
   public void setProject(Project project) throws IOException {   
     List<String>list = project.sourcePaths().collect(Collectors.toList());
-    list.forEach(System.out::println);
+    //list.forEach(System.out::println);
     
     root = TreeCreator.create(list);
     this.project = project;
     eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root));
   }
 
+  /** 現在の プロジェクトを更新する */
+  public void update() throws IOException {
+    if (project == null)  throw new IllegalStateException("No Current Project");
+    List<String>list = project.sourcePaths().collect(Collectors.toList());
+    root = TreeCreator.create(list);
+    eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root));
+  }
+  
   public PkgNode getRoot() {
     return root;
   }
