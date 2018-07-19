@@ -2,6 +2,7 @@ package com.cm55.depDetect.gui;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.*;
 
 import com.cm55.depDetect.gui.model.*;
@@ -10,11 +11,16 @@ import com.cm55.fx.*;
 import com.cm55.fx.AbstractMenu.*;
 import com.google.inject.*;
 
+/**
+ * ファイルメニューバー
+ * @author ysugimura
+ */
 public class FileMenuBar {
 
   @Inject private Model model;
   
   public final FxMenuBar menuBar;
+  FxProgressMessageDialog loadingDialog;
   TreeNode listNode;
   TreeNode updateNode;
   
@@ -27,26 +33,40 @@ public class FileMenuBar {
     );
     projectMenu.listenSelection(this::menuItemClicked);  
     menuBar = new FxMenuBar(projectMenu);    
+
   }
 
   void menuItemClicked(SelectionEvent<TreeNode>e) {
     javafx.scene.Node node = menuBar.node().getParent();
     if (e.node == listNode) {
-      Project project = new ProjectsDialog().showAndWait(FxNode.wrap(node), null);
-      if (project == null) return;
-      try {
-        model.setProject(project);
-      } catch (IOException ex) {
-        FxAlerts.error(menuBar,  "エラー：" + ex.getMessage());
-      }
+      projectList();
     }
     if (e.node == updateNode) {
-      try {
-        model.update();
-      } catch (Exception ex) {
-        FxAlerts.error(menuBar,  "エラー：" + ex.getMessage());
-      }
+      update();
     }
+  }
+  
+  
+  private void projectList() {
+    loadingDialog = new FxProgressMessageDialog(menuBar, "ロード中。お待ちください");
+    
+    Project project = new ProjectsDialog().showAndWait(menuBar, null);
+    if (project == null) return;
+    
+    loadingDialog.show(
+      ()-> { model.setProject(project); return null; },
+      r->{},
+      e->{  FxAlerts.error(menuBar,  "エラー：" + e.getMessage()); }
+    );
+  }
+  
+  private void update() {
+    loadingDialog = new FxProgressMessageDialog(menuBar, "ロード中。お待ちください");
+    loadingDialog.show(
+        ()-> { model.update(); return null; },
+        r->{},
+        e->{  FxAlerts.error(menuBar,  "エラー：" + e.getMessage()); }
+      );  
   }
   
   public static class NodeAdapter implements Adapter<TreeNode> {

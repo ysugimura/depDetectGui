@@ -107,7 +107,6 @@ public class MainPanel {
       null
     );
 
-    model.listen(ModelEvent.ProjectChanged.class, this::projectChanged);
     
     stage.setScene(new FxScene(borderPane));
 //    resources.setStyleToStage(stage.getStage());    
@@ -126,9 +125,6 @@ public class MainPanel {
     });
     
   }
-  
-  private void projectChanged(ModelEvent.ProjectChanged e) {
-    //ystem.out.println("" + model.getRoot().treeString());
-  }
+
 
 }
