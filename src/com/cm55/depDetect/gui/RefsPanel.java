@@ -5,7 +5,6 @@ import java.util.stream.*;
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.fx.*;
-import com.cm55.fx.FxSplitPane.*;
 import com.cm55.fx.FxTable.*;
 import com.google.inject.*;
 

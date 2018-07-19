@@ -32,7 +32,7 @@ public class MainPanel {
   @Inject private DepsFromPanel depsFromPanel;
   @Inject private CyclicsPanel cyclicsPanel;
   @Inject private AllCyclicsPanel allCyclicsPanel;
-  @Inject private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;
+  private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;
   @Inject private CyclicClassesPanel cyclicClassesPanel;
   @Inject private CyclicFocusingClassPanel cyclicFocusingClassPanel;
   
@@ -116,7 +116,9 @@ public class MainPanel {
     stage.setOnCloseRequest(e-> {
       windowBoundsPersister.finish();
     });
-    windowBoundsPersister.begin(stage, new WindowBoundsSerializer<MyWindowBounds>(MyWindowBounds.class));
+    windowBoundsPersister = new WindowBoundsPersister<>(
+        stage, new WindowBoundsSerializer<MyWindowBounds>(MyWindowBounds.class)
+    );
     stage.show();
     
     guiEvent.bus.listen(GuiEvent.PackageSelection.class,  e-> {
