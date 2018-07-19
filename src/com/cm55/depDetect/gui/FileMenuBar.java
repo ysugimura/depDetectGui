@@ -16,11 +16,13 @@ public class FileMenuBar {
   
   public final FxMenuBar menuBar;
   TreeNode listNode;
+  TreeNode updateNode;
   
   public FileMenuBar() {
     FxMenu<TreeNode> projectMenu = new FxMenu<TreeNode>(new NodeAdapter(), 
       new TreeNode("Project", 
-        listNode = new TreeNode("List")
+        listNode = new TreeNode("List"),
+        updateNode = new TreeNode("Update")
       )
     );
     projectMenu.listenSelection(this::menuItemClicked);  
@@ -35,6 +37,13 @@ public class FileMenuBar {
       try {
         model.setProject(project);
       } catch (IOException ex) {
+        FxAlerts.error(menuBar,  "エラー：" + ex.getMessage());
+      }
+    }
+    if (e.node == updateNode) {
+      try {
+        model.update();
+      } catch (Exception ex) {
         FxAlerts.error(menuBar,  "エラー：" + ex.getMessage());
       }
     }
