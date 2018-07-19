@@ -33,6 +33,7 @@ public class MainPanel {
   @Inject private CyclicsPanel cyclicsPanel;
   @Inject private AllCyclicsPanel allCyclicsPanel;
   @Inject private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;
+  @Inject private CyclicClassesPanel cyclicClassesPanel;
   
   FxBorderPane.Ver borderPane;
   
@@ -94,9 +95,11 @@ public class MainPanel {
     borderPane = new FxBorderPane.Ver(
       fileMenuBar.menuBar,
       splitPane = new FxSplitPane.Hor(
-        javaTreePane,
+          allCyclicsPanel,
+//        javaTreePane,
         refsPane,
-        allCyclicsPanel
+        cyclicClassesPanel
+
       ).setResizeFixed(0),
       null
     );

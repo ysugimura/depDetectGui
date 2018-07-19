@@ -33,7 +33,7 @@ public class AllCyclicsPanel implements FxNode {
       if (index < 0) return;
       guiEvent.setPkgNode(rows.get(index));
     });
-    titledBorder = new FxTitledBorder("循環依存パッケージ一覧", table);
+    titledBorder = new FxTitledBorder("循環依存パッケージ一覧", new FxJustBox(table));
   } 
   
   private void projectChanged(ModelEvent.ProjectChanged e) {
