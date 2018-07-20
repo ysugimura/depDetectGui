@@ -119,6 +119,7 @@ public class MainPanel {
     windowBoundsPersister = new WindowBoundsPersister<>(
         stage, new WindowBoundsSerializer<MyWindowBounds>(MyWindowBounds.class)
     );
+    stage.setTitle(System.getProperty("java.version"));
     stage.show();
     
     guiEvent.bus.listen(GuiEvent.PackageSelection.class,  e-> {

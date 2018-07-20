@@ -15,7 +15,11 @@ public class AppMain extends Application {
   public void start(Stage stage) throws Exception {
     
     // フォントの色がおかしくなる問題：
-    System.setProperty( "prism.lcdtext" , "false" );
+    try {
+      System.setProperty( "prism.lcdtext" , "false" );
+    } catch (Exception ex) {   
+      System.err.println(ex.getMessage());
+    }
     
     // コマンドラインパラメータを取得
     Parameters params = getParameters();
