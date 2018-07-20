@@ -1,6 +1,11 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+version = '0.1'
+
+def APP_NAME = 'depDetectGui'
+def FAT_JAR = 'depDetectGui.jar'
+def MAIN_CLASS = 'com.cm55.depDetect.gui.AppMain';
 
 // 全ソースがUTF-8であることを指定する
 tasks.withType(JavaCompile) {
@@ -49,6 +54,8 @@ dependencies {
   compile(group: 'com.cm55', name: 'eventBus', version: '1.1.0')
   compile(group: 'com.cm55', name: 'gsonwrapper', version: '1.0.1')
   compile(group: 'com.cm55', name: 'miniSerial', version: '1.0')
+  compile(group: 'com.cm55', name: 'fxwrapper', version: '1.5.1')
+  compile(group: 'com.cm55', name: 'depDetect', version: '1.1')
   compile group: 'com.h2database', name: 'h2', version: '1.4.193'
     
     
@@ -112,8 +119,35 @@ eclipse {
         removeDuplicatedSources(cp)
         removeOutputFoldersForSourceFolders(cp)
         removeAllExcludes(cp)
-        addOtherProjects(cp)
+        //addOtherProjects(cp)
       }
     }    
   }     
+}
+
+// fat-jarを作成する。これはテスト用に作成するもので難読化とは無関係
+task fat(type: Jar, dependsOn:jar) {
+
+  // 出力先ファイル
+  destinationDir = file('.')
+  archiveName = FAT_JAR 
+  
+  // 入力ファイル
+  from { 
+    configurations.compile.collect { zipTree(it) };
+  }
+  with jar
+  
+  // マニフェスト
+  manifest {
+    attributes 'Implementation-Title': APP_NAME, 'Implementation-Version': version
+    attributes 'Main-Class': MAIN_CLASS
+    exclude 'META-INF/DEPENDENCIES' 
+    exclude 'META-INF/LICENSE'
+    exclude 'META-INF/LICENSE.txt'   
+    exclude 'META-INF/NOTICE'     
+    exclude 'META-INF/NOTICE.txt' 
+    exclude 'META-INF/maven/**' 
+    exclude 'META-INF/services/**' 
+  }
 }
