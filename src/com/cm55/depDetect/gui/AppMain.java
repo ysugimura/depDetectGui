@@ -28,6 +28,7 @@ public class AppMain extends Application {
   
   public static void main(String[] args) {  
     
+    System.out.println("" + System.getProperty("java.version"));
 //    if (args.length == 1 && args[0].equals("-version")) {
 //      System.out.println("version:" + Version.version);
 //      System.exit(0);
