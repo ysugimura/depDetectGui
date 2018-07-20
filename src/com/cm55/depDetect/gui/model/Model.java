@@ -11,6 +11,10 @@ import com.cm55.depDetect.impl.*;
 import com.cm55.eventBus.*;
 import com.google.inject.*;
 
+/**
+ * プロジェクトモデル
+ * @author ysugimura
+ */
 @Singleton
 public class Model {
 
