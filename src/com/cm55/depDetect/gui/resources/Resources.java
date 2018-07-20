@@ -17,7 +17,7 @@ public class Resources {
   static final String style;
   static {
     style = Resources.class.getResource("stylesheet.txt").toExternalForm();
-    System.out.println(style);
+    //ystem.out.println(style);
   }
   
   public static void setStyleToStage(FxStage stage) {
