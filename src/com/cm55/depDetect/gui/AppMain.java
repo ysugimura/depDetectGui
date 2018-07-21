@@ -9,7 +9,7 @@ import javafx.application.*;
 import javafx.stage.Stage;
 
 /**
- * アプリケーションエントリポイント
+　* アプリのエントリ
  */
 public class AppMain extends Application {
 
