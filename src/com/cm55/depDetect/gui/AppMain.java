@@ -8,7 +8,11 @@ import com.google.inject.*;
 import javafx.application.*;
 import javafx.stage.Stage;
 
-
+/**
+ * アプリケーションメイン
+ * @author ysugimura
+ *
+ */
 public class AppMain extends Application {
 
   @Override
