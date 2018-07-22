@@ -1,6 +1,7 @@
 package com.cm55.depDetect.gui;
 
 import com.cm55.depDetect.*;
+import com.cm55.depDetect.gui.model.*;
 import com.cm55.eventBus.*;
 import com.google.inject.*;
 
@@ -15,11 +16,8 @@ public class GuiEvent {
   /** 参照元パッケージノード */
   private PkgNode fromPkgNode = null;
   private SimpleBooleanProperty fromPkgDescend = new SimpleBooleanProperty();    
-  public SimpleBooleanProperty getFromPkgDescendProperty() { return fromPkgDescend; }
-  
+  public SimpleBooleanProperty getFromPkgDescendProperty() { return fromPkgDescend; }  
   private PkgNode toPkgNode = null;
-  
-  private ClsNode cyclicFocusingClass;
   
   public static class FromPackageSelection {
     public final PkgNode fromPkgNode;
@@ -44,20 +42,23 @@ public class GuiEvent {
       this.toPkgNode = toPkgNode;
     }
   }
+
   
-  public static class CyclicFocusingClassSelection {
-    public final ClsNode node;
-    private CyclicFocusingClassSelection(ClsNode node) {
-      this.node = node;
-    }
-  }
-  
-  public GuiEvent() {
+  @Inject
+  public GuiEvent(Model model) {
     fromPkgDescend.addListener(new ChangeListener<Boolean>() {
       public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
         fireFromPackageSelection();
       }      
     });
+    model.listen(ModelEvent.ProjectChanged.class, this::projectChanged);
+  }
+  
+  private void projectChanged(ModelEvent.ProjectChanged e) {
+    fromPkgNode = null;
+    toPkgNode = null;
+    this.fireFromPackageSelection();
+    this.fireToPackageSelection();
   }
   
   public void setFromPkgNode(PkgNode fromPkgNode) {
@@ -69,23 +70,16 @@ public class GuiEvent {
   public void setToPkgNode(PkgNode toPkgNode) {
     if (this.toPkgNode == toPkgNode) return;
     this.toPkgNode = toPkgNode;
-    ToPackageSelection e = new ToPackageSelection(fromPkgNode, fromPkgDescend.get(), toPkgNode);
+    fireToPackageSelection();
+  }
+
+  private void fireFromPackageSelection() {
+    FromPackageSelection e = new FromPackageSelection(fromPkgNode, fromPkgDescend.get());
     bus.dispatchEvent(e);
   }
 
-  public void setCyclicFocusingClass(ClsNode node) {
-    this.cyclicFocusingClass = node;
-    fireCyclicFocusingClassSelection();
-  }
-  
-  private void fireFromPackageSelection() {
-    FromPackageSelection e = new FromPackageSelection(fromPkgNode, fromPkgDescend.get());
-    //ystem.out.println("fire " + e);
-    bus.dispatchEvent(e);
-  }
-  
-  private void fireCyclicFocusingClassSelection() {
-    CyclicFocusingClassSelection e = new CyclicFocusingClassSelection(cyclicFocusingClass);
+  private void fireToPackageSelection() {
+    ToPackageSelection e = new ToPackageSelection(fromPkgNode, fromPkgDescend.get(), toPkgNode);
     bus.dispatchEvent(e);
   }
 }

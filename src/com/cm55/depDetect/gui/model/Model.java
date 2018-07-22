@@ -11,6 +11,8 @@ import com.cm55.depDetect.impl.*;
 import com.cm55.eventBus.*;
 import com.google.inject.*;
 
+import javafx.application.*;
+
 /**
  * プロジェクトモデル
  * 
@@ -30,22 +32,35 @@ public class Model {
   public Model() {
   }
 
-  /** プロジェクトを設定する */
+  /** 
+   * プロジェクトを設定する
+   * この操作は時間がかかるのでイベントスレッド以外で実行されることに注意
+   * @param project
+   * @throws IOException
+   */
   public void setProject(Project project) throws IOException {   
     List<String>list = project.sourcePaths().collect(Collectors.toList());
     //list.forEach(System.out::println);
     
     root = TreeCreator.create(list);
     this.project = project;
-    eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root));
+    Platform.runLater(()-> {
+      eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root));
+    });
   }
 
-  /** 現在の プロジェクトを更新する */
+  /** 
+   * 現在の プロジェクトを更新する
+   * この操作は時間がかかるのでイベントスレッド以外で実行されることに注意
+   * @throws IOException
+   */
   public void update() throws IOException {
     if (project == null)  throw new IllegalStateException("No Current Project");
     List<String>list = project.sourcePaths().collect(Collectors.toList());
     root = TreeCreator.create(list);
-    eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root));
+    Platform.runLater(()-> {
+      eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root));
+    });
   }
   
   public PkgNode getRoot() {
