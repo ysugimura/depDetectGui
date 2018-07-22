@@ -11,25 +11,36 @@ import javafx.beans.value.*;
 public class GuiEvent {
 
   public EventBus bus = new EventBus();
-  private PkgNode pkgNode = null;
-  private SimpleBooleanProperty descend = new SimpleBooleanProperty();  
-  public SimpleBooleanProperty getDescendProperty() { return descend; }
+  
+  /** 参照元パッケージノード */
+  private PkgNode fromPkgNode = null;
+  private SimpleBooleanProperty fromPkgDescend = new SimpleBooleanProperty();    
+  public SimpleBooleanProperty getFromPkgDescendProperty() { return fromPkgDescend; }
+  
+  private PkgNode toPkgNode = null;
   
   private ClsNode cyclicFocusingClass;
   
-  public static class PackageSelection {
-    public final PkgNode node;
-    public final boolean descend;
-    private PackageSelection(PkgNode node, boolean descend) {
-      this.node = node;
-      this.descend = descend;
+  public static class FromPackageSelection {
+    public final PkgNode fromPkgNode;
+    public final boolean fromPkgDescend;
+    private FromPackageSelection(PkgNode fromPkgNode, boolean fromPkgDescend) {
+      this.fromPkgNode = fromPkgNode;
+      this.fromPkgDescend = fromPkgDescend;
     }
     @Override
     public String toString() {
-      return node.getPath() + "," + descend;
+      return fromPkgNode.getPath() + "," + fromPkgDescend;
     }
   }
 
+  public static class ToPackageSelection {
+    public final PkgNode toPkgNode;
+    private ToPackageSelection(PkgNode toPkgNode) {
+      this.toPkgNode = toPkgNode;
+    }
+  }
+  
   public static class CyclicFocusingClassSelection {
     public final ClsNode node;
     private CyclicFocusingClassSelection(ClsNode node) {
@@ -38,17 +49,24 @@ public class GuiEvent {
   }
   
   public GuiEvent() {
-    descend.addListener(new ChangeListener<Boolean>() {
+    fromPkgDescend.addListener(new ChangeListener<Boolean>() {
       public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-        firePackageSelection();
+        fireFromPackageSelection();
       }      
     });
   }
   
-  public void setPkgNode(PkgNode pkgNode) {
-    if (this.pkgNode == pkgNode) return;
-    this.pkgNode = pkgNode;
-    firePackageSelection();
+  public void setFromPkgNode(PkgNode fromPkgNode) {
+    if (this.fromPkgNode == fromPkgNode) return;
+    this.fromPkgNode = fromPkgNode;
+    fireFromPackageSelection();
+  }
+  
+  public void setToPkgNode(PkgNode toPkgNode) {
+    if (this.toPkgNode == toPkgNode) return;
+    this.toPkgNode = toPkgNode;
+    ToPackageSelection e = new ToPackageSelection(toPkgNode);
+    bus.dispatchEvent(e);
   }
 
   public void setCyclicFocusingClass(ClsNode node) {
@@ -56,8 +74,8 @@ public class GuiEvent {
     fireCyclicFocusingClassSelection();
   }
   
-  private void firePackageSelection() {
-    PackageSelection e = new PackageSelection(pkgNode, descend.get());
+  private void fireFromPackageSelection() {
+    FromPackageSelection e = new FromPackageSelection(fromPkgNode, fromPkgDescend.get());
     //ystem.out.println("fire " + e);
     bus.dispatchEvent(e);
   }

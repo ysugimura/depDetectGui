@@ -30,14 +30,14 @@ public abstract class RefsPanel implements FxNode {
     );
     rows = table.getRows();
     table.setColumns(new FxTable.TextColumn<PkgNode>("パッケージ", t->FixedValue.w(t.getPath())).setPrefWidth(300));    
-    guiEvent.bus.listen(GuiEvent.PackageSelection.class, this::packageSelection);
+    guiEvent.bus.listen(GuiEvent.FromPackageSelection.class, this::packageSelection);
   }
   
-  private void packageSelection(GuiEvent.PackageSelection e) {
+  private void packageSelection(GuiEvent.FromPackageSelection e) {
     //ystem.out.println("packageSelection " + e);
     rows.clear();
-    if (e.node == null) return;    
-    Refs refs = getRefs(e.node, e.descend);
+    if (e.fromPkgNode == null) return;    
+    Refs refs = getRefs(e.fromPkgNode, e.fromPkgDescend);
     rows.addAll(refs.stream().collect(Collectors.toList()));
   }
 

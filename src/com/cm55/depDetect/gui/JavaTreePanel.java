@@ -45,9 +45,9 @@ public class JavaTreePanel implements FxNode {
     model.listen(ModelEvent.ProjectChanged.class, this::projectChanged);
     
     // guiEventに対応しノード変更する。
-    guiEvent.bus.listen(GuiEvent.PackageSelection.class,  e-> {
+    guiEvent.bus.listen(GuiEvent.FromPackageSelection.class,  e-> {
       if (selfGuiEvent) return;
-      treeView.selectItem(e.node);
+      treeView.selectItem(e.fromPkgNode);
     });
   }
  
@@ -60,7 +60,7 @@ public class JavaTreePanel implements FxNode {
   private void treeItemSelection(ItemSelectionEvent<PkgNode>e) {
     selfGuiEvent = true;
     try {
-      guiEvent.setPkgNode(e.item);
+      guiEvent.setFromPkgNode(e.item);
     } finally {
       selfGuiEvent = false;
     }

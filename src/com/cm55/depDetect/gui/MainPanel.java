@@ -80,7 +80,7 @@ public class MainPanel {
         new FxButton("tree", e-> {
           javaTreeMenu.show(e, Side.BOTTOM);
         }),
-        new FxCheckBox("Descend").bind(guiEvent.getDescendProperty()),
+        new FxCheckBox("Descend").bind(guiEvent.getFromPkgDescendProperty()),
         null
       ),
       javaTreePanel,
@@ -122,9 +122,9 @@ public class MainPanel {
     stage.setTitle(System.getProperty("java.version"));
     stage.show();
     
-    guiEvent.bus.listen(GuiEvent.PackageSelection.class,  e-> {
-      if (e.node == null) stage.setTitle("");
-      else stage.setTitle(e.node.getPath() + " --- " + e.descend);
+    guiEvent.bus.listen(GuiEvent.FromPackageSelection.class,  e-> {
+      if (e.fromPkgNode == null) stage.setTitle("");
+      else stage.setTitle(e.fromPkgNode.getPath() + " --- " + e.fromPkgDescend);
     });
     
   }

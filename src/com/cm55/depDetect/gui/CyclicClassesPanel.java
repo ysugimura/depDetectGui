@@ -33,7 +33,7 @@ public class CyclicClassesPanel implements FxNode {
     titledBorder = new FxTitledBorder("循環参照クラス一覧", new FxJustBox(
       classTable
     ));    
-    guiEvent.bus.listen(GuiEvent.PackageSelection.class, this::packageSelection);
+    guiEvent.bus.listen(GuiEvent.FromPackageSelection.class, this::packageSelection);
   }
 
   /** 
@@ -41,9 +41,9 @@ public class CyclicClassesPanel implements FxNode {
    * このパッケージ中の循環依存を起こしているクラスをリストアップする。
    * @param e
    */
-  private void packageSelection(GuiEvent.PackageSelection e) {
+  private void packageSelection(GuiEvent.FromPackageSelection e) {
     classRows.clear();
-    PkgNode pkgNode = e.node;
+    PkgNode pkgNode = e.fromPkgNode;
     if (pkgNode == null) return;
     Refs cyclics = pkgNode.getCyclics(false);    
     List<ClsNode>list = pkgNode.classStream().filter(clsNode->clsNode.getDepsTo().containsAny(cyclics))

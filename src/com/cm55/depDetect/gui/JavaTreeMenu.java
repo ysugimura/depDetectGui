@@ -42,7 +42,7 @@ public class JavaTreeMenu  {
 
   /** メニューアイテム選択時にグローバルGuiEventを発行する */
   private void pkgNodeSelection(SelectionEvent<PkgNode> e) {
-    guiEvent.setPkgNode(e.node);
+    guiEvent.setFromPkgNode(e.node);
   }
 
   /** 指定ノードにメニューを表示する */
