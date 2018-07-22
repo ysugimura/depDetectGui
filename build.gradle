@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-version = '0.1'
+version = '0.2'
 
 def APP_NAME = 'depDetectGui'
 def FAT_JAR = 'depDetectGui.jar'
@@ -126,7 +126,7 @@ eclipse {
 }
 
 // fat-jarを作成する。これはテスト用に作成するもので難読化とは無関係
-task fat(type: Jar, dependsOn:jar) {
+task rel(type: Jar, dependsOn:jar) {
 
   // 出力先ファイル
   destinationDir = file('.')
