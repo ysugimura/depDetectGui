@@ -17,7 +17,7 @@ public class PackagesPanel implements FxNode {
   @SuppressWarnings("restriction")
   public PackagesPanel() {
     table = new FxTable<PkgNode>();
-    table.setColumns(new FxTable.TextColumn<PkgNode>("パッケージ", t->FixedValue.w(t.getPath())).setPrefWidth(300));
+    table.setColumns(new FxTable.TextColumn<PkgNode>("パッケージ", t->FixedValue.w(t.getPath())).setPrefWidth(600));
     rows = table.getRows();
     table.getSelectionModel().listenSelection(e-> {
       PkgNode node = null;
