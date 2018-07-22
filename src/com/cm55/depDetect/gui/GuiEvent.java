@@ -35,8 +35,12 @@ public class GuiEvent {
   }
 
   public static class ToPackageSelection {
+    public final PkgNode fromPkgNode;
+    public final boolean fromPkgDescend;
     public final PkgNode toPkgNode;
-    private ToPackageSelection(PkgNode toPkgNode) {
+    private ToPackageSelection(PkgNode fromPkgNode, boolean fromPkgDescend, PkgNode toPkgNode) {
+      this.fromPkgNode = fromPkgNode;
+      this.fromPkgDescend = fromPkgDescend;
       this.toPkgNode = toPkgNode;
     }
   }
@@ -65,7 +69,7 @@ public class GuiEvent {
   public void setToPkgNode(PkgNode toPkgNode) {
     if (this.toPkgNode == toPkgNode) return;
     this.toPkgNode = toPkgNode;
-    ToPackageSelection e = new ToPackageSelection(toPkgNode);
+    ToPackageSelection e = new ToPackageSelection(fromPkgNode, fromPkgDescend.get(), toPkgNode);
     bus.dispatchEvent(e);
   }
 

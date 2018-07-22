@@ -2,7 +2,6 @@ package com.cm55.depDetect.gui;
 
 import java.io.*;
 
-import com.cm55.depDetect.gui.RefsPanel.*;
 import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.depDetect.gui.resources.*;
@@ -11,41 +10,29 @@ import com.cm55.fx.*;
 import com.cm55.fx.util.*;
 import com.cm55.fx.winBounds.*;
 import com.cm55.miniSerial.*;
-
 import com.google.inject.*;
 
 import javafx.application.*;
 import javafx.application.Application.*;
-import javafx.geometry.*;
 
 public class MainPanel {
 
 
   @Inject private Msg msg;
   @Inject private FileMenuBar fileMenuBar;
-  private FxSplitPane splitPane;
   @Inject private GuiEvent guiEvent;
-  @Inject private JavaTreePanel javaTreePanel;
   @Inject private Model model;
-  @Inject private JavaTreeMenu javaTreeMenu;
-  @Inject private DepsToPanel depsToPanel;
-  @Inject private DepsFromPanel depsFromPanel;
-  @Inject private CyclicsPanel cyclicsPanel;
   @Inject private AllCyclicsPanel allCyclicsPanel;
-  private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;
-  @Inject private CyclicClassesPanel cyclicClassesPanel;
-  @Inject private CyclicFocusingClassPanel cyclicFocusingClassPanel;
+  @Inject private AllCyclicToPanel allCyclicToPanel;
+  @Inject private FromClassesPanel fromClassesPanel;
+  @Inject private ToClassesPanel toClassesPanel;
+  private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;  
   
   FxBorderPane.Ver borderPane;
   
   /** このウインドウの状態セーブ */
   @Serialized(key=985833802388795844L)
   public static class MyWindowBounds extends WindowBounds {
-  }
-  
-  
-  public MainPanel() {
-    // TODO Auto-generated constructor stub
   }
   
   public void execute(Parameters params, HostServices hostServices, FxStage stage)  {
@@ -75,35 +62,23 @@ public class MainPanel {
     
     FocusControlPolicy.setDefaultFocusable(false);
 
-    FxTitledBorder javaTreePane = new FxTitledBorder("パッケージツリー", new FxBorderPane.Ver(
-      new FxBorderPane.Hor(
-        new FxButton("tree", e-> {
-          javaTreeMenu.show(e, Side.BOTTOM);
-        }),
-        new FxCheckBox("Descend").bind(guiEvent.getFromPkgDescendProperty()),
-        null
-      ),
-      javaTreePanel,
-      null
-    ));
+
     
-    FxNode refsPane =  new FxSplitPane.Ver(
-      depsToPanel,
-      depsFromPanel,
-      cyclicsPanel
+    FxSplitPane.Ver leftPanel = new FxSplitPane.Ver(
+      allCyclicsPanel,
+      allCyclicToPanel
+    );
+    FxSplitPane.Ver rightPanel = new FxSplitPane.Ver(
+      fromClassesPanel,
+      toClassesPanel
     );
     
     borderPane = new FxBorderPane.Ver(
       fileMenuBar.menuBar,
-      splitPane = new FxSplitPane.Hor(
-          allCyclicsPanel,
-//        javaTreePane,
-        refsPane,
-        new FxSplitPane.Ver(
-          cyclicClassesPanel,
-          (FxNode)cyclicFocusingClassPanel
-        )
-      ).setResizeFixed(0),
+      new FxSplitPane.Hor(
+        leftPanel,
+        rightPanel
+      ),
       null
     );
 
