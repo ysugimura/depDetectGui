@@ -17,7 +17,7 @@ public class ClassesPanel implements FxNode {
   @SuppressWarnings("restriction")
   public ClassesPanel() {
     table = new FxTable<ClsNode>();
-    table.setColumns(new FxTable.TextColumn<ClsNode>("クラス", t->FixedValue.w(t.getPath())).setPrefWidth(600));
+    table.setColumns(new FxTable.TextColumn<ClsNode>("クラス", t->FixedValue.w(t.getPath())).setPrefWidth(400));
     rows = table.getRows();
     table.getSelectionModel().listenSelection(e-> {
       ClsNode node = null;
