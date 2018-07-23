@@ -43,6 +43,13 @@ public class ProjectEditDialog extends FxOkCancelDlg<Project, Project> {
     selectionModel.listenSelection(l->buttonsEnabled());
   }
 
+  @Override
+  protected boolean initialize(FxNode node) {
+    boolean r = super.initialize(node);
+    if (r) dialog.setResizable(true);
+    return r;    
+  }
+  
   /** ソースパスの追加 */
   @SuppressWarnings("restriction")
   private void add(FxButton b) {
