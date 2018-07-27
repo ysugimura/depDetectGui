@@ -6,7 +6,7 @@ import com.cm55.fx.*;
 import com.google.inject.*;
 
 /**
- * 指定された循環依存パッケージについての全循環依存先パッケージを表示する
+ * 指定された循環依存パッケージ(From)についての全循環依存先パッケージ(Tos)を表示する
  * いずれかが選択された場合には、toPkgNode選択イベントを発行する
  * @author ysugimura
  */
@@ -14,18 +14,16 @@ public class AllCyclicToPanel implements FxNode {
 
   private FxTitledBorder titledBorder;
   private PackagesPanel packagesPanel;
-  private CyclicModel guiEvent;
   
   @Inject
-  public AllCyclicToPanel(CyclicModel guiEvent) {
-    this.guiEvent = guiEvent;
-    guiEvent.bus.listen(CyclicModel.FromPackageSelection.class, this::fromPackageSelection);
-    packagesPanel = new PackagesPanel().setSelectionCallback(this::toPackageSelection);
+  public AllCyclicToPanel(CyclicModel cyclicModel) {
+    cyclicModel.bus.listen(CyclicModel.FromPkgEvent.class, this::fromPkgSelection);
+    packagesPanel = new PackagesPanel().setSelectionCallback(node->cyclicModel.setToPkgNode(node));
     titledBorder = new FxTitledBorder("循環依存先パッケージ一覧", new FxJustBox(packagesPanel));
   }
 
-  void fromPackageSelection(CyclicModel.FromPackageSelection e) {
-    if (e.fromPkgNode == null) {
+  void fromPkgSelection(CyclicModel.FromPkgEvent e) {
+    if (e.isEmpty()) {
        packagesPanel.clearRows();
        return;
     }
@@ -33,10 +31,6 @@ public class AllCyclicToPanel implements FxNode {
     // このパッケージの全循環依存先パッケージを取得する
     Refs cyclics = e.fromPkgNode.getCyclics(e.fromPkgDescend);
     packagesPanel.setRows(cyclics.stream());        
-  }
-  
-  void toPackageSelection(PkgNode node) {
-    guiEvent.setToPkgNode(node);    
   }
   
   public javafx.scene.Node node() {

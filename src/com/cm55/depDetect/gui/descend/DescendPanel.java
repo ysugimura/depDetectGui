@@ -39,7 +39,7 @@ public class DescendPanel implements FxNode  {
   public DescendPanel(Model model) {    
     table = new FxTable<Row>();
     table.setColumns(
-      new FxTable.CheckColumn<Row>("descend",  r->r.descend).setAlign(FxAlign.CENTER).setPrefWidth(50),
+      new FxTable.CheckColumn<Row>("desc",  r->r.descend).setAlign(FxAlign.CENTER).setPrefWidth(30),
       new FxTable.TextColumn<Row>("パッケージ", r->FixedValue.w(r.pkgNode.getPath())).setPrefWidth(400)
     );    
     rows = table.getRows();

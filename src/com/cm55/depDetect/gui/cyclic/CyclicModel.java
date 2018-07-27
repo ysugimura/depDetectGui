@@ -5,81 +5,91 @@ import com.cm55.depDetect.gui.model.*;
 import com.cm55.eventBus.*;
 import com.google.inject.*;
 
-import javafx.beans.property.*;
-import javafx.beans.value.*;
-
 @Singleton
 public class CyclicModel {
 
+  /** イベントバス */
   public EventBus bus = new EventBus();
+
+  /** descendセット */
+  private DescendSet descendSet;
   
-  /** 参照元パッケージノード */
+  /** 循環参照元パッケージ */
   private PkgNode fromPkgNode = null;
-  private SimpleBooleanProperty fromPkgDescend = new SimpleBooleanProperty();    
-  public SimpleBooleanProperty getFromPkgDescendProperty() { return fromPkgDescend; }  
-  private PkgNode toPkgNode = null;
+
+  /** 循環参照元パッケージのdescendフラグ */
+  private boolean fromPkgDescend;
   
-  public static class FromPackageSelection {
+  /** 循環参照先パッケージ */
+  private PkgNode toPkgNode = null;
+
+  /** 循環参照先パッケージのdescendフラグ */
+  private boolean toPkgDescend;
+  
+  @Inject
+  public CyclicModel(Model model) {
+    model.listen(ModelEvent.ProjectChanged.class, this::projectChanged);
+  }
+  
+  /**
+   * プロジェクト変更時
+   * @param e
+   */
+  private void projectChanged(ModelEvent.ProjectChanged e) {
+    this.descendSet = e.descendSet;
+    fromPkgNode = null;
+    toPkgNode = null;
+    setFromPkgNode(null);
+    setToPkgNode(null);
+  }
+
+  /** 参照元パッケージノードを指定する */
+  public void setFromPkgNode(PkgNode fromPkgNode) {
+    if (this.fromPkgNode == fromPkgNode) return;
+    this.fromPkgNode = fromPkgNode;
+    this.fromPkgDescend = descendSet.contains(fromPkgNode);
+    FromPkgEvent e = new FromPkgEvent(fromPkgNode, fromPkgDescend);
+    bus.dispatchEvent(e);
+  }
+
+  /** 参照先パッケージノードを指定する */
+  public void setToPkgNode(PkgNode toPkgNode) {
+    if (this.toPkgNode == toPkgNode) return;
+    this.toPkgNode = toPkgNode;
+    this.toPkgDescend = descendSet.contains(toPkgNode);
+    ToPkgEvent e = new ToPkgEvent(fromPkgNode, fromPkgDescend, toPkgNode, toPkgDescend);
+    bus.dispatchEvent(e);
+  }
+  
+  public static class FromPkgEvent {
     public final PkgNode fromPkgNode;
     public final boolean fromPkgDescend;
-    private FromPackageSelection(PkgNode fromPkgNode, boolean fromPkgDescend) {
+    private FromPkgEvent(PkgNode fromPkgNode, boolean fromPkgDescend) {
       this.fromPkgNode = fromPkgNode;
       this.fromPkgDescend = fromPkgDescend;
     }
     @Override
     public String toString() {
-      return fromPkgNode.getPath() + "," + fromPkgDescend;
+      return fromPkgNode.getPath();
+    }
+    public boolean isEmpty() {
+      return fromPkgNode == null;
     }
   }
 
-  public static class ToPackageSelection {
+  public static class ToPkgEvent {
     public final PkgNode fromPkgNode;
     public final boolean fromPkgDescend;
     public final PkgNode toPkgNode;
-    private ToPackageSelection(PkgNode fromPkgNode, boolean fromPkgDescend, PkgNode toPkgNode) {
+    public final boolean toPkgDescend;    
+    private ToPkgEvent(PkgNode fromPkgNode, boolean fromPkgDescend, PkgNode toPkgNode, boolean toPkgDescend) {
       this.fromPkgNode = fromPkgNode;
       this.fromPkgDescend = fromPkgDescend;
       this.toPkgNode = toPkgNode;
+      this.toPkgDescend = toPkgDescend;
     }
-  }
-
-  
-  @Inject
-  public CyclicModel(Model model) {
-    fromPkgDescend.addListener(new ChangeListener<Boolean>() {
-      public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-        fireFromPackageSelection();
-      }      
-    });
-    model.listen(ModelEvent.ProjectChanged.class, this::projectChanged);
-  }
-  
-  private void projectChanged(ModelEvent.ProjectChanged e) {
-    fromPkgNode = null;
-    toPkgNode = null;
-    this.fireFromPackageSelection();
-    this.fireToPackageSelection();
-  }
-  
-  public void setFromPkgNode(PkgNode fromPkgNode) {
-    if (this.fromPkgNode == fromPkgNode) return;
-    this.fromPkgNode = fromPkgNode;
-    fireFromPackageSelection();
-  }
-  
-  public void setToPkgNode(PkgNode toPkgNode) {
-    if (this.toPkgNode == toPkgNode) return;
-    this.toPkgNode = toPkgNode;
-    fireToPackageSelection();
-  }
-
-  private void fireFromPackageSelection() {
-    FromPackageSelection e = new FromPackageSelection(fromPkgNode, fromPkgDescend.get());
-    bus.dispatchEvent(e);
-  }
-
-  private void fireToPackageSelection() {
-    ToPackageSelection e = new ToPackageSelection(fromPkgNode, fromPkgDescend.get(), toPkgNode);
-    bus.dispatchEvent(e);
+    public boolean isEmpty() {
+      return fromPkgNode == null || toPkgNode == null;
+    }
   }
 }

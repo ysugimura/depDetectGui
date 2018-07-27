@@ -19,14 +19,14 @@ public class ToClassesPanel implements FxNode {
   public ToClassesPanel(CyclicModel guiEvent) {
     classesPanel = new ClassesPanel();
     titledBorder = new FxTitledBorder("参照先クラス", new FxJustBox(classesPanel));
-    guiEvent.bus.listen(CyclicModel.ToPackageSelection.class,  this::toPackageSelection);
+    guiEvent.bus.listen(CyclicModel.ToPkgEvent.class,  this::toPackageSelection);
   }
 
   /** 
    * 参照先側ノードが指定された。
    * @param e
    */
-  void toPackageSelection(CyclicModel.ToPackageSelection e) {
+  void toPackageSelection(CyclicModel.ToPkgEvent e) {
     if (e.toPkgNode == null) {
       classesPanel.clearRows();
       return;
