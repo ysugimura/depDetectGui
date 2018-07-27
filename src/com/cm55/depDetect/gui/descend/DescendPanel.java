@@ -1,6 +1,7 @@
 package com.cm55.depDetect.gui.descend;
 
 import java.util.*;
+import java.util.stream.*;
 
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.model.*;
@@ -36,14 +37,17 @@ public class DescendPanel implements FxNode  {
       table,
       new FxButton("clear", this::clear)
     );
-    titledBorder = new FxTitledBorder("Includes descends", new FxJustBox(borderPane));
+    titledBorder = new FxTitledBorder("みなしパッケージ", new FxJustBox(borderPane));
   }
 
+  private boolean selfEvent = false;
+  
   /** 
    * プロジェクト変更時。表示をリセットする
    * @param e
    */
   void projectChanged(ModelEvent.ProjectChanged e) {
+    if (selfEvent) return;
     descendSet = e.descendSet;
     List<Row>list = new ArrayList<>();
     e.root.visitPackages(VisitOrder.PRE, pkgNode->{
@@ -53,18 +57,45 @@ public class DescendPanel implements FxNode  {
     rows.addAll(list);
   }
 
-  /** ある行のdescendフラグをON/OFFする */
+  /** 
+   * ある行のdescendフラグをON/OFFする
+   * ONの場合、そのパッケージ以下の行を削除する。
+   * OFFの場合、そのパッケージ以下の行を復活する。
+   * @param targetRow
+   * @param on
+   */
   @SuppressWarnings("restriction")
-  private void setOn(PkgNode pkgNode, boolean on) {
-    descendSet.setOn(pkgNode, on);   
+  private void setOn(Row targetRow, boolean on) {
     
-    if (!on) return;
-    for (int i = 0; i < rows.size(); i++) {
-      Row row = rows.get(i);
-      if (!row.descend.get()) continue;
-      if (!descendSet.contains(row.pkgNode))
-        row.descend.set(false);
-    }        
+    // descendSetを操作するとイベントが発生してしまう。
+    selfEvent = true;
+    try {
+      if (!descendSet.setOn(targetRow.pkgNode, on)) return;
+    } finally {
+      selfEvent = false;
+    }
+
+    int index = rows.indexOf(targetRow);
+    if (index < 0) {
+      // ありえない!!!
+      return;
+    }
+    index++;
+    
+    // ONの場合、このパッケージ以下の行を削除する
+    if (on) {
+      Set<PkgNode>set = targetRow.pkgNode.childPackages(true).collect(Collectors.toSet());
+      while (index < rows.size()) {
+        Row r = rows.get(index);
+        if (set.contains(r.pkgNode)) rows.remove(index); 
+        else break;
+      }
+      return;
+    }
+    
+    // OFFの場合、このパッケージ以下の行を復活する
+    List<Row>list = targetRow.pkgNode.childPackages(true).map(n->new Row(n, false)).collect(Collectors.toList());
+    rows.addAll(index, list);      
   }
   
   /** 全descenフラグをOFFする */
@@ -91,9 +122,14 @@ public class DescendPanel implements FxNode  {
       descend.addListener(new ChangeListener<Boolean>() {
         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
           //ystem.out.println("changed " + oldValue + "," + newValue);
-          setOn(pkgNode, newValue);
+          setOn(Row.this, newValue);
         }  
       });
+    }
+    
+    @Override
+    public String toString() {
+      return pkgNode.getPath() + "," + descend.get();
     }
   }
   

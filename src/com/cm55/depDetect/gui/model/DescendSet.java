@@ -49,15 +49,16 @@ public class DescendSet {
    * @param pkgNode
    * @param on
    */
-  public void setOn(PkgNode pkgNode, boolean on) {
-    if (on == set.contains(pkgNode)) return;
+  public boolean setOn(PkgNode pkgNode, boolean on) {
+    if (on == set.contains(pkgNode)) return false;
     if (!on) {
       set.remove(pkgNode);
       fireEvent();
-      return;
+      return true;
     }
     internalOn(pkgNode);
     fireEvent();
+    return true;
   }
 
   /** 
