@@ -56,8 +56,7 @@ public class CyclicModel {
   public void setToPkgNode(PkgNode toPkgNode) {
     if (this.toPkgNode == toPkgNode) return;
     this.toPkgNode = toPkgNode;
-    this.toPkgDescend = descendSet.contains(toPkgNode);
-    ToPkgEvent e = new ToPkgEvent(fromPkgNode, fromPkgDescend, toPkgNode, toPkgDescend);
+    ToPkgEvent e = new ToPkgEvent(fromPkgNode, fromPkgDescend, toPkgNode);
     bus.dispatchEvent(e);
   }
   
@@ -80,16 +79,20 @@ public class CyclicModel {
   public static class ToPkgEvent {
     public final PkgNode fromPkgNode;
     public final boolean fromPkgDescend;
-    public final PkgNode toPkgNode;
-    public final boolean toPkgDescend;    
-    private ToPkgEvent(PkgNode fromPkgNode, boolean fromPkgDescend, PkgNode toPkgNode, boolean toPkgDescend) {
+    public final PkgNode toPkgNode;  
+    private ToPkgEvent(PkgNode fromPkgNode, boolean fromPkgDescend, PkgNode toPkgNode) {
       this.fromPkgNode = fromPkgNode;
       this.fromPkgDescend = fromPkgDescend;
       this.toPkgNode = toPkgNode;
-      this.toPkgDescend = toPkgDescend;
     }
     public boolean isEmpty() {
       return fromPkgNode == null || toPkgNode == null;
+    }
+    
+    @Override
+    public String toString() {
+      if (isEmpty()) return "empty";
+      return fromPkgNode.getPath() + "," + fromPkgDescend + "," + toPkgNode.getPath();
     }
   }
 }
