@@ -70,6 +70,9 @@ public class DependModel {
       this.focusPkg = focusPkg;
       this.descend = descend;
     }
+    public boolean isEmpty() {
+      return focusPkg == null;
+    }
   }
   
   /** ノードがnullの場合はリセット */
@@ -87,6 +90,10 @@ public class DependModel {
       this.focusPkg = focusPkg;
       this.descend = descend;
       this.pkgNode = pkgNode;
+    }
+    
+    public boolean isEmpty() {
+      return pkgNode == null;
     }
   }
   

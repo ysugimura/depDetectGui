@@ -22,6 +22,10 @@ public class DepsToPkgPanel implements FxNode {
   }
 
   void focusPkgChanged(DependModel.FocusPkgEvent e) {
+    if (e.isEmpty()) {
+      packagesPanel.clearRows();
+      return;
+    }
     packagesPanel.setRows(e.focusPkg.getDepsTo(e.descend).stream());
   }
   
