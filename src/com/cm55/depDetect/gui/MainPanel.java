@@ -95,7 +95,7 @@ public class MainPanel {
     windowBoundsPersister = new WindowBoundsPersister<>(
         stage, new WindowBoundsSerializer<MyWindowBounds>(MyWindowBounds.class)
     );
-    stage.setTitle(System.getProperty("java.version"));
+    stage.setTitle("depDetectGui");
     stage.show();
     
     

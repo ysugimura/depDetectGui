@@ -15,7 +15,7 @@ public class AppMain extends Application {
 
   @Override
   public void start(Stage stage) throws Exception {
-    
+        
     // フォントの色がおかしくなる問題：
     try {
       System.setProperty( "prism.lcdtext" , "false" );

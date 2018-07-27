@@ -3,8 +3,11 @@ package com.cm55.depDetect.gui.projects;
 import java.util.*;
 import java.util.stream.*;
 
+import com.cm55.depDetect.gui.settings.*;
 import com.cm55.fx.*;
 import com.cm55.fx.FxSingleSelectionModel.*;
+import com.cm55.fx.winBounds.*;
+import com.cm55.miniSerial.*;
 
 import javafx.beans.property.*;
 import javafx.scene.Node;
@@ -113,7 +116,7 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
 
   @Override
   protected String getTitle() {
-    return "Test";
+    return "プロジェクト一覧";
   }
 
   @Override
@@ -139,9 +142,27 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
     return row.project;
   }
  
+  
   @Override
   public Project showAndWait(FxNode node, Object input) {
     return super.showAndWait(node, input);
+  }
+  
+  private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;  
+  
+  @Override
+  protected void onShowing() {
+    windowBoundsPersister = new WindowBoundsPersister<>(dialog, new WindowBoundsSerializer<>(MyWindowBounds.class));
+  }
+  
+  @Override 
+  protected void onHiding() {
+    windowBoundsPersister.finish();
+    window.hide();
+  }
+    
+  @Serialized(key=1598653366578215844L)
+  public static class MyWindowBounds extends WindowBounds {
   }
   
 }

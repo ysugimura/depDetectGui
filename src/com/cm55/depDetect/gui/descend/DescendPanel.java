@@ -48,10 +48,16 @@ public class DescendPanel implements FxNode  {
    */
   void projectChanged(ModelEvent.ProjectChanged e) {
     if (selfEvent) return;
+    
     descendSet = e.descendSet;
+    
+    // 行として表示するパッケージを決定するが、その際、
+    // 1. descendモードのパッケージによって隠されているものは表示しない
+    // 2.　descendモードのパッケージは、そのフラグをONにする。
     List<Row>list = new ArrayList<>();
     e.root.visitPackages(VisitOrder.PRE, pkgNode->{
-      list.add(new Row(pkgNode, e.descendSet.contains(pkgNode)));
+      if (descendSet.isHidden(pkgNode)) return;
+      list.add(new Row(pkgNode, descendSet.contains(pkgNode)));
     });
     rows.clear();    
     rows.addAll(list);
