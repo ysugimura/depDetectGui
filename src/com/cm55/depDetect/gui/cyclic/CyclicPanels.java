@@ -7,7 +7,7 @@ import javafx.scene.*;
 
 public class CyclicPanels implements FxNode{
 
-  FxTitledBorder titledBorder;
+  FxSplitPane.Hor splitPane;
   
   @Inject
   public CyclicPanels(
@@ -24,11 +24,11 @@ public class CyclicPanels implements FxNode{
       fromClassesPanel,
       toClassesPanel
     );
-    FxSplitPane.Hor hor = new FxSplitPane.Hor(leftPanel, rightPanel);
-    titledBorder = new FxTitledBorder("Cyclics detection", hor);
+    splitPane = new FxSplitPane.Hor(leftPanel, rightPanel);
+
   }
 
   public Node node() {
-    return titledBorder.node();
+    return splitPane.node();
   }
 }

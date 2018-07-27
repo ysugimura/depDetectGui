@@ -47,7 +47,7 @@ public class Model {
     
     root = TreeCreator.create(list);
     this.project = project;
-    this.descendSet = new DescendSet();
+    this.descendSet = new DescendSet(Model.this::descendChange);
     Platform.runLater(()-> {
       eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, descendSet));
     });
@@ -68,11 +68,15 @@ public class Model {
        * 更新されたプロジェクトのノードは、現在の{@link DescendSet}とは異なるもの。
        * */
       DescendSet old = descendSet;
-      descendSet = new DescendSet(root, old);
+      descendSet = new DescendSet(Model.this::descendChange, root, old);
       eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, descendSet));
     });
   }
 
+  /** カレントのDescendSetが変更された */
+  void descendChange(DescendSet descendSet) {
+    eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, descendSet));
+  }
   
   public PkgNode getRoot() {
     return root;

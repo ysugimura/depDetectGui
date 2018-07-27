@@ -3,6 +3,7 @@ package com.cm55.depDetect.gui;
 import java.io.*;
 
 import com.cm55.depDetect.gui.cyclic.*;
+import com.cm55.depDetect.gui.depends.*;
 import com.cm55.depDetect.gui.descend.*;
 import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.depDetect.gui.model.*;
@@ -25,6 +26,7 @@ public class MainPanel {
   @Inject private GuiEvent guiEvent;
   @Inject private Model model;
   @Inject private CyclicPanels cyclicPanels;
+  @Inject private DependPanels dependPanels;
   
   @Inject private DescendPanel descendPanel;
   private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;  
@@ -65,11 +67,15 @@ public class MainPanel {
 
 
     
+    FxTabPane tabPane = new FxTabPane();
+    tabPane.add("Cyclic Dependency", cyclicPanels);
+    tabPane.add("Dependent To/From", dependPanels);
     borderPane = new FxBorderPane.Ver(
       fileMenuBar.menuBar,
       new FxSplitPane.Hor(
         descendPanel,
-        cyclicPanels
+        
+        tabPane
       ),
       null
     );
