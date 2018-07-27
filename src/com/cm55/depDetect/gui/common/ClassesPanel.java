@@ -1,4 +1,4 @@
-package com.cm55.depDetect.gui;
+package com.cm55.depDetect.gui.common;
 
 import java.util.*;
 import java.util.function.*;
@@ -8,25 +8,25 @@ import com.cm55.depDetect.*;
 import com.cm55.fx.*;
 import com.cm55.fx.FxTable.*;
 
-public class PackagesPanel implements FxNode {
+public class ClassesPanel implements FxNode {
 
-  FxTable<PkgNode>table;
-  FxObservableList<PkgNode>rows;
-  Consumer<PkgNode>selectionCallback;
+  FxTable<ClsNode>table;
+  FxObservableList<ClsNode>rows;
+  Consumer<ClsNode>selectionCallback;
   
   @SuppressWarnings("restriction")
-  public PackagesPanel() {
-    table = new FxTable<PkgNode>();
-    table.setColumns(new FxTable.TextColumn<PkgNode>("パッケージ", t->FixedValue.w(t.getPath())).setPrefWidth(400));
+  public ClassesPanel() {
+    table = new FxTable<ClsNode>();
+    table.setColumns(new FxTable.TextColumn<ClsNode>("クラス", t->FixedValue.w(t.getPath())).setPrefWidth(400));
     rows = table.getRows();
     table.getSelectionModel().listenSelection(e-> {
-      PkgNode node = null;
+      ClsNode node = null;
       if (e.value >= 0) node = rows.get(e.value);
       if (selectionCallback != null) selectionCallback.accept(node);
     });
   }
   
-  public PackagesPanel setSelectionCallback(Consumer<PkgNode>callback) {
+  public ClassesPanel setSelectionCallback(Consumer<ClsNode>callback) {
     this.selectionCallback = callback;
     return this;
   }
@@ -35,11 +35,11 @@ public class PackagesPanel implements FxNode {
     rows.clear();
   }
   
-  public void setRows(Stream<PkgNode>stream) {
+  public void setRows(Stream<ClsNode>stream) {
     setRows(stream.collect(Collectors.toList()));
   }
   
-  public void setRows(Collection<PkgNode>list) {
+  public void setRows(Collection<ClsNode>list) {
       rows.clear();
       rows.addAll(list);
   }
@@ -48,3 +48,4 @@ public class PackagesPanel implements FxNode {
     return table.node();
   }
 }
+

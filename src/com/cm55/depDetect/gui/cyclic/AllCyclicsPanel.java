@@ -1,8 +1,10 @@
-package com.cm55.depDetect.gui;
+package com.cm55.depDetect.gui.cyclic;
 
 import java.util.*;
 
 import com.cm55.depDetect.*;
+import com.cm55.depDetect.gui.*;
+import com.cm55.depDetect.gui.common.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.fx.*;
 import com.google.inject.*;
@@ -27,12 +29,12 @@ public class AllCyclicsPanel implements FxNode {
     this.guiEvent = guiEvent;
     model.listen(ModelEvent.ProjectChanged.class, this::projectChanged);
     packagesPanel = new PackagesPanel();
-    packagesPanel.table.getSelectionModel().listenSelection(e-> {
+    packagesPanel.getTable().getSelectionModel().listenSelection(e-> {
       int index = e.value;
       if (index < 0) return;
-      guiEvent.setFromPkgNode(packagesPanel.rows.get(index));
+      guiEvent.setFromPkgNode(packagesPanel.getRows().get(index));
     });
-    titledBorder = new FxTitledBorder("循環依存パッケージ一覧", new FxJustBox(packagesPanel.table));
+    titledBorder = new FxTitledBorder("循環依存パッケージ一覧", new FxJustBox(packagesPanel.getTable()));
   } 
   
   private void projectChanged(ModelEvent.ProjectChanged e) {    

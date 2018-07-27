@@ -5,6 +5,7 @@ import java.util.*;
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.fx.*;
+import com.cm55.fx.FxBorderPane.*;
 import com.cm55.fx.FxTable.*;
 import com.google.inject.*;
 
@@ -28,7 +29,7 @@ public class DescendPanel implements FxNode  {
       descend.set(on);
       descend.addListener(new ChangeListener<Boolean>() {
         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-          System.out.println("changed " + oldValue + "," + newValue);
+          //ystem.out.println("changed " + oldValue + "," + newValue);
           setOn(pkgNode, newValue);
         }  
       });
@@ -44,7 +45,12 @@ public class DescendPanel implements FxNode  {
     );    
     rows = table.getRows();
     model.listen(ModelEvent.ProjectChanged.class, this::projectChanged);
-    titledBorder = new FxTitledBorder("Includes descends", new FxJustBox(table));
+    FxBorderPane.Ver borderPane = new FxBorderPane.Ver(
+      null,
+      table,
+      new FxButton("clear", this::clear)
+    );
+    titledBorder = new FxTitledBorder("Includes descends", new FxJustBox(borderPane));
   }
 
   /** プロジェクト変更時 */
@@ -60,10 +66,6 @@ public class DescendPanel implements FxNode  {
   
   private void setOn(PkgNode pkgNode, boolean on) {
     descendSet.setOn(pkgNode, on);   
- 
-    System.out.println("test");
-    descendSet.getPackages().forEach(System.out::println);
-    
     
     if (!on) return;
     for (int i = 0; i < rows.size(); i++) {
@@ -71,8 +73,14 @@ public class DescendPanel implements FxNode  {
       if (!row.descend.get()) continue;
       if (!descendSet.contains(row.pkgNode))
         row.descend.set(false);
+    }        
+  }
+  
+  private void clear(FxButton button) {
+    descendSet.clear();
+    for (int i = 0; i < rows.size(); i++) {
+      rows.get(i).descend.set(false);
     }
-        
   }
   
   public javafx.scene.Node node() {

@@ -48,6 +48,10 @@ public class DescendSet {
     pkgNode.childPackages(true).forEach(n->set.remove(n));
   }
   
+  public void clear() {
+    set = new HashSet<>();
+  }
+  
   public Stream<String>getPackages() {
     return set.stream().map(n->n.getPath());
   }

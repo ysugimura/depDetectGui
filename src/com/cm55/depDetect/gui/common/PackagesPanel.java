@@ -1,4 +1,4 @@
-package com.cm55.depDetect.gui;
+package com.cm55.depDetect.gui.common;
 
 import java.util.*;
 import java.util.function.*;
@@ -8,25 +8,33 @@ import com.cm55.depDetect.*;
 import com.cm55.fx.*;
 import com.cm55.fx.FxTable.*;
 
-public class ClassesPanel implements FxNode {
+public class PackagesPanel implements FxNode {
 
-  FxTable<ClsNode>table;
-  FxObservableList<ClsNode>rows;
-  Consumer<ClsNode>selectionCallback;
+  FxTable<PkgNode>table;
+  FxObservableList<PkgNode>rows;
+  Consumer<PkgNode>selectionCallback;
+  
+  public FxTable<PkgNode>getTable() {
+    return table;
+  }
+  
+  public FxObservableList<PkgNode>getRows() {
+    return rows;
+  }
   
   @SuppressWarnings("restriction")
-  public ClassesPanel() {
-    table = new FxTable<ClsNode>();
-    table.setColumns(new FxTable.TextColumn<ClsNode>("クラス", t->FixedValue.w(t.getPath())).setPrefWidth(400));
+  public PackagesPanel() {
+    table = new FxTable<PkgNode>();
+    table.setColumns(new FxTable.TextColumn<PkgNode>("パッケージ", t->FixedValue.w(t.getPath())).setPrefWidth(400));
     rows = table.getRows();
     table.getSelectionModel().listenSelection(e-> {
-      ClsNode node = null;
+      PkgNode node = null;
       if (e.value >= 0) node = rows.get(e.value);
       if (selectionCallback != null) selectionCallback.accept(node);
     });
   }
   
-  public ClassesPanel setSelectionCallback(Consumer<ClsNode>callback) {
+  public PackagesPanel setSelectionCallback(Consumer<PkgNode>callback) {
     this.selectionCallback = callback;
     return this;
   }
@@ -35,11 +43,11 @@ public class ClassesPanel implements FxNode {
     rows.clear();
   }
   
-  public void setRows(Stream<ClsNode>stream) {
+  public void setRows(Stream<PkgNode>stream) {
     setRows(stream.collect(Collectors.toList()));
   }
   
-  public void setRows(Collection<ClsNode>list) {
+  public void setRows(Collection<PkgNode>list) {
       rows.clear();
       rows.addAll(list);
   }
@@ -48,4 +56,3 @@ public class ClassesPanel implements FxNode {
     return table.node();
   }
 }
-
