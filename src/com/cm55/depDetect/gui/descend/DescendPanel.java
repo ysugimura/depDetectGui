@@ -11,29 +11,16 @@ import com.google.inject.*;
 import javafx.beans.property.*;
 import javafx.beans.value.*;
 
+/**
+ * 対象とするすべてのパッケージを表示し、descendフラグをON/OFFする。
+ * @author ysugimura
+ */
 public class DescendPanel implements FxNode  {
   
   FxTitledBorder titledBorder;
   FxTable<Row>table;
   FxObservableList<Row>rows;
   DescendSet descendSet;
-
-  public class Row {
-    public final PkgNode pkgNode;
-    public final SimpleBooleanProperty descend;
-    
-    Row(PkgNode pkgNode, boolean on) {
-      this.pkgNode = pkgNode;
-      descend = new SimpleBooleanProperty(false);      
-      descend.set(on);
-      descend.addListener(new ChangeListener<Boolean>() {
-        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-          //ystem.out.println("changed " + oldValue + "," + newValue);
-          setOn(pkgNode, newValue);
-        }  
-      });
-    }
-  }
   
   @Inject
   public DescendPanel(Model model) {    
@@ -52,7 +39,10 @@ public class DescendPanel implements FxNode  {
     titledBorder = new FxTitledBorder("Includes descends", new FxJustBox(borderPane));
   }
 
-  /** プロジェクト変更時 */
+  /** 
+   * プロジェクト変更時。表示をリセットする
+   * @param e
+   */
   void projectChanged(ModelEvent.ProjectChanged e) {
     descendSet = e.descendSet;
     List<Row>list = new ArrayList<>();
@@ -62,7 +52,9 @@ public class DescendPanel implements FxNode  {
     rows.clear();    
     rows.addAll(list);
   }
-  
+
+  /** ある行のdescendフラグをON/OFFする */
+  @SuppressWarnings("restriction")
   private void setOn(PkgNode pkgNode, boolean on) {
     descendSet.setOn(pkgNode, on);   
     
@@ -75,10 +67,33 @@ public class DescendPanel implements FxNode  {
     }        
   }
   
+  /** 全descenフラグをOFFする */
+  @SuppressWarnings("restriction")
   private void clear(FxButton button) {
     descendSet.clear();
     for (int i = 0; i < rows.size(); i++) {
       rows.get(i).descend.set(false);
+    }
+  }
+
+  /** 表示行 */
+  public class Row {
+    /** パッケージノード */
+    public final PkgNode pkgNode;
+    
+    /** descendフラグ */
+    public final SimpleBooleanProperty descend;
+    
+    Row(PkgNode pkgNode, boolean on) {
+      this.pkgNode = pkgNode;
+      descend = new SimpleBooleanProperty(false);      
+      descend.set(on);
+      descend.addListener(new ChangeListener<Boolean>() {
+        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+          //ystem.out.println("changed " + oldValue + "," + newValue);
+          setOn(pkgNode, newValue);
+        }  
+      });
     }
   }
   
