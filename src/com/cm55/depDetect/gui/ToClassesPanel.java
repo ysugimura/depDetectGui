@@ -31,7 +31,7 @@ public class ToClassesPanel implements FxNode {
       return;
     }
     classesPanel.setRows(
-      e.toPkgNode.classStream().filter(clsNode->clsNode.getDepsTo().contains(e.fromPkgNode))
+      e.toPkgNode.classStream(false).filter(clsNode->clsNode.getDepsTo().contains(e.fromPkgNode))
     );
   }
   
