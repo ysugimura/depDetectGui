@@ -1,7 +1,6 @@
 package com.cm55.depDetect.gui.cyclic;
 
 import com.cm55.depDetect.*;
-import com.cm55.depDetect.gui.*;
 import com.cm55.depDetect.gui.common.*;
 import com.cm55.fx.*;
 import com.google.inject.*;
@@ -15,17 +14,17 @@ public class AllCyclicToPanel implements FxNode {
 
   private FxTitledBorder titledBorder;
   private PackagesPanel packagesPanel;
-  private GuiEvent guiEvent;
+  private CyclicModel guiEvent;
   
   @Inject
-  public AllCyclicToPanel(GuiEvent guiEvent) {
+  public AllCyclicToPanel(CyclicModel guiEvent) {
     this.guiEvent = guiEvent;
-    guiEvent.bus.listen(GuiEvent.FromPackageSelection.class, this::fromPackageSelection);
+    guiEvent.bus.listen(CyclicModel.FromPackageSelection.class, this::fromPackageSelection);
     packagesPanel = new PackagesPanel().setSelectionCallback(this::toPackageSelection);
     titledBorder = new FxTitledBorder("循環依存先パッケージ一覧", new FxJustBox(packagesPanel));
   }
 
-  void fromPackageSelection(GuiEvent.FromPackageSelection e) {
+  void fromPackageSelection(CyclicModel.FromPackageSelection e) {
     if (e.fromPkgNode == null) {
        packagesPanel.clearRows();
        return;

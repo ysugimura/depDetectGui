@@ -1,4 +1,4 @@
-package com.cm55.depDetect.gui;
+package com.cm55.depDetect.gui.cyclic;
 
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.model.*;
@@ -9,7 +9,7 @@ import javafx.beans.property.*;
 import javafx.beans.value.*;
 
 @Singleton
-public class GuiEvent {
+public class CyclicModel {
 
   public EventBus bus = new EventBus();
   
@@ -45,7 +45,7 @@ public class GuiEvent {
 
   
   @Inject
-  public GuiEvent(Model model) {
+  public CyclicModel(Model model) {
     fromPkgDescend.addListener(new ChangeListener<Boolean>() {
       public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
         fireFromPackageSelection();

@@ -5,7 +5,6 @@ import java.util.*;
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.fx.*;
-import com.cm55.fx.FxBorderPane.*;
 import com.cm55.fx.FxTable.*;
 import com.google.inject.*;
 

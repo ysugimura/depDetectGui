@@ -1,7 +1,6 @@
 package com.cm55.depDetect.gui.depends;
 
 import com.cm55.fx.*;
-import com.cm55.fx.FxSplitPane.*;
 import com.google.inject.*;
 
 import javafx.scene.*;

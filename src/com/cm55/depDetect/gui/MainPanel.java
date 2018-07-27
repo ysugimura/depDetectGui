@@ -23,7 +23,7 @@ public class MainPanel {
 
   @Inject private Msg msg;
   @Inject private FileMenuBar fileMenuBar;
-  @Inject private GuiEvent guiEvent;
+  @Inject private CyclicModel guiEvent;
   @Inject private Model model;
   @Inject private CyclicPanels cyclicPanels;
   @Inject private DependPanels dependPanels;
