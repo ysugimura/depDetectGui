@@ -95,10 +95,6 @@ public class MainPanel {
     stage.setTitle(System.getProperty("java.version"));
     stage.show();
     
-    guiEvent.bus.listen(GuiEvent.FromPackageSelection.class,  e-> {
-      if (e.fromPkgNode == null) stage.setTitle("");
-      else stage.setTitle(e.fromPkgNode.getPath() + " --- " + e.fromPkgDescend);
-    });
     
   }
 

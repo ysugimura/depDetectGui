@@ -2,7 +2,6 @@ package com.cm55.depDetect.gui.cyclic;
 
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.*;
-import com.cm55.depDetect.gui.GuiEvent.*;
 import com.cm55.depDetect.gui.common.*;
 import com.cm55.fx.*;
 import com.google.inject.*;
