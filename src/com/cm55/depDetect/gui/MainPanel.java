@@ -61,7 +61,7 @@ public class MainPanel {
     
     // Uncatched exceptions
     Thread.currentThread().setUncaughtExceptionHandler((thread, th) -> {
-//      System.out.println("VERSION:" + Version.version + "\n");
+//      ystem.out.println("VERSION:" + Version.version + "\n");
       System.out.println(GetFullStackTrace.get(th));
     });
     

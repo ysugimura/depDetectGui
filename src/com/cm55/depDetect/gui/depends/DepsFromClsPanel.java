@@ -23,7 +23,7 @@ public class DepsFromClsPanel implements FxNode {
    * @param e
    */
   void dependFromPkgChanged(DependModel.DepFromPkgEvent e) {
-    System.out.println("" + e);
+    //ystem.out.println("" + e);
     
     // 依存元パッケージがない
     if (e.isEmpty()) {
