@@ -18,7 +18,7 @@ public class DepsFromPkgPanel implements FxNode {
   public DepsFromPkgPanel(DependModel dependModel) {    
     packagesPanel = new PackagesPanel();
     packagesPanel.setSelectionCallback(pkgNode->dependModel.setDepFromPkg(pkgNode));
-    titledBorder = new FxTitledBorder("Depend-From packages", new FxJustBox(packagesPanel));
+    titledBorder = new FxTitledBorder("被依存先パッケージ", new FxJustBox(packagesPanel));
     dependModel.bus.listen(DependModel.FocusPkgEvent.class, this::focusPkgChanged);
   }
 

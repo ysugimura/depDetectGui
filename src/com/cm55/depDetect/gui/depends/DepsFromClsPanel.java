@@ -12,7 +12,7 @@ public class DepsFromClsPanel implements FxNode {
   @Inject
   public DepsFromClsPanel(DependModel dependModel) {
     classesPanel = new ClassesPanel();
-    titledBorder = new FxTitledBorder("Source classes", new FxJustBox(classesPanel));
+    titledBorder = new FxTitledBorder("ソースクラス", new FxJustBox(classesPanel));
     dependModel.bus.listen(DependModel.DepFromPkgEvent.class,  this::dependFromPkgChanged);
   }
   
