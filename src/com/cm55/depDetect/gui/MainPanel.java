@@ -9,6 +9,7 @@ import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.depDetect.gui.resources.*;
 import com.cm55.depDetect.gui.settings.*;
+import com.cm55.depDetect.gui.unknown.*;
 import com.cm55.fx.*;
 import com.cm55.fx.util.*;
 import com.cm55.fx.winBounds.*;
@@ -27,6 +28,7 @@ public class MainPanel {
   @Inject private Model model;
   @Inject private CyclicPanels cyclicPanels;
   @Inject private DependPanels dependPanels;
+  @Inject private UnknownPanels unknownPanels;
   
   @Inject private DescendPanel descendPanel;
   private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;  
@@ -68,8 +70,9 @@ public class MainPanel {
 
     
     FxTabPane tabPane = new FxTabPane();
-    tabPane.add("Cyclic Dependency", cyclicPanels);
-    tabPane.add("Dependent To/From", dependPanels);
+    tabPane.add("循環依存", cyclicPanels);
+    tabPane.add("依存先・元", dependPanels);
+    tabPane.add("外部参照",  unknownPanels);
     borderPane = new FxBorderPane.Ver(
       fileMenuBar.menuBar,
       new FxSplitPane.Hor(

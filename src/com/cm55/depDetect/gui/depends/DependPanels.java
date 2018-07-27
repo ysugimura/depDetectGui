@@ -18,7 +18,7 @@ public class DependPanels implements FxNode {
   
   @Inject 
   public DependPanels(
-      AllPackagesPanel allPackagesPanel,
+      PrunedPkgPanel allPackagesPanel,
       DepsToPkgPanel depsToPkgPanel,
       DepsToClsPanel depsToClsPanel,
       DepsFromPkgPanel depsFromPkgPanel,
