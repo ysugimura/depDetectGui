@@ -40,7 +40,7 @@ public class ProjectEditDialog extends FxOkCancelDlg<Project, Project> {
       null
     );
     pathTable.setColumns(
-      new FxTable.TextColumn<String>("ソースパス", t->FixedValue.w(t))
+      new FxTable.TextColumn<String>("ソースパス", t->FixedValue.w(t)).setPrefWidth(400)
     );
     pathRows = pathTable.getRows();
     selectionModel = pathTable.getSelectionModel();  
@@ -57,8 +57,11 @@ public class ProjectEditDialog extends FxOkCancelDlg<Project, Project> {
   /** ソースパスの追加 */
   @SuppressWarnings("restriction")
   private void add(FxButton b) {
-    String init = null;
-    if (pathRows.size() > 0) init = pathRows.get(pathRows.size() - 1);
+    File init = null;
+    if (pathRows.size() > 0) {
+      init = new File(pathRows.get(pathRows.size() - 1));
+      init = init.getParentFile();
+    }
     FxDirectoryChooser dc = new FxDirectoryChooser().setTitle("ソースパスの指定");
     if (init != null) dc.setInitDir(init);
     File newPath = dc.showDialog(borderPane);    

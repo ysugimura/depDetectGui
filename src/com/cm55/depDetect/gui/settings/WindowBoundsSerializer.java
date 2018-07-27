@@ -24,7 +24,7 @@ public class WindowBoundsSerializer<T extends WindowBounds>
 
   @Override
   public T load() {
-    return this.get();
+    return this.mayGet();
   }
 
   @Override

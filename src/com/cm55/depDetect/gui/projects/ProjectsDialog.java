@@ -61,7 +61,7 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
       ).setSpacing(5)
     );    
     projectTable.setColumns(
-      new FxTable.TextColumn<RowWrapper>("プロジェクト名", t->t.name),
+      new FxTable.TextColumn<RowWrapper>("プロジェクト名", t->t.name).setPrefWidth(200),
       new FxTable.Column<RowWrapper, Number>("パス数", t->t.paths)
     );
     selectionModel = projectTable.getSelectionModel();
