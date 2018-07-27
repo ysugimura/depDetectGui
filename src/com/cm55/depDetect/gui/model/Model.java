@@ -29,6 +29,9 @@ public class Model {
   /** 現在のルート */
   private PkgNode root;
   
+  /** 現在のDescendSet */
+  private DescendSet descendSet;
+  
   public Model() {
   }
 
@@ -44,8 +47,9 @@ public class Model {
     
     root = TreeCreator.create(list);
     this.project = project;
+    this.descendSet = new DescendSet();
     Platform.runLater(()-> {
-      eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root));
+      eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, descendSet));
     });
   }
 
@@ -59,9 +63,16 @@ public class Model {
     List<String>list = project.sourcePaths().collect(Collectors.toList());
     root = TreeCreator.create(list);
     Platform.runLater(()-> {
-      eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root));
+      /** 
+       * 更新されたプロジェクトに{@link DescendSet}を適合させる。
+       * 更新されたプロジェクトのノードは、現在の{@link DescendSet}とは異なるもの。
+       * */
+      DescendSet old = descendSet;
+      descendSet = new DescendSet(root, old);
+      eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, descendSet));
     });
   }
+
   
   public PkgNode getRoot() {
     return root;

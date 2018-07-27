@@ -2,6 +2,7 @@ package com.cm55.depDetect.gui;
 
 import java.io.*;
 
+import com.cm55.depDetect.gui.descend.*;
 import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.depDetect.gui.resources.*;
@@ -26,6 +27,7 @@ public class MainPanel {
   @Inject private AllCyclicToPanel allCyclicToPanel;
   @Inject private FromClassesPanel fromClassesPanel;
   @Inject private ToClassesPanel toClassesPanel;
+  @Inject private DescendPanel descendPanel;
   private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;  
   
   FxBorderPane.Ver borderPane;
@@ -76,6 +78,7 @@ public class MainPanel {
     borderPane = new FxBorderPane.Ver(
       fileMenuBar.menuBar,
       new FxSplitPane.Hor(
+        descendPanel,
         leftPanel,
         rightPanel
       ),
