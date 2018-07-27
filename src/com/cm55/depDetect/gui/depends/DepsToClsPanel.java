@@ -17,14 +17,14 @@ public class DepsToClsPanel implements FxNode {
   }
   
   void dependToPkgChanged(DependModel.DepToPkgEvent e) {
-    if (e.pkgNode == null) {
+    if (e.isEmpty()) {
       classesPanel.clearRows();
       return;
     }
     
     // フォーカス中のパッケージ下の全クラスについて、選択された依存先パッケージを依存先としてもつものを取得
     classesPanel.setRows(
-      e.focusPkg.childClasses(e.descend).filter(cls->cls.getDepsTo().contains(e.pkgNode))
+      e.focusPkg.childClasses(e.focusDescend).filter(cls->cls.getDepsTo().contains(e.getDepToPkg()))
     );
   }
   

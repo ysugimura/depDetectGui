@@ -81,19 +81,25 @@ public class DependModel {
     public final PkgNode focusPkg;
     
     /** 注目パッケージのdescendモード */
-    public final boolean descend;
+    public final boolean focusDescend;
     
     /** 依存・被依存パッケージ */
-    public final PkgNode pkgNode;
+    protected final PkgNode pkgNode;
     
-    DepPkgEvent(PkgNode focusPkg, boolean descend, PkgNode pkgNode) {
+    DepPkgEvent(PkgNode focusPkg, boolean focusDescend, PkgNode pkgNode) {
       this.focusPkg = focusPkg;
-      this.descend = descend;
+      this.focusDescend = focusDescend;
       this.pkgNode = pkgNode;
     }
     
     public boolean isEmpty() {
-      return pkgNode == null;
+      return focusPkg == null || pkgNode == null;
+    }
+    
+    @Override
+    public String toString() {
+      if (isEmpty()) return "empty";
+      return focusPkg.getPath() + "," + focusDescend + "," + pkgNode.getPath();
     }
   }
   
@@ -102,12 +108,18 @@ public class DependModel {
     DepToPkgEvent(PkgNode focusPkg, boolean descend, PkgNode pkgNode) {
       super(focusPkg, descend, pkgNode);
     }
+    public PkgNode getDepToPkg() {
+      return pkgNode;
+    }
   }
   
   /** 注目被依存パッケージ変更イベント */
   public static class DepFromPkgEvent extends DepPkgEvent {
     DepFromPkgEvent(PkgNode focusPkg, boolean descend, PkgNode pkgNode) {
       super(focusPkg, descend, pkgNode);
+    }
+    public PkgNode getDepFromPkg() {
+      return pkgNode;
     }
   }
 }

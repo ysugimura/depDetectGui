@@ -22,11 +22,20 @@ public class DepsFromPkgPanel implements FxNode {
     dependModel.bus.listen(DependModel.FocusPkgEvent.class, this::focusPkgChanged);
   }
 
+  /** 
+   * 着目対象パッケージが変更された
+   * このパッケージに依存するパッケージを列挙する。
+   * ただし、着目対象パッケージは枝刈りを考慮するが、依存パッケージ側は枝刈りを考慮しない。
+   * @param e
+   */
   void focusPkgChanged(DependModel.FocusPkgEvent e) {
+    // 着目対象パッケージが無い場合
     if (e.isEmpty()) {
       packagesPanel.clearRows();
       return;
     }
+    // 着目対象パッケージについて枝刈りを考慮して依存パッケージを取得する
+    // ただし依存パッケージ側は枝刈りを考慮しない。すべてのパッケージを列挙する。
     packagesPanel.setRows(e.focusPkg.getDepsFrom(e.descend).stream());
   }
   
