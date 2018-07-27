@@ -7,7 +7,9 @@ import com.google.inject.*;
 import javafx.scene.*;
 
 /**
- * 参照元ノード下にあるクラスのうち、指定された参照先ノードを参照しているクラスのリスト。
+ * 参照元ノード(from)下にあるクラスのうち、指定された参照先(to)ノードを参照しているクラスのリスト。
+ * ただし、参照元ノードはdescendである可能性があり、「下にあるクラス」とは直下とは限らず、下すべてのパッケージ内のクラスの可能性。
+ * 
  * @author ysugimura
  */
 public class FromClassesPanel implements FxNode {
@@ -27,12 +29,18 @@ public class FromClassesPanel implements FxNode {
    * @param e
    */
   void toPackageSelection(CyclicModel.ToPkgEvent e) {
-    if (e.toPkgNode == null) {
+    if (e.isEmpty()) {
       classesPanel.clearRows();
       return;
     }
+    
+    //　fromノード下のすべてのクラスのうち、toノードを参照するものをリストする。
+    // fromノードがdescendモードの場合はfromノードの子孫にあるすべてのクラスをチェックする。
+    // が、チェック対象の参照ノードとしては、指定されたノードだけでよい。
     classesPanel.setRows(
-      e.fromPkgNode.childClasses(false).filter(clsNode->clsNode.getDepsTo().contains(e.toPkgNode))
+      e.fromPkgNode.childClasses(e.fromPkgDescend).filter(clsNode-> {        
+        return clsNode.getDepsTo().contains(e.toPkgNode);
+      })
     );
   }
   

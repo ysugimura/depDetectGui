@@ -1,5 +1,6 @@
 package com.cm55.depDetect.gui.cyclic;
 
+import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.common.*;
 import com.cm55.fx.*;
 import com.google.inject.*;
@@ -27,12 +28,19 @@ public class ToClassesPanel implements FxNode {
    * @param e
    */
   void toPackageSelection(CyclicModel.ToPkgEvent e) {
-    if (e.toPkgNode == null) {
+    if (e.isEmpty()) {
       classesPanel.clearRows();
       return;
     }
+    
+    // toノード直下のクラスのみを調べ、fromノードを参照するクラスをリストする。
+    // ただし、fromノードがdescendモードの場合はfromの子孫ノードもチェック対象に含める
     classesPanel.setRows(
-      e.toPkgNode.childClasses(false).filter(clsNode->clsNode.getDepsTo().contains(e.fromPkgNode))
+      e.toPkgNode.childClasses(false).filter(clsNode-> {
+        Refs refs = clsNode.getDepsTo();
+        if (e.fromPkgDescend) refs.containsUnder(e.fromPkgNode);
+        return refs.contains(e.fromPkgNode);
+      })
     );
   }
   
