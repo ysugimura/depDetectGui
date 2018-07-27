@@ -19,8 +19,22 @@ public class DependPanels implements FxNode {
   
   @Inject 
   public DependPanels(
-      AllPackagesPanel allPackagesPanel) {
-    splitPane = new FxSplitPane.Hor(allPackagesPanel, new FxLabel("test"));
+      AllPackagesPanel allPackagesPanel,
+      DepsToPkgPanel depsToPkgPanel,
+      DepsToClsPanel depsToClsPanel,
+      DepsFromPkgPanel depsFromPkgPanel,
+      DepsFromClsPanel depsFromClsPanel) {
+    
+    splitPane = new FxSplitPane.Hor(
+      allPackagesPanel, 
+      new FxSplitPane.Ver(
+          depsToPkgPanel, depsToClsPanel
+      ),
+      new FxSplitPane.Ver(
+          depsFromPkgPanel, depsFromClsPanel
+      )
+    );
+    
   }
 
   public Node node() {
