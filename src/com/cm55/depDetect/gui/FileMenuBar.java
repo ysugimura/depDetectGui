@@ -44,11 +44,12 @@ public class FileMenuBar {
     }
   }
   
+  @Inject private Provider<ProjectsDialog>projectDialogProvider;
   
   private void projectList() {
     loadingDialog = new FxProgressMessageDialog(menuBar, "ロード中。お待ちください");
     
-    Project project = new ProjectsDialog().showAndWait(menuBar, null);
+    Project project = projectDialogProvider.get().showAndWait(menuBar, null);
     if (project == null) return;
     
     loadingDialog.show(

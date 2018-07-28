@@ -9,6 +9,7 @@ import com.cm55.fx.*;
 import com.cm55.fx.FxSingleSelectionModel.*;
 import com.cm55.fx.winBounds.*;
 import com.cm55.miniSerial.*;
+import com.google.inject.*;
 
 import javafx.beans.property.*;
 import javafx.scene.Node;
@@ -23,6 +24,7 @@ import javafx.scene.layout.*;
  */
 public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
 
+  @Inject private Model model;
   FxBorderPane.Hor borderPane;
   FxTable<RowWrapper>projectTable;
   FxSingleSelectionModel<RowWrapper>selectionModel;
@@ -47,8 +49,7 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
     
     Project getProject() {
       return project;
-    }
-    
+    }    
   }
   
   public ProjectsDialog() {
@@ -127,7 +128,7 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
 
   @Override
   protected void setInput(Object input) {    
-    projectList = new ProjectList.Serializer().get();
+    projectList = model.getProjectList();
     projectTable.getRows().clear();
     projectTable.getRows().addAll(projectList.stream().map(p->new RowWrapper(p)).collect(Collectors.toList()));
     buttonsEnabled();
@@ -136,8 +137,9 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
   @Override
   protected Project getOutput() {   
     List<Project>list = projectTable.getRows().stream().map(r->r.project).collect(Collectors.toList());
-    ProjectList projectList = new ProjectList(list);    
-    new ProjectList.Serializer().put(projectList);    
+    ProjectList projectList = new ProjectList(list);   
+    model.setProjectList(projectList);
+
     RowWrapper row = projectTable.getSelection();
     if (row == null) return null;
     return row.project;

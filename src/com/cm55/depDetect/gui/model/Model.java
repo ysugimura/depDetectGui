@@ -22,6 +22,9 @@ public class Model {
 
   public final EventBus bus = new EventBus();
   
+  /** 現在のプロジェクトリスト */
+  private ProjectList projectList;
+  
   /** 現在のプロジェクト */
   private Project project;
   
@@ -41,9 +44,18 @@ public class Model {
   private boolean focusPruned;
   public boolean getFocusPruned() { return focusPruned; }
   
-  public Model() {
+  /** プロジェクトリストを取得する　*/
+  public ProjectList getProjectList() {
+    if (projectList != null) return projectList;
+    return projectList = new ProjectList.Serializer().get();
   }
-
+  
+  /** プロジェクトリストを設定する */
+  public void setProjectList(ProjectList projectList) {
+    new ProjectList.Serializer().put(projectList);    
+    this.projectList = projectList;
+  }
+  
   /** 
    * プロジェクトを設定する
    * この操作は時間がかかるのでイベントスレッド以外で実行されることに注意

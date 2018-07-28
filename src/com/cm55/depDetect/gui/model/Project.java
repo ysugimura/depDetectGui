@@ -17,6 +17,9 @@ public class Project {
   
   /** プロジェクトの複数のソースパス。.javaソースツリーフォルダ  */
   public List<String>sourcePaths = new ArrayList<>();
+
+  /** 枝刈されたパッケージ名称集合 */
+  private Set<String>prunedPkgs;
   
   public Project() {    
   }
@@ -31,9 +34,20 @@ public class Project {
     sourcePaths = new ArrayList<>(paths);
   }
   
-  /** */
+  /** ソースフォルダのパスを取得する */
   public Stream<String>sourcePaths() {
     return sourcePaths.stream();
+  }
+  
+  /** 枝刈りパッケージ集合を取得する */
+  public Set<String>getPrunedPkgs() {
+    if (prunedPkgs != null) return prunedPkgs;
+    return new HashSet<>();
+  }
+  
+  /** 枝刈りパッケージ集合を設定する */
+  public void setPrunedPkgs(Stream<String>stream) {
+    prunedPkgs = new HashSet<>(stream.collect(Collectors.toSet()));
   }
 
   /** デバッグ用文字列化 */
