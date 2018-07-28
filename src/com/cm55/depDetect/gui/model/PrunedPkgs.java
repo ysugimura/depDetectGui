@@ -33,16 +33,15 @@ public class PrunedPkgs {
   /** 枝刈りされたパッケージノード */
   Set<PkgNode>set = new HashSet<>();
   
-  PrunedPkgs() {}
-  PrunedPkgs(PkgNode root, PrunedPkgs old) {
-    old.getPrunedPkgNames().forEach(name-> {
+  PrunedPkgs(PkgNode root, Stream<String>stream) {
+    stream.forEach(name-> {
       JavaNode found = root.findExact(name);
       if (found == null) return;
       if (found instanceof ClsNode) return;
       internalOn((PkgNode)found);
     });
   }
-  
+
   /** 
    * 指定されたパッケージノードが枝刈り状態であるかを取得する
    * @param pkgNode　調査対象のパッケージノード

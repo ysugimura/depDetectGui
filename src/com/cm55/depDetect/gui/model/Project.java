@@ -40,19 +40,27 @@ public class Project {
   }
   
   /** 枝刈りパッケージ集合を取得する */
-  public Set<String>getPrunedPkgs() {
-    if (prunedPkgs != null) return prunedPkgs;
-    return new HashSet<>();
+  public Stream<String>getPrunedPkgs() {
+    //ystem.out.println("getPrunedPkgs " + toString());
+    if (prunedPkgs != null)
+      return prunedPkgs.stream();
+    else 
+      return new HashSet<String>().stream();
   }
   
   /** 枝刈りパッケージ集合を設定する */
   public void setPrunedPkgs(Stream<String>stream) {
     prunedPkgs = new HashSet<>(stream.collect(Collectors.toSet()));
+    //ystem.out.println(prunedPkgs.size() + "setPrunedPkgs " + toString());
   }
 
   /** デバッグ用文字列化 */
   @Override
   public String toString() {
-    return name + ":" + sourcePaths.stream().collect(Collectors.joining(","));
+    String msg =  name + ":" + 
+        sourcePaths.stream().collect(Collectors.joining(",")) + ":";
+    if (prunedPkgs != null)
+        prunedPkgs.stream().collect(Collectors.joining(","));
+    return msg;
   }
 }

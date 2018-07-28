@@ -1,16 +1,10 @@
 package com.cm55.depDetect.gui.model;
 
 import java.io.*;
-import java.util.*;
-import java.util.stream.*;
-
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.model.PrunedPkgs.*;
-import com.cm55.depDetect.impl.*;
 import com.cm55.eventBus.*;
 import com.google.inject.*;
-
-import javafx.application.*;
 
 /**
  * プロジェクトモデル
@@ -52,8 +46,12 @@ public class Model {
   
   /** プロジェクトリストを設定する */
   public void setProjectList(ProjectList projectList) {
-    new ProjectList.Serializer().put(projectList);    
     this.projectList = projectList;
+  }
+  
+  /** プロジェクトリストをセーブする */
+  private void saveProjectList() {
+    new ProjectList.Serializer().put(projectList);        
   }
   
   /** 
@@ -65,10 +63,10 @@ public class Model {
   public void setProject(Project project, PkgNode root) {       
     this.project = project;
     this.root = root;
-    this.prunedPkgs = new PrunedPkgs();
+    this.prunedPkgs = new PrunedPkgs(root, project.getPrunedPkgs());
     focusPkg = null;
     focusPruned = false;
-    prunedPkgs.bus.listen(PrunedChangedEvent.class, e->fireProjectChanged());    
+    prunedPkgs.bus.listen(PrunedChangedEvent.class, e->prunedPkgChanged());    
     fireProjectChanged();    
   }
 
@@ -89,8 +87,8 @@ public class Model {
      * 更新されたプロジェクトのノードは、現在の{@link PrunedPkgs}とは異なるもの。
      * */
     PrunedPkgs old = prunedPkgs;
-    prunedPkgs = new PrunedPkgs(root, old);
-    prunedPkgs.bus.listen(PrunedChangedEvent.class, e->fireProjectChanged());
+    prunedPkgs = new PrunedPkgs(root, old.getPrunedPkgNames());
+    prunedPkgs.bus.listen(PrunedChangedEvent.class, e->prunedPkgChanged());
     focusPkg = null;
     focusPruned = false;
     fireProjectChanged();    
@@ -104,9 +102,17 @@ public class Model {
     firePkgFocused();
   }
 
+  /** PrunedPkgsが変更された */
+  private void prunedPkgChanged() {
+    //ystem.out.println("prunedPkgChanged");
+    project.setPrunedPkgs(prunedPkgs.getPrunedPkgNames());
+    saveProjectList();
+    fireProjectChanged();
+  }
+  
   /** プロジェクト変更イベントを発行する */
   private void fireProjectChanged() {
-    System.out.println("fireProjectChanged");
+    //ystem.out.println("fireProjectChanged");
     bus.dispatchEvent(new ModelEvent.ProjectChanged(root, prunedPkgs));
     this.focusPkg = null;
     this.focusPruned = false;
@@ -115,7 +121,7 @@ public class Model {
   
   /** フォーカスパッケージ変更イベントを発行する　*/
   private void firePkgFocused() {
-    System.out.println("firePkgFocused " + focusPkg + "," + focusPruned);
+    //ystem.out.println("firePkgFocused " + focusPkg + "," + focusPruned);
     bus.dispatchEvent(new ModelEvent.PkgFocused(focusPkg, focusPruned));    
   }
 }
