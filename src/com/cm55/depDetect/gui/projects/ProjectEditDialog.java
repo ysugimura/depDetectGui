@@ -3,7 +3,7 @@ package com.cm55.depDetect.gui.projects;
 import java.io.*;
 import java.util.stream.*;
 
-import com.cm55.depDetect.gui.projects.ProjectsDialog.*;
+import com.cm55.depDetect.gui.model.*;
 import com.cm55.depDetect.gui.settings.*;
 import com.cm55.fx.*;
 import com.cm55.fx.FxTable.*;

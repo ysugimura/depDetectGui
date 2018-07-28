@@ -7,7 +7,6 @@ import java.util.stream.*;
 
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.model.PrunedPkgs.*;
-import com.cm55.depDetect.gui.projects.*;
 import com.cm55.depDetect.impl.*;
 import com.cm55.eventBus.*;
 import com.google.inject.*;
@@ -30,8 +29,8 @@ public class Model {
   /** 現在のルート */
   private PkgNode root;
   
-  /** 現在のDescendSet */
-  private PrunedPkgs descendSet;
+  /** 現在の枝刈り集合 */
+  private PrunedPkgs prunedPkgs;
   
   public Model() {
   }
@@ -48,10 +47,10 @@ public class Model {
     
     root = TreeCreator.create(list);
     this.project = project;
-    this.descendSet = new PrunedPkgs();
-    descendSet.bus.listen(PrunedChangedEvent.class,  this::descendChange);
+    this.prunedPkgs = new PrunedPkgs();
+    prunedPkgs.bus.listen(PrunedChangedEvent.class,  this::descendChange);
     Platform.runLater(()-> {
-      eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, descendSet));
+      eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, prunedPkgs));
     });
   }
 
@@ -69,10 +68,10 @@ public class Model {
        * 更新されたプロジェクトに{@link DescendSet}を適合させる。
        * 更新されたプロジェクトのノードは、現在の{@link DescendSet}とは異なるもの。
        * */
-      PrunedPkgs old = descendSet;
-      descendSet = new PrunedPkgs(root, old);
-      descendSet.bus.listen(PrunedChangedEvent.class, this::descendChange);
-      eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, descendSet));
+      PrunedPkgs old = prunedPkgs;
+      prunedPkgs = new PrunedPkgs(root, old);
+      prunedPkgs.bus.listen(PrunedChangedEvent.class, this::descendChange);
+      eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, prunedPkgs));
     });
   }
 

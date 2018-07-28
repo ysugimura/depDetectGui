@@ -1,7 +1,6 @@
 package com.cm55.depDetect.gui.model;
 
 import java.util.*;
-import java.util.function.*;
 import java.util.stream.*;
 
 import com.cm55.depDetect.*;

@@ -1,4 +1,4 @@
-package com.cm55.depDetect.gui.projects;
+package com.cm55.depDetect.gui.model;
 
 import java.util.*;
 import java.util.stream.*;
@@ -12,8 +12,11 @@ import com.cm55.miniSerial.*;
 @Serialized(key=3236454494238683284L)
 public class Project {
 
-  String name = "";
-  List<String>sourcePaths = new ArrayList<>();
+  /** プロジェクトの名称 */
+  public String name = "";
+  
+  /** プロジェクトの複数のソースパス。.javaソースツリーフォルダ  */
+  public List<String>sourcePaths = new ArrayList<>();
   
   public Project() {    
   }
@@ -28,6 +31,7 @@ public class Project {
     sourcePaths = new ArrayList<>(paths);
   }
   
+  /** */
   public Stream<String>sourcePaths() {
     return sourcePaths.stream();
   }

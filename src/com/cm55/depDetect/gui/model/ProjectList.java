@@ -1,4 +1,4 @@
-package com.cm55.depDetect.gui.projects;
+package com.cm55.depDetect.gui.model;
 
 import java.util.*;
 import java.util.stream.*;
