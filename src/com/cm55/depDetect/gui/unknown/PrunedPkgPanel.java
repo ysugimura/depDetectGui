@@ -22,7 +22,7 @@ public class PrunedPkgPanel implements FxNode {
     packagesPanel = new PackagesPanel();
     packagesPanel.setSelectionCallback(node->unknownModel.setFocusPkg(node));
     titledBorder = new FxTitledBorder("対象パッケージ", new FxJustBox(packagesPanel));
-    model.listen(ModelEvent.ProjectChanged.class,  this::projectChanged);    
+    model.bus.listen(ModelEvent.ProjectChanged.class,  this::projectChanged);    
   }
   
   void projectChanged(ModelEvent.ProjectChanged e) {

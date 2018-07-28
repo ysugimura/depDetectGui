@@ -23,7 +23,9 @@ public class AllPkgsPanel implements FxNode  {
   FxTable<Row>table;
   FxObservableList<Row>rows;
   PrunedPkgs prunedPkgs;
+  @Inject private Model model;
   
+  @SuppressWarnings("restriction")
   @Inject
   public AllPkgsPanel(Model model) {    
     table = new FxTable<Row>();
@@ -32,7 +34,13 @@ public class AllPkgsPanel implements FxNode  {
       new FxTable.TextColumn<Row>("パッケージ", r->FixedValue.w(r.pkgNode.getPath())).setPrefWidth(400)
     );    
     rows = table.getRows();
-    model.listen(ModelEvent.ProjectChanged.class, this::projectChanged);
+    table.getSelectionModel().listenSelection(e-> {
+      if (e.value >= 0) 
+        rowSelection(rows.get(e.value));
+      else 
+        rowSelection(null);
+    });
+    model.bus.listen(ModelEvent.ProjectChanged.class, this::projectChanged);
     FxBorderPane.Ver borderPane = new FxBorderPane.Ver(
       null,
       table,
@@ -41,6 +49,11 @@ public class AllPkgsPanel implements FxNode  {
     titledBorder = new FxTitledBorder("全パッケージ", new FxJustBox(borderPane));
   }
 
+  /** 行選択時 */
+  private void rowSelection(Row row) {
+    model.setFocusPkg(row != null? row.pkgNode:null);
+  }
+  
   private boolean selfEvent = false;
   
   /** 
@@ -82,27 +95,31 @@ public class AllPkgsPanel implements FxNode  {
       selfEvent = false;
     }
 
-    int index = rows.indexOf(targetRow);
-    if (index < 0) {
+    int targetIndex = rows.indexOf(targetRow);
+    if (targetIndex < 0) {
       // ありえない!!!
       return;
     }
-    index++;
+    int nextIndex = targetIndex + 1;
     
     // ONの場合、このパッケージ以下の行を削除する
     if (on) {
       Set<PkgNode>set = targetRow.pkgNode.childPackages(true).collect(Collectors.toSet());
-      while (index < rows.size()) {
-        Row r = rows.get(index);
-        if (set.contains(r.pkgNode)) rows.remove(index); 
+      while (nextIndex < rows.size()) {
+        Row r = rows.get(nextIndex);
+        if (set.contains(r.pkgNode)) rows.remove(nextIndex); 
         else break;
       }
+      table.getSelectionModel().select(targetIndex);
+      model.setFocusPkg(targetRow.pkgNode);
       return;
     }
     
     // OFFの場合、このパッケージ以下の行を復活する
     List<Row>list = targetRow.pkgNode.childPackages(true).map(n->new Row(n, false)).collect(Collectors.toList());
-    rows.addAll(index, list);      
+    rows.addAll(nextIndex, list);
+    table.getSelectionModel().select(targetIndex);
+    model.setFocusPkg(targetRow.pkgNode);
   }
   
   /** 全descenフラグをOFFする */

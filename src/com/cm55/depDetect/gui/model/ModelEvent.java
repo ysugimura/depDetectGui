@@ -11,14 +11,18 @@ public class ModelEvent {
     ProjectChanged(PkgNode root, PrunedPkgs prunedPkgs) {
       this.root = root;
       this.prunedPkgs = prunedPkgs;
+
     }
+
   }
 
   /** フォーカスパッケージ変更イベント */
   public static class PkgFocused extends ModelEvent{
     public final PkgNode focusPkg;
-    PkgFocused(PkgNode focusPkg) {
+    public final boolean focusPruned;
+    PkgFocused(PkgNode focusPkg, boolean focusPruned) {
       this.focusPkg = focusPkg;
+      this.focusPruned = focusPruned;
     }
   }
 }

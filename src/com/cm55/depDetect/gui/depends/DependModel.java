@@ -11,15 +11,10 @@ import com.google.inject.*;
  */
 @Singleton
 public class DependModel {
-
-  EventBus bus = new EventBus();
-  private PrunedPkgs descendSet;
   
-  /** 注目するパッケージ */
-  private PkgNode focusPkg;
-
-  /** 注目パッケージのdescend */
-  private boolean focusDescend;
+  EventBus bus = new EventBus();
+  
+  private Model model;
   
   /** 注目パッケージの依存先パッケージ中の単一パッケージ */
   private PkgNode depToPkg;
@@ -29,37 +24,26 @@ public class DependModel {
   
   @Inject
   public DependModel(Model model) {
-    model.listen(ModelEvent.ProjectChanged.class,  this::projectChanged);
-  }
-  
-  /** プロジェクト変更時 */
-  private void projectChanged(ModelEvent.ProjectChanged e) {
-    descendSet = e.prunedPkgs;
-    setFocusPkg(null);
-  }
-
-  /** 注目するパッケージを設定する。依存先、被依存先パッケージをリセット */
-  public void setFocusPkg(PkgNode pkgNode) {
-    if (focusPkg == pkgNode) return;
-    focusPkg = pkgNode;
-    focusDescend = descendSet.contains(focusPkg);
-    bus.dispatchEvent(new FocusPkgEvent(focusPkg, focusDescend));
-    setDepToPkg(null);
-    setDepFromPkg(null);
+    this.model = model;
+    model.bus.listen(ModelEvent.PkgFocused.class,  e-> {
+      bus.dispatchEvent(new FocusPkgEvent(e.focusPkg, e.focusPruned));
+      setDepToPkg(null);
+      setDepFromPkg(null);
+    });
   }
   
   /** 注目する依存先パッケージを通知する */
   public void setDepToPkg(PkgNode pkgNode) {
     if (depToPkg == pkgNode) return;
     depToPkg = pkgNode;
-    bus.dispatchEvent(new DepToPkgEvent(focusPkg, focusDescend, depToPkg));
+    bus.dispatchEvent(new DepToPkgEvent(model.getFocusPkg(), model.getFocusPruned(), depToPkg));
   }
   
   /** 注目する被依存先パッケージを通知する */
   public void setDepFromPkg(PkgNode pkgNode) {
     if (depFromPkg == pkgNode) return;
     depFromPkg = pkgNode;
-    bus.dispatchEvent(new DepFromPkgEvent(focusPkg, focusDescend, depFromPkg));
+    bus.dispatchEvent(new DepFromPkgEvent(model.getFocusPkg(), model.getFocusPruned(), depFromPkg));
   }
 
   /** フォーカス対象パッケージの変更イベント */

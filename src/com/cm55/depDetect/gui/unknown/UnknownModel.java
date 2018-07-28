@@ -14,7 +14,7 @@ public class UnknownModel {
   
   @Inject 
   public UnknownModel(Model model) {
-    model.listen(ModelEvent.ProjectChanged.class, this::reset);
+    model.bus.listen(ModelEvent.ProjectChanged.class, this::reset);
   }
 
   private void reset(ModelEvent.ProjectChanged e) {

@@ -28,7 +28,7 @@ public class CyclicModel {
   
   @Inject
   public CyclicModel(Model model) {
-    model.listen(ModelEvent.ProjectChanged.class, this::projectChanged);
+    model.bus.listen(ModelEvent.ProjectChanged.class, this::projectChanged);
   }
   
   /**

@@ -2,7 +2,6 @@ package com.cm55.depDetect.gui.model;
 
 import java.io.*;
 import java.util.*;
-import java.util.function.*;
 import java.util.stream.*;
 
 import com.cm55.depDetect.*;
@@ -21,16 +20,26 @@ import javafx.application.*;
 @Singleton
 public class Model {
 
-  private EventBus eventBus = new EventBus();
+  public final EventBus bus = new EventBus();
   
   /** 現在のプロジェクト */
   private Project project;
   
   /** 現在のルート */
   private PkgNode root;
+  public PkgNode getRoot() { return root; }
   
   /** 現在の枝刈り集合 */
   private PrunedPkgs prunedPkgs;
+  public PrunedPkgs getPrunedPkgs() { return prunedPkgs; }
+  
+  /** 現在の着目パッケージノード */
+  private PkgNode focusPkg;
+  public PkgNode getFocusPkg() { return focusPkg; }
+  
+  /** 現在の着目パッケージノードの枝刈り状況 */
+  private boolean focusPruned;
+  public boolean getFocusPruned() { return focusPruned; }
   
   public Model() {
   }
@@ -42,15 +51,15 @@ public class Model {
    * @throws IOException
    */
   public void setProject(Project project) throws IOException {   
-    List<String>list = project.sourcePaths().collect(Collectors.toList());
-    //list.forEach(System.out::println);
-    
+    List<String>list = project.sourcePaths().collect(Collectors.toList());    
     root = TreeCreator.create(list);
     this.project = project;
     this.prunedPkgs = new PrunedPkgs();
-    prunedPkgs.bus.listen(PrunedChangedEvent.class,  this::prunedChanged);
+    focusPkg = null;
+    focusPruned = false;
+    prunedPkgs.bus.listen(PrunedChangedEvent.class, e->fireProjectChanged());
     Platform.runLater(()-> {
-      eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, prunedPkgs));
+      fireProjectChanged();
     });
   }
 
@@ -70,26 +79,31 @@ public class Model {
        * */
       PrunedPkgs old = prunedPkgs;
       prunedPkgs = new PrunedPkgs(root, old);
-      prunedPkgs.bus.listen(PrunedChangedEvent.class, this::prunedChanged);
-      eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, prunedPkgs));
+      prunedPkgs.bus.listen(PrunedChangedEvent.class, e->fireProjectChanged());
+      focusPkg = null;
+      focusPruned = false;
+      fireProjectChanged();
     });
   }
-
-  /** カレントのPrunedPkgsが変更された */
-  void prunedChanged(PrunedPkgs.PrunedChangedEvent e) {
-    eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, e.prunedPkgs));
-  }
   
+  /** 着目パッケージを変更する */
   public void setFocusPkg(PkgNode node) {
-    eventBus.dispatchEvent(new ModelEvent.PkgFocused(node));
+    if (focusPkg == node) return;
+    this.focusPkg = node;
+    this.focusPruned = this.prunedPkgs.contains(focusPkg);
+    firePkgFocused();
   }
 
-  /** 現在のルートノードを取得する */
-  public PkgNode getRoot() {
-    return root;
+  private void fireProjectChanged() {
+    System.out.println("fireProjectChanged");
+    bus.dispatchEvent(new ModelEvent.ProjectChanged(root, prunedPkgs));
+    this.focusPkg = null;
+    this.focusPruned = false;
+    firePkgFocused();
   }
   
-  public <T extends ModelEvent> Unlistener<T> listen(Class<T>clazz, Consumer<T>listener) {
-    return eventBus.listen(clazz,  listener);
+  private void firePkgFocused() {
+    System.out.println("firePkgFocused " + focusPkg + "," + focusPruned);
+    bus.dispatchEvent(new ModelEvent.PkgFocused(focusPkg, focusPruned));    
   }
 }

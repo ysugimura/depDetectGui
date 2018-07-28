@@ -27,7 +27,7 @@ public class AllCyclicsPanel implements FxNode {
     this.model = model;
     this.cyclicModel = cyclicModel;
     
-    model.listen(ModelEvent.ProjectChanged.class, this::projectChanged);
+    model.bus.listen(ModelEvent.ProjectChanged.class, this::projectChanged);
     
     packagesPanel = new PackagesPanel();
     packagesPanel.getTable().getSelectionModel().listenSelection(e-> {
