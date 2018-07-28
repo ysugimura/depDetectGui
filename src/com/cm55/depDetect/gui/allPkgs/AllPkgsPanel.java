@@ -1,4 +1,4 @@
-package com.cm55.depDetect.gui.descend;
+package com.cm55.depDetect.gui.allPkgs;
 
 import java.util.*;
 import java.util.stream.*;
@@ -13,18 +13,19 @@ import javafx.beans.property.*;
 import javafx.beans.value.*;
 
 /**
- * 対象とするすべてのパッケージを表示し、descendフラグをON/OFFする。
+ * 対象とするすべてのパッケージを表示し、枝刈りフラグをON/OFFする。
+ * 選択されたパッケージを{@link Model}側に通知する。
  * @author ysugimura
  */
-public class DescendPanel implements FxNode  {
+public class AllPkgsPanel implements FxNode  {
   
   FxTitledBorder titledBorder;
   FxTable<Row>table;
   FxObservableList<Row>rows;
-  PrunedPkgs descendSet;
+  PrunedPkgs prunedPkgs;
   
   @Inject
-  public DescendPanel(Model model) {    
+  public AllPkgsPanel(Model model) {    
     table = new FxTable<Row>();
     table.setColumns(
       new FxTable.CheckColumn<Row>("desc",  r->r.descend).setAlign(FxAlign.CENTER).setPrefWidth(30),
@@ -49,15 +50,15 @@ public class DescendPanel implements FxNode  {
   void projectChanged(ModelEvent.ProjectChanged e) {
     if (selfEvent) return;
     
-    descendSet = e.descendSet;
+    prunedPkgs = e.descendSet;
     
     // 行として表示するパッケージを決定するが、その際、
     // 1. descendモードのパッケージによって隠されているものは表示しない
     // 2.　descendモードのパッケージは、そのフラグをONにする。
     List<Row>list = new ArrayList<>();
     e.root.visitPackages(VisitOrder.PRE, pkgNode->{
-      if (descendSet.isHidden(pkgNode)) return;
-      list.add(new Row(pkgNode, descendSet.contains(pkgNode)));
+      if (prunedPkgs.isHidden(pkgNode)) return;
+      list.add(new Row(pkgNode, prunedPkgs.contains(pkgNode)));
     });
     rows.clear();    
     rows.addAll(list);
@@ -76,7 +77,7 @@ public class DescendPanel implements FxNode  {
     // descendSetを操作するとイベントが発生してしまう。
     selfEvent = true;
     try {
-      if (!descendSet.setOn(targetRow.pkgNode, on)) return;
+      if (!prunedPkgs.setOn(targetRow.pkgNode, on)) return;
     } finally {
       selfEvent = false;
     }
@@ -107,7 +108,7 @@ public class DescendPanel implements FxNode  {
   /** 全descenフラグをOFFする */
   @SuppressWarnings("restriction")
   private void clear(FxButton button) {
-    descendSet.clear();
+    prunedPkgs.clear();
     for (int i = 0; i < rows.size(); i++) {
       rows.get(i).descend.set(false);
     }

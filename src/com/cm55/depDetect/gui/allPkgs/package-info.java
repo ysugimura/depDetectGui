@@ -5,4 +5,4 @@
  * @author ysugimura
  *
  */
-package com.cm55.depDetect.gui.descend;
+package com.cm55.depDetect.gui.allPkgs;

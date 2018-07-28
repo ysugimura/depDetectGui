@@ -65,8 +65,8 @@ public class Model {
     root = TreeCreator.create(list);
     Platform.runLater(()-> {
       /** 
-       * 更新されたプロジェクトに{@link DescendSet}を適合させる。
-       * 更新されたプロジェクトのノードは、現在の{@link DescendSet}とは異なるもの。
+       * 更新されたプロジェクトに{@link PrunedPkgs}を適合させる。
+       * 更新されたプロジェクトのノードは、現在の{@link PrunedPkgs}とは異なるもの。
        * */
       PrunedPkgs old = prunedPkgs;
       prunedPkgs = new PrunedPkgs(root, old);
@@ -75,7 +75,7 @@ public class Model {
     });
   }
 
-  /** カレントのDescendSetが変更された */
+  /** カレントのPrunedPkgsが変更された */
   void descendChange(PrunedPkgs.PrunedChangedEvent e) {
     eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, e.prunedPkgs));
   }

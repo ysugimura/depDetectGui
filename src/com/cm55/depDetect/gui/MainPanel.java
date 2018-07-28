@@ -2,9 +2,9 @@ package com.cm55.depDetect.gui;
 
 import java.io.*;
 
+import com.cm55.depDetect.gui.allPkgs.*;
 import com.cm55.depDetect.gui.cyclic.*;
 import com.cm55.depDetect.gui.depends.*;
-import com.cm55.depDetect.gui.descend.*;
 import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.depDetect.gui.resources.*;
@@ -21,27 +21,63 @@ import javafx.application.Application.*;
 
 public class MainPanel {
 
-
   @Inject private Msg msg;
   @Inject private FileMenuBar fileMenuBar;
   @Inject private CyclicModel guiEvent;
   @Inject private Model model;
+
+  /** 全パッケージ表示、枝刈りパネル */
+  @Inject private AllPkgsPanel allPkgsPanel;
+  
+  /** 循環依存パネル */
   @Inject private CyclicPanels cyclicPanels;
+  
+  /** 依存先・元パネル */
   @Inject private DependPanels dependPanels;
-  @Inject private UnknownPanels unknownPanels;
   
-  @Inject private DescendPanel descendPanel;
-  private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;  
-  
-  FxBorderPane.Ver borderPane;
-  
-  /** このウインドウの状態セーブ */
-  @Serialized(key=985833802388795844L)
-  public static class MyWindowBounds extends WindowBounds {
-  }
+  /** 不明importパネル */
+  @Inject private UnknownPanels unknownPanels;  
   
   public void execute(Parameters params, HostServices hostServices, FxStage stage)  {
+
+    // Uncatched exceptions
+    Thread.currentThread().setUncaughtExceptionHandler((thread, th) -> {
+      System.out.println(GetFullStackTrace.get(th));
+    });
+    
     // データベースオープン
+    openDatabase();
+        
+    FocusControlPolicy.setDefaultFocusable(false);
+  
+    FxTabPane tabPane = new FxTabPane();
+    tabPane.add("循環依存", cyclicPanels);
+    tabPane.add("依存先・元", dependPanels);
+    tabPane.add("外部参照",  unknownPanels);
+    
+    FxBorderPane.Ver borderPane = new FxBorderPane.Ver(
+      fileMenuBar.menuBar,
+      new FxSplitPane.Hor(
+        allPkgsPanel,        
+        tabPane
+      ),
+      null
+    );
+    
+    stage.setScene(new FxScene(borderPane));
+    Resources.setStyleToStage(stage);
+    stage.setOnCloseRequest(e-> {
+      windowBoundsPersister.finish();
+    });
+    windowBoundsPersister = new WindowBoundsPersister<>(
+      stage, new WindowBoundsSerializer<MyWindowBounds>(MyWindowBounds.class)
+    );
+    stage.setTitle("depDetectGui");
+    stage.show();    
+  }
+
+  /** H2データベースのオープン */
+  private void openDatabase() {
     try {
       H2Data.create(new File(System.getProperty("user.home"), AppName.DOT_SYSTEM_NAME));
     } catch (Exception ex) {
@@ -50,56 +86,17 @@ public class MainPanel {
         msg.get(Msg.データベースエラー) + "\n" +
         "\n" +
         ex.getMessage()
-        /*
-        "Could not execute the app because that database is in use.\n" +
-        "アプリケーションを起動できません。データベース使用中です。"
-        */
       );
       Platform.exit();
       System.exit(0);
-    }
-    
-    // Uncatched exceptions
-    Thread.currentThread().setUncaughtExceptionHandler((thread, th) -> {
-//      ystem.out.println("VERSION:" + Version.version + "\n");
-      System.out.println(GetFullStackTrace.get(th));
-    });
-    
-    FocusControlPolicy.setDefaultFocusable(false);
-
-
-    
-    FxTabPane tabPane = new FxTabPane();
-    tabPane.add("循環依存", cyclicPanels);
-    tabPane.add("依存先・元", dependPanels);
-    tabPane.add("外部参照",  unknownPanels);
-    borderPane = new FxBorderPane.Ver(
-      fileMenuBar.menuBar,
-      new FxSplitPane.Hor(
-        descendPanel,
-        
-        tabPane
-      ),
-      null
-    );
-
-    
-    stage.setScene(new FxScene(borderPane));
-//    resources.setStyleToStage(stage.getStage());    
-//    stage.getStage().resizableProperty().setValue(Boolean.FALSE);
-//    beforeOpen();
-    Resources.setStyleToStage(stage);
-    stage.setOnCloseRequest(e-> {
-      windowBoundsPersister.finish();
-    });
-    windowBoundsPersister = new WindowBoundsPersister<>(
-        stage, new WindowBoundsSerializer<MyWindowBounds>(MyWindowBounds.class)
-    );
-    stage.setTitle("depDetectGui");
-    stage.show();
-    
-    
+    }    
   }
-
-
+  
+  /** ウインドウ状態ロード・セーブオブジェクト */
+  private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;  
+  
+  /** このウインドウの状態セーブ */
+  @Serialized(key=985833802388795844L)
+  public static class MyWindowBounds extends WindowBounds {
+  }
 }
