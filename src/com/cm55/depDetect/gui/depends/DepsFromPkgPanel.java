@@ -36,7 +36,7 @@ public class DepsFromPkgPanel implements FxNode {
     }
     // 着目対象パッケージについて枝刈りを考慮して依存パッケージを取得する
     // ただし依存パッケージ側は枝刈りを考慮しない。すべてのパッケージを列挙する。
-    packagesPanel.setRows(e.focusPkg.getDepsFrom(e.descend).stream());
+    packagesPanel.setRows(e.focusPkg.getDepsFrom(e.focusPruned).stream());
   }
   
   public javafx.scene.Node node() {

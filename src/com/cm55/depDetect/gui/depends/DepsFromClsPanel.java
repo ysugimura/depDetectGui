@@ -36,7 +36,7 @@ public class DepsFromClsPanel implements FxNode {
     classesPanel.setRows(
       e.getDepFromPkg().childClasses(false).filter(cls-> {        
         Refs refs = cls.getDepsTo();
-        if (e.focusDescend) return refs.containsUnder(e.focusPkg);
+        if (e.focusPruned) return refs.containsUnder(e.focusPkg);
         return refs.contains(e.focusPkg); 
       })
     );

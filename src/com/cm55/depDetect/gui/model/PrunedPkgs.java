@@ -30,7 +30,7 @@ public class PrunedPkgs {
 
   public final EventBus bus = new EventBus();
   
-  /** descendフラグを持つパッケージノード */
+  /** 枝刈りされたパッケージノード */
   Set<PkgNode>set = new HashSet<>();
   
   PrunedPkgs() {}

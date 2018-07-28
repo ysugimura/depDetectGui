@@ -34,11 +34,11 @@ public class ToClassesPanel implements FxNode {
     }
     
     // toノード直下のクラスのみを調べ、fromノードを参照するクラスをリストする。
-    // ただし、fromノードがdescendモードの場合はfromの子孫ノードもチェック対象に含める
+    // ただし、fromノードが枝刈りされている場合はfromの子孫ノードもチェック対象に含める
     classesPanel.setRows(
       e.toPkgNode.childClasses(false).filter(clsNode-> {
         Refs refs = clsNode.getDepsTo();
-        if (e.fromPkgDescend) 
+        if (e.fromPkgPruned) 
           return refs.containsUnder(e.fromPkgNode);
         else
           return refs.contains(e.fromPkgNode);

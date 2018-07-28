@@ -29,7 +29,7 @@ public class AllCyclicToPanel implements FxNode {
     }
     
     // このパッケージの全循環依存先パッケージを取得する
-    Refs cyclics = e.fromPkgNode.getCyclics(e.fromPkgDescend);
+    Refs cyclics = e.fromPkgNode.getCyclics(e.fromPkgPruned);
     packagesPanel.setRows(cyclics.stream());        
   }
   

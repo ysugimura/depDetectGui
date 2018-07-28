@@ -24,7 +24,7 @@ public class DepsToClsPanel implements FxNode {
     
     // フォーカス中のパッケージ下の全クラスについて、選択された依存先パッケージを依存先としてもつものを取得
     classesPanel.setRows(
-      e.focusPkg.childClasses(e.focusDescend).filter(cls->cls.getDepsTo().contains(e.getDepToPkg()))
+      e.focusPkg.childClasses(e.focusPruned).filter(cls->cls.getDepsTo().contains(e.getDepToPkg()))
     );
   }
   

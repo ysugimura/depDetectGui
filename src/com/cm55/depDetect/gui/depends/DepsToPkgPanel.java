@@ -26,7 +26,7 @@ public class DepsToPkgPanel implements FxNode {
       packagesPanel.clearRows();
       return;
     }
-    packagesPanel.setRows(e.focusPkg.getDepsTo(e.descend).stream());
+    packagesPanel.setRows(e.focusPkg.getDepsTo(e.focusPruned).stream());
   }
   
   public javafx.scene.Node node() {

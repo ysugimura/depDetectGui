@@ -49,10 +49,10 @@ public class DependModel {
   /** フォーカス対象パッケージの変更イベント */
   public static class FocusPkgEvent {
     public final PkgNode focusPkg;
-    public final boolean descend;
-    FocusPkgEvent(PkgNode focusPkg, boolean descend) {
+    public final boolean focusPruned;
+    FocusPkgEvent(PkgNode focusPkg, boolean focusPruned) {
       this.focusPkg = focusPkg;
-      this.descend = descend;
+      this.focusPruned = focusPruned;
     }
     public boolean isEmpty() {
       return focusPkg == null;
@@ -64,15 +64,15 @@ public class DependModel {
     /** 注目パッケージ */
     public final PkgNode focusPkg;
     
-    /** 注目パッケージのdescendモード */
-    public final boolean focusDescend;
+    /** 注目パッケージが枝刈りされているか */
+    public final boolean focusPruned;
     
     /** 依存・被依存パッケージ */
     protected final PkgNode pkgNode;
     
-    DepPkgEvent(PkgNode focusPkg, boolean focusDescend, PkgNode pkgNode) {
+    DepPkgEvent(PkgNode focusPkg, boolean focusPruned, PkgNode pkgNode) {
       this.focusPkg = focusPkg;
-      this.focusDescend = focusDescend;
+      this.focusPruned = focusPruned;
       this.pkgNode = pkgNode;
     }
     
@@ -83,14 +83,14 @@ public class DependModel {
     @Override
     public String toString() {
       if (isEmpty()) return "empty";
-      return focusPkg.getPath() + "," + focusDescend + "," + pkgNode.getPath();
+      return focusPkg.getPath() + "," + focusPruned + "," + pkgNode.getPath();
     }
   }
   
   /** 注目依存パッケージ変更イベント */
   public static class DepToPkgEvent extends DepPkgEvent {
-    DepToPkgEvent(PkgNode focusPkg, boolean descend, PkgNode pkgNode) {
-      super(focusPkg, descend, pkgNode);
+    DepToPkgEvent(PkgNode focusPkg, boolean focusPruned, PkgNode pkgNode) {
+      super(focusPkg, focusPruned, pkgNode);
     }
     public PkgNode getDepToPkg() {
       return pkgNode;
@@ -99,8 +99,8 @@ public class DependModel {
   
   /** 注目被依存パッケージ変更イベント */
   public static class DepFromPkgEvent extends DepPkgEvent {
-    DepFromPkgEvent(PkgNode focusPkg, boolean descend, PkgNode pkgNode) {
-      super(focusPkg, descend, pkgNode);
+    DepFromPkgEvent(PkgNode focusPkg, boolean focusPruned, PkgNode pkgNode) {
+      super(focusPkg, focusPruned, pkgNode);
     }
     public PkgNode getDepFromPkg() {
       return pkgNode;

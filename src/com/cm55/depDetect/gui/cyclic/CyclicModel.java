@@ -11,20 +11,20 @@ public class CyclicModel {
   /** イベントバス */
   public EventBus bus = new EventBus();
 
-  /** descendセット */
-  private PrunedPkgs descendSet;
+  /** 枝刈りセット */
+  private PrunedPkgs prunedPkgs;
   
   /** 循環参照元パッケージ */
   private PkgNode fromPkgNode = null;
 
-  /** 循環参照元パッケージのdescendフラグ */
-  private boolean fromPkgDescend;
+  /** 循環参照元パッケージの枝刈りフラグ */
+  private boolean fromPkgPruned;
   
   /** 循環参照先パッケージ */
   private PkgNode toPkgNode = null;
 
-  /** 循環参照先パッケージのdescendフラグ */
-  private boolean toPkgDescend;
+  /** 循環参照先パッケージの枝刈りフラグ */
+  private boolean toPkgPruned;
   
   @Inject
   public CyclicModel(Model model) {
@@ -36,7 +36,7 @@ public class CyclicModel {
    * @param e
    */
   private void projectChanged(ModelEvent.ProjectChanged e) {
-    this.descendSet = e.prunedPkgs;
+    this.prunedPkgs = e.prunedPkgs;
     fromPkgNode = null;
     toPkgNode = null;
     setFromPkgNode(null);
@@ -47,8 +47,8 @@ public class CyclicModel {
   public void setFromPkgNode(PkgNode fromPkgNode) {
     if (this.fromPkgNode == fromPkgNode) return;
     this.fromPkgNode = fromPkgNode;
-    this.fromPkgDescend = descendSet.contains(fromPkgNode);
-    FromPkgEvent e = new FromPkgEvent(fromPkgNode, fromPkgDescend);
+    this.fromPkgPruned = prunedPkgs.contains(fromPkgNode);
+    FromPkgEvent e = new FromPkgEvent(fromPkgNode, fromPkgPruned);
     bus.dispatchEvent(e);
   }
 
@@ -56,16 +56,16 @@ public class CyclicModel {
   public void setToPkgNode(PkgNode toPkgNode) {
     if (this.toPkgNode == toPkgNode) return;
     this.toPkgNode = toPkgNode;
-    ToPkgEvent e = new ToPkgEvent(fromPkgNode, fromPkgDescend, toPkgNode);
+    ToPkgEvent e = new ToPkgEvent(fromPkgNode, fromPkgPruned, toPkgNode);
     bus.dispatchEvent(e);
   }
   
   public static class FromPkgEvent {
     public final PkgNode fromPkgNode;
-    public final boolean fromPkgDescend;
-    private FromPkgEvent(PkgNode fromPkgNode, boolean fromPkgDescend) {
+    public final boolean fromPkgPruned;
+    private FromPkgEvent(PkgNode fromPkgNode, boolean fromPkgPruned) {
       this.fromPkgNode = fromPkgNode;
-      this.fromPkgDescend = fromPkgDescend;
+      this.fromPkgPruned = fromPkgPruned;
     }
     @Override
     public String toString() {
@@ -78,11 +78,11 @@ public class CyclicModel {
 
   public static class ToPkgEvent {
     public final PkgNode fromPkgNode;
-    public final boolean fromPkgDescend;
+    public final boolean fromPkgPruned;
     public final PkgNode toPkgNode;  
-    private ToPkgEvent(PkgNode fromPkgNode, boolean fromPkgDescend, PkgNode toPkgNode) {
+    private ToPkgEvent(PkgNode fromPkgNode, boolean fromPkgPruned, PkgNode toPkgNode) {
       this.fromPkgNode = fromPkgNode;
-      this.fromPkgDescend = fromPkgDescend;
+      this.fromPkgPruned = fromPkgPruned;
       this.toPkgNode = toPkgNode;
     }
     public boolean isEmpty() {
@@ -92,7 +92,7 @@ public class CyclicModel {
     @Override
     public String toString() {
       if (isEmpty()) return "empty";
-      return fromPkgNode.getPath() + "," + fromPkgDescend + "," + toPkgNode.getPath();
+      return fromPkgNode.getPath() + "," + fromPkgPruned + "," + toPkgNode.getPath();
     }
   }
 }

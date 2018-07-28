@@ -94,6 +94,7 @@ public class Model {
     firePkgFocused();
   }
 
+  /** プロジェクト変更イベントを発行する */
   private void fireProjectChanged() {
     System.out.println("fireProjectChanged");
     bus.dispatchEvent(new ModelEvent.ProjectChanged(root, prunedPkgs));
@@ -102,6 +103,7 @@ public class Model {
     firePkgFocused();
   }
   
+  /** フォーカスパッケージ変更イベントを発行する　*/
   private void firePkgFocused() {
     System.out.println("firePkgFocused " + focusPkg + "," + focusPruned);
     bus.dispatchEvent(new ModelEvent.PkgFocused(focusPkg, focusPruned));    
