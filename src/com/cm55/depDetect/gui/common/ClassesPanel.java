@@ -1,6 +1,5 @@
 package com.cm55.depDetect.gui.common;
 
-import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
@@ -8,6 +7,10 @@ import com.cm55.depDetect.*;
 import com.cm55.fx.*;
 import com.cm55.fx.FxTable.*;
 
+/**
+ * クラス一覧を表示スルパネル
+ * @author ysugimura
+ */
 public class ClassesPanel implements FxNode {
 
   FxTable<ClsNode>table;
@@ -26,24 +29,24 @@ public class ClassesPanel implements FxNode {
     });
   }
   
+  /** クラスが選択されたときにコールバックする */
   public ClassesPanel setSelectionCallback(Consumer<ClsNode>callback) {
     this.selectionCallback = callback;
     return this;
   }
-  
+
+  /** 行をクリア */
   public void clearRows() {
     rows.clear();
   }
   
+  /** 行を設定 */
   public void setRows(Stream<ClsNode>stream) {
-    setRows(stream.collect(Collectors.toList()));
+    rows.clear();
+    rows.addAll(stream.collect(Collectors.toList()));
   }
   
-  public void setRows(Collection<ClsNode>list) {
-      rows.clear();
-      rows.addAll(list);
-  }
-  
+  /** ノード取得 */
   public javafx.scene.Node node() {
     return table.node();
   }

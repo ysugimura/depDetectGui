@@ -8,19 +8,15 @@ import com.cm55.depDetect.*;
 import com.cm55.fx.*;
 import com.cm55.fx.FxTable.*;
 
+/**
+ * パッケージ一覧を表示するパネル
+ * @author ysugimura
+ */
 public class PackagesPanel implements FxNode {
 
   FxTable<PkgNode>table;
   FxObservableList<PkgNode>rows;
   Consumer<PkgNode>selectionCallback;
-  
-  public FxTable<PkgNode>getTable() {
-    return table;
-  }
-  
-  public FxObservableList<PkgNode>getRows() {
-    return rows;
-  }
   
   @SuppressWarnings("restriction")
   public PackagesPanel() {
@@ -37,6 +33,14 @@ public class PackagesPanel implements FxNode {
   public PackagesPanel setSelectionCallback(Consumer<PkgNode>callback) {
     this.selectionCallback = callback;
     return this;
+  }
+
+  public FxTable<PkgNode>getTable() {
+    return table;
+  }
+  
+  public FxObservableList<PkgNode>getRows() {
+    return rows;
   }
   
   public void clearRows() {
