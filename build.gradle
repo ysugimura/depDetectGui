@@ -4,7 +4,7 @@ apply plugin: 'eclipse'
 version = '0.4.3'
 
 def APP_NAME = 'depDetectGui'
-def FAT_JAR = 'depDetectGui.jar'
+def FAT_JAR_BASE = 'release/depDetectGui'
 def MAIN_CLASS = 'com.cm55.depDetect.gui.AppMain';
 
 // バージョン番号を保持するJavaファイル
@@ -151,7 +151,7 @@ task rel(type: Jar, dependsOn:jar) {
 
   // 出力先ファイル
   destinationDir = file('.')
-  archiveName = FAT_JAR 
+  archiveName = FAT_JAR_BASE + '-' + version + '.jar'
   
   // 入力ファイル
   from { 
