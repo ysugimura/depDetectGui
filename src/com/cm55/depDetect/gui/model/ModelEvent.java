@@ -24,5 +24,8 @@ public class ModelEvent {
       this.focusPkg = focusPkg;
       this.focusPruned = focusPruned;
     }
+    public boolean isEmpty() {
+      return focusPkg == null;
+    }
   }
 }

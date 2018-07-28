@@ -23,7 +23,7 @@ public class MainPanel {
 
   @Inject private Msg msg;
   @Inject private FileMenuBar fileMenuBar;
-  @Inject private CyclicModel guiEvent;
+  
   @Inject private Model model;
 
   /** 全パッケージ表示、枝刈りパネル */
@@ -72,7 +72,16 @@ public class MainPanel {
     windowBoundsPersister = new WindowBoundsPersister<>(
       stage, new WindowBoundsSerializer<MyWindowBounds>(MyWindowBounds.class)
     );
-    stage.setTitle("depDetectGui");
+    stage.setTitle("[depDetectGui]");
+    model.bus.listen(ModelEvent.PkgFocused.class, e-> {
+      if (e.isEmpty()) {
+        stage.setTitle("[depDetectGui]");
+        return;
+      }
+      String msg = e.focusPkg.getPath();
+      if (e.focusPruned) msg += "（刈）";
+      stage.setTitle(msg);
+    });
     stage.show();    
   }
 
