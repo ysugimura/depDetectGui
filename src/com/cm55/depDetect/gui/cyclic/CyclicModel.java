@@ -37,8 +37,6 @@ public class CyclicModel {
    */
   private void projectChanged(ModelEvent.ProjectChanged e) {
     this.prunedPkgs = e.prunedPkgs;
-    fromPkgNode = null;
-    toPkgNode = null;
     setFromPkgNode(null);
     setToPkgNode(null);
   }

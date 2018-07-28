@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-version = '0.4.3'
+version = '0.4.4'
 
 def APP_NAME = 'depDetectGui'
 def FAT_JAR_BASE = 'release/depDetectGui'
@@ -72,7 +72,7 @@ dependencies {
   compile(group: 'com.cm55', name: 'miniSerial', version: '1.1')
   compile group: 'com.h2database', name: 'h2', version: '1.4.193'
   compile(group: 'com.cm55', name: 'fxwrapper', version: '1.5.2')
-  compile(group: 'com.cm55', name: 'depDetect', version: '1.3.0')
+  compile(group: 'com.cm55', name: 'depDetect', version: '1.3.1')
     
   testCompile group: 'org.mockito', name: 'mockito-core', version: '2.19.0'
   testCompile(group: 'junit', name: 'junit', version: '4.12') {
