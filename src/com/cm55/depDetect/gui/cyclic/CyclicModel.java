@@ -12,7 +12,7 @@ public class CyclicModel {
   public EventBus bus = new EventBus();
 
   /** descendセット */
-  private DescendSet descendSet;
+  private PrunedPkgs descendSet;
   
   /** 循環参照元パッケージ */
   private PkgNode fromPkgNode = null;

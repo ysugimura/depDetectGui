@@ -13,7 +13,7 @@ import com.google.inject.*;
 public class DependModel {
 
   EventBus bus = new EventBus();
-  private DescendSet descendSet;
+  private PrunedPkgs descendSet;
   
   /** 注目するパッケージ */
   private PkgNode focusPkg;

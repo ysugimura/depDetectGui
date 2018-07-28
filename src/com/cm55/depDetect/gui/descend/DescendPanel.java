@@ -21,7 +21,7 @@ public class DescendPanel implements FxNode  {
   FxTitledBorder titledBorder;
   FxTable<Row>table;
   FxObservableList<Row>rows;
-  DescendSet descendSet;
+  PrunedPkgs descendSet;
   
   @Inject
   public DescendPanel(Model model) {    

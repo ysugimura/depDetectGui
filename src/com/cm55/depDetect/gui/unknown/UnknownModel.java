@@ -9,7 +9,7 @@ import com.google.inject.*;
 public class UnknownModel {
 
   EventBus bus = new EventBus();  
-  private DescendSet descendSet;
+  private PrunedPkgs descendSet;
   private PkgNode focusPkg;
   
   @Inject 

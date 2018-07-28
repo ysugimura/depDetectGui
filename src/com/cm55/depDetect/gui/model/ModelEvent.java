@@ -6,8 +6,8 @@ public class ModelEvent {
 
   public static class ProjectChanged extends ModelEvent {
     public final PkgNode root;
-    public final DescendSet descendSet;
-    ProjectChanged(PkgNode root, DescendSet descendSet) {
+    public final PrunedPkgs descendSet;
+    ProjectChanged(PkgNode root, PrunedPkgs descendSet) {
       this.root = root;
       this.descendSet = descendSet;
     }

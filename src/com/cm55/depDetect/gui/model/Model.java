@@ -6,6 +6,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import com.cm55.depDetect.*;
+import com.cm55.depDetect.gui.model.PrunedPkgs.*;
 import com.cm55.depDetect.gui.projects.*;
 import com.cm55.depDetect.impl.*;
 import com.cm55.eventBus.*;
@@ -30,7 +31,7 @@ public class Model {
   private PkgNode root;
   
   /** 現在のDescendSet */
-  private DescendSet descendSet;
+  private PrunedPkgs descendSet;
   
   public Model() {
   }
@@ -47,7 +48,8 @@ public class Model {
     
     root = TreeCreator.create(list);
     this.project = project;
-    this.descendSet = new DescendSet(Model.this::descendChange);
+    this.descendSet = new PrunedPkgs();
+    descendSet.bus.listen(PrunedChangedEvent.class,  this::descendChange);
     Platform.runLater(()-> {
       eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, descendSet));
     });
@@ -67,15 +69,16 @@ public class Model {
        * 更新されたプロジェクトに{@link DescendSet}を適合させる。
        * 更新されたプロジェクトのノードは、現在の{@link DescendSet}とは異なるもの。
        * */
-      DescendSet old = descendSet;
-      descendSet = new DescendSet(Model.this::descendChange, root, old);
+      PrunedPkgs old = descendSet;
+      descendSet = new PrunedPkgs(root, old);
+      descendSet.bus.listen(PrunedChangedEvent.class, this::descendChange);
       eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, descendSet));
     });
   }
 
   /** カレントのDescendSetが変更された */
-  void descendChange(DescendSet descendSet) {
-    eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, descendSet));
+  void descendChange(PrunedPkgs.PrunedChangedEvent e) {
+    eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, e.prunedPkgs));
   }
   
   public PkgNode getRoot() {
