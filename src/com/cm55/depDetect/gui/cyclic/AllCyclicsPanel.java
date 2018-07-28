@@ -50,11 +50,11 @@ public class AllCyclicsPanel implements FxNode {
     }
     
     // ルートを含めてすべてのパッケージを列強するが、ただし、
-    // DescendSetで隠されているノードは無視し、Descendであるノードはそれ以下すべてを取得する
+    // {@link PrunedPkgs}で隠されているノードは無視し、Descendであるノードはそれ以下すべてを取得する
     List<PkgNode>list = new ArrayList<>();
     e.root.visitPackages(VisitOrder.PRE, pkg-> {
-      if (e.descendSet.isHidden(pkg)) return;      
-      if (pkg.getCyclics(e.descendSet.contains(pkg)).size() > 0) list.add(pkg);
+      if (e.prunedPkgs.isHidden(pkg)) return;      
+      if (pkg.getCyclics(e.prunedPkgs.contains(pkg)).size() > 0) list.add(pkg);
     });
     
     packagesPanel.setRows(list);

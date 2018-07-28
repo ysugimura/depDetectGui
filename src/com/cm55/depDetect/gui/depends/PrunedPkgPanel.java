@@ -26,7 +26,7 @@ public class PrunedPkgPanel implements FxNode {
   }
   
   void projectChanged(ModelEvent.ProjectChanged e) {
-    packagesPanel.setRows(e.descendSet.getEffectivePackages(e.root).collect(Collectors.toList()));
+    packagesPanel.setRows(e.prunedPkgs.getEffectivePackages(e.root).collect(Collectors.toList()));
   }
 
   public javafx.scene.Node node() {

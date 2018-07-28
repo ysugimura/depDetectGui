@@ -7,10 +7,10 @@ public class ModelEvent {
   /** プロジェクト変更イベント */
   public static class ProjectChanged extends ModelEvent {
     public final PkgNode root;
-    public final PrunedPkgs descendSet;
-    ProjectChanged(PkgNode root, PrunedPkgs descendSet) {
+    public final PrunedPkgs prunedPkgs;
+    ProjectChanged(PkgNode root, PrunedPkgs prunedPkgs) {
       this.root = root;
-      this.descendSet = descendSet;
+      this.prunedPkgs = prunedPkgs;
     }
   }
 

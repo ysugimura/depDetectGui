@@ -28,7 +28,7 @@ public class AllPkgsPanel implements FxNode  {
   public AllPkgsPanel(Model model) {    
     table = new FxTable<Row>();
     table.setColumns(
-      new FxTable.CheckColumn<Row>("刈",  r->r.descend).setAlign(FxAlign.CENTER).setPrefWidth(30),
+      new FxTable.CheckColumn<Row>("刈",  r->r.pruned).setAlign(FxAlign.CENTER).setPrefWidth(30),
       new FxTable.TextColumn<Row>("パッケージ", r->FixedValue.w(r.pkgNode.getPath())).setPrefWidth(400)
     );    
     rows = table.getRows();
@@ -50,11 +50,11 @@ public class AllPkgsPanel implements FxNode  {
   void projectChanged(ModelEvent.ProjectChanged e) {
     if (selfEvent) return;
     
-    prunedPkgs = e.descendSet;
+    prunedPkgs = e.prunedPkgs;
     
     // 行として表示するパッケージを決定するが、その際、
-    // 1. descendモードのパッケージによって隠されているものは表示しない
-    // 2.　descendモードのパッケージは、そのフラグをONにする。
+    // 1. 枝刈りされているパッケージによって隠されているものは表示しない
+    // 2.　枝刈りされているパッケージは、そのフラグをONにする。
     List<Row>list = new ArrayList<>();
     e.root.visitPackages(VisitOrder.PRE, pkgNode->{
       if (prunedPkgs.isHidden(pkgNode)) return;
@@ -65,7 +65,7 @@ public class AllPkgsPanel implements FxNode  {
   }
 
   /** 
-   * ある行のdescendフラグをON/OFFする
+   * ある行の枝刈りフラウをON/OFFする
    * ONの場合、そのパッケージ以下の行を削除する。
    * OFFの場合、そのパッケージ以下の行を復活する。
    * @param targetRow
@@ -74,7 +74,7 @@ public class AllPkgsPanel implements FxNode  {
   @SuppressWarnings("restriction")
   private void setOn(Row targetRow, boolean on) {
     
-    // descendSetを操作するとイベントが発生してしまう。
+    // prunedPkgsを操作するとイベントが発生してしまう。
     selfEvent = true;
     try {
       if (!prunedPkgs.setOn(targetRow.pkgNode, on)) return;
@@ -110,7 +110,7 @@ public class AllPkgsPanel implements FxNode  {
   private void clear(FxButton button) {
     prunedPkgs.clear();
     for (int i = 0; i < rows.size(); i++) {
-      rows.get(i).descend.set(false);
+      rows.get(i).pruned.set(false);
     }
   }
 
@@ -119,14 +119,14 @@ public class AllPkgsPanel implements FxNode  {
     /** パッケージノード */
     public final PkgNode pkgNode;
     
-    /** descendフラグ */
-    public final SimpleBooleanProperty descend;
+    /** prunedフラグ */
+    public final SimpleBooleanProperty pruned;
     
     Row(PkgNode pkgNode, boolean on) {
       this.pkgNode = pkgNode;
-      descend = new SimpleBooleanProperty(false);      
-      descend.set(on);
-      descend.addListener(new ChangeListener<Boolean>() {
+      pruned = new SimpleBooleanProperty(false);      
+      pruned.set(on);
+      pruned.addListener(new ChangeListener<Boolean>() {
         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
           //ystem.out.println("changed " + oldValue + "," + newValue);
           setOn(Row.this, newValue);
@@ -136,7 +136,7 @@ public class AllPkgsPanel implements FxNode  {
     
     @Override
     public String toString() {
-      return pkgNode.getPath() + "," + descend.get();
+      return pkgNode.getPath() + "," + pruned.get();
     }
   }
   

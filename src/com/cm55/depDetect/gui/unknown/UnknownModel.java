@@ -18,7 +18,7 @@ public class UnknownModel {
   }
 
   private void reset(ModelEvent.ProjectChanged e) {
-    this.descendSet = e.descendSet;
+    this.descendSet = e.prunedPkgs;
     setFocusPkg(null);
   }
   

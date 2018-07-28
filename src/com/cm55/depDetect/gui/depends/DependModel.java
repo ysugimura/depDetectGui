@@ -34,7 +34,7 @@ public class DependModel {
   
   /** プロジェクト変更時 */
   private void projectChanged(ModelEvent.ProjectChanged e) {
-    descendSet = e.descendSet;
+    descendSet = e.prunedPkgs;
     setFocusPkg(null);
   }
 

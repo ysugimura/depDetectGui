@@ -36,7 +36,7 @@ public class CyclicModel {
    * @param e
    */
   private void projectChanged(ModelEvent.ProjectChanged e) {
-    this.descendSet = e.descendSet;
+    this.descendSet = e.prunedPkgs;
     fromPkgNode = null;
     toPkgNode = null;
     setFromPkgNode(null);
