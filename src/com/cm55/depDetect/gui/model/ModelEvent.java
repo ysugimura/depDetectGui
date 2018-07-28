@@ -4,6 +4,7 @@ import com.cm55.depDetect.*;
 
 public class ModelEvent {
 
+  /** プロジェクト変更イベント */
   public static class ProjectChanged extends ModelEvent {
     public final PkgNode root;
     public final PrunedPkgs descendSet;
@@ -13,4 +14,11 @@ public class ModelEvent {
     }
   }
 
+  /** フォーカスパッケージ変更イベント */
+  public static class PkgFocused extends ModelEvent{
+    public final PkgNode focusPkg;
+    PkgFocused(PkgNode focusPkg) {
+      this.focusPkg = focusPkg;
+    }
+  }
 }

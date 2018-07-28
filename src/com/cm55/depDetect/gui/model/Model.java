@@ -48,7 +48,7 @@ public class Model {
     root = TreeCreator.create(list);
     this.project = project;
     this.prunedPkgs = new PrunedPkgs();
-    prunedPkgs.bus.listen(PrunedChangedEvent.class,  this::descendChange);
+    prunedPkgs.bus.listen(PrunedChangedEvent.class,  this::prunedChanged);
     Platform.runLater(()-> {
       eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, prunedPkgs));
     });
@@ -70,16 +70,21 @@ public class Model {
        * */
       PrunedPkgs old = prunedPkgs;
       prunedPkgs = new PrunedPkgs(root, old);
-      prunedPkgs.bus.listen(PrunedChangedEvent.class, this::descendChange);
+      prunedPkgs.bus.listen(PrunedChangedEvent.class, this::prunedChanged);
       eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, prunedPkgs));
     });
   }
 
   /** カレントのPrunedPkgsが変更された */
-  void descendChange(PrunedPkgs.PrunedChangedEvent e) {
+  void prunedChanged(PrunedPkgs.PrunedChangedEvent e) {
     eventBus.dispatchEvent(new ModelEvent.ProjectChanged(root, e.prunedPkgs));
   }
   
+  public void setFocusPkg(PkgNode node) {
+    eventBus.dispatchEvent(new ModelEvent.PkgFocused(node));
+  }
+
+  /** 現在のルートノードを取得する */
   public PkgNode getRoot() {
     return root;
   }
