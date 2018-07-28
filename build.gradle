@@ -1,11 +1,16 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-version = '0.4.2'
+version = '0.4.3'
 
 def APP_NAME = 'depDetectGui'
 def FAT_JAR = 'depDetectGui.jar'
 def MAIN_CLASS = 'com.cm55.depDetect.gui.AppMain';
+
+// バージョン番号を保持するJavaファイル
+def VERSION_JAVA_FOLDER = 'src/com/cm55/depDetect/gui'
+def VERSION_JAVA_FILE = VERSION_JAVA_FOLDER + '/Version.java'
+
 
 // 全ソースがUTF-8であることを指定する
 tasks.withType(JavaCompile) {
@@ -30,6 +35,16 @@ repositories {
 task sourceJar(type: Jar) {
   from sourceSets.main.allJava
   classifier "sources"
+}
+
+// バージョンの設定
+task versionSet(type: Copy) { 
+  doFirst {
+    delete VERSION_JAVA_FILE
+  }
+  from 'Version.java'
+  into VERSION_JAVA_FOLDER
+  expand(version: version) 
 }
 
 /* ソースセットの指定 */
@@ -128,6 +143,8 @@ eclipse {
     }    
   }     
 }
+
+compileJava.dependsOn(['versionSet'])
 
 // fat-jarを作成する。これはテスト用に作成するもので難読化とは無関係
 task rel(type: Jar, dependsOn:jar) {

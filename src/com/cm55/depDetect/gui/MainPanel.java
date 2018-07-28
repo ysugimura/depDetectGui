@@ -72,10 +72,10 @@ public class MainPanel {
     windowBoundsPersister = new WindowBoundsPersister<>(
       stage, new WindowBoundsSerializer<MyWindowBounds>(MyWindowBounds.class)
     );
-    stage.setTitle("[depDetectGui]");
+    stage.setTitle("depDetectGui Ver. " + Version.version);
     model.bus.listen(ModelEvent.PkgFocused.class, e-> {
       if (e.isEmpty()) {
-        stage.setTitle("[depDetectGui]");
+        stage.setTitle("depDetectGui Ver. " + Version.version);
         return;
       }
       String msg = e.focusPkg.getPath();
