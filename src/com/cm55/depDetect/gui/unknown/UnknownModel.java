@@ -9,31 +9,20 @@ import com.google.inject.*;
 public class UnknownModel {
 
   EventBus bus = new EventBus();  
-  private PrunedPkgs descendSet;
-  private PkgNode focusPkg;
   
   @Inject 
   public UnknownModel(Model model) {
-    model.bus.listen(ModelEvent.ProjectChanged.class, this::reset);
-  }
-
-  private void reset(ModelEvent.ProjectChanged e) {
-    this.descendSet = e.prunedPkgs;
-    setFocusPkg(null);
-  }
-  
-  public void setFocusPkg(PkgNode value) {
-    if (focusPkg == value) return;
-    focusPkg = value;
-    bus.dispatchEvent(new FocusPkgEvent(focusPkg, descendSet.contains(focusPkg)));
+    model.bus.listen(ModelEvent.PkgFocused.class,  e-> {
+      bus.dispatchEvent(new FocusPkgEvent(e.focusPkg, e.focusPruned));
+    });
   }
   
   public static class FocusPkgEvent {
     public final PkgNode focusPkg;
-    public final boolean descend;
-    FocusPkgEvent(PkgNode node, boolean descend) {
-      this.focusPkg = node;
-      this.descend = descend;
+    public final boolean focusPruned;
+    FocusPkgEvent(PkgNode focusPkg, boolean focusPruned) {
+      this.focusPkg = focusPkg;
+      this.focusPruned = focusPruned;
     }
    public boolean isEmpty() {
      return focusPkg == null;

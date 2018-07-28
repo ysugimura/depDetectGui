@@ -24,7 +24,7 @@ public class UnknownListPanel implements FxNode {
   void focusPkgSelection(UnknownModel.FocusPkgEvent e) {
     rows.clear();
     if (e.isEmpty()) return;      
-    rows.setAll(e.focusPkg.getUnknowns(e.descend).stream().collect(Collectors.toList()));    
+    rows.setAll(e.focusPkg.getUnknowns(e.focusPruned).stream().collect(Collectors.toList()));    
   }
   
   public javafx.scene.Node node() {

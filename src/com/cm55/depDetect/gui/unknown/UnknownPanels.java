@@ -11,11 +11,9 @@ public class UnknownPanels implements FxNode {
   
   @Inject
   public UnknownPanels(
-    PrunedPkgPanel prunedPkgPanel,
     UnknownListPanel unknownListPanel  
   ) {
     splitPane = new FxSplitPane.Hor(
-      prunedPkgPanel,
       unknownListPanel
     );
   }
