@@ -28,7 +28,7 @@ public class AllPkgsPanel implements FxNode  {
   public AllPkgsPanel(Model model) {    
     table = new FxTable<Row>();
     table.setColumns(
-      new FxTable.CheckColumn<Row>("desc",  r->r.descend).setAlign(FxAlign.CENTER).setPrefWidth(30),
+      new FxTable.CheckColumn<Row>("刈",  r->r.descend).setAlign(FxAlign.CENTER).setPrefWidth(30),
       new FxTable.TextColumn<Row>("パッケージ", r->FixedValue.w(r.pkgNode.getPath())).setPrefWidth(400)
     );    
     rows = table.getRows();
@@ -38,7 +38,7 @@ public class AllPkgsPanel implements FxNode  {
       table,
       new FxButton("clear", this::clear)
     );
-    titledBorder = new FxTitledBorder("みなしパッケージ", new FxJustBox(borderPane));
+    titledBorder = new FxTitledBorder("全パッケージ", new FxJustBox(borderPane));
   }
 
   private boolean selfEvent = false;
