@@ -62,40 +62,38 @@ public class Model {
    * @param project
    * @throws IOException
    */
-  public void setProject(Project project) throws IOException {   
-    List<String>list = project.sourcePaths().collect(Collectors.toList());    
-    root = TreeCreator.create(list);
+  public void setProject(Project project, PkgNode root) {       
     this.project = project;
+    this.root = root;
     this.prunedPkgs = new PrunedPkgs();
     focusPkg = null;
     focusPruned = false;
-    prunedPkgs.bus.listen(PrunedChangedEvent.class, e->fireProjectChanged());
-    Platform.runLater(()-> {
-      fireProjectChanged();
-    });
+    prunedPkgs.bus.listen(PrunedChangedEvent.class, e->fireProjectChanged());    
+    fireProjectChanged();    
   }
 
+  public Project getProject() {
+    return project;
+  }
+  
   /** 
    * 現在の プロジェクトを更新する
    * この操作は時間がかかるのでイベントスレッド以外で実行されることに注意
    * @throws IOException
    */
-  public void update() throws IOException {
-    if (project == null)  throw new IllegalStateException("No Current Project");
-    List<String>list = project.sourcePaths().collect(Collectors.toList());
-    root = TreeCreator.create(list);
-    Platform.runLater(()-> {
-      /** 
-       * 更新されたプロジェクトに{@link PrunedPkgs}を適合させる。
-       * 更新されたプロジェクトのノードは、現在の{@link PrunedPkgs}とは異なるもの。
-       * */
-      PrunedPkgs old = prunedPkgs;
-      prunedPkgs = new PrunedPkgs(root, old);
-      prunedPkgs.bus.listen(PrunedChangedEvent.class, e->fireProjectChanged());
-      focusPkg = null;
-      focusPruned = false;
-      fireProjectChanged();
-    });
+  public void update(PkgNode root) {
+    this.root = root;
+
+    /** 
+     * 更新されたプロジェクトに{@link PrunedPkgs}を適合させる。
+     * 更新されたプロジェクトのノードは、現在の{@link PrunedPkgs}とは異なるもの。
+     * */
+    PrunedPkgs old = prunedPkgs;
+    prunedPkgs = new PrunedPkgs(root, old);
+    prunedPkgs.bus.listen(PrunedChangedEvent.class, e->fireProjectChanged());
+    focusPkg = null;
+    focusPruned = false;
+    fireProjectChanged();    
   }
   
   /** 着目パッケージを変更する */

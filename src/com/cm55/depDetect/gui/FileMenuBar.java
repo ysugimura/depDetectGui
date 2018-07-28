@@ -3,8 +3,10 @@ package com.cm55.depDetect.gui;
 import java.util.*;
 import java.util.stream.*;
 
+import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.depDetect.gui.projects.*;
+import com.cm55.depDetect.impl.*;
 import com.cm55.fx.*;
 import com.cm55.fx.AbstractMenu.*;
 import com.google.inject.*;
@@ -52,18 +54,32 @@ public class FileMenuBar {
     Project project = projectDialogProvider.get().showAndWait(menuBar, null);
     if (project == null) return;
     
-    loadingDialog.show(
-      ()-> { model.setProject(project); return null; },
-      r->{},
+    loadingDialog.<PkgNode>show(
+      ()-> { 
+        List<String>list = project.sourcePaths().collect(Collectors.toList());    
+        return TreeCreator.create(list);
+      },
+      r->{
+        model.setProject(project, r);
+      },
       e->{  FxAlerts.error(menuBar,  "エラー：" + e.getMessage()); }
     );
   }
   
   private void update() {
+    Project project = model.getProject();
+    if (project == null) {
+      FxAlerts.error(menuBar,  "プロジェクトがありません");
+      return;
+    }
     loadingDialog = new FxProgressMessageDialog(menuBar, "ロード中。お待ちください");
     loadingDialog.show(
-        ()-> { model.update(); return null; },
-        r->{},
+        ()-> { 
+          return TreeCreator.create(project.sourcePaths().collect(Collectors.toList()));
+        },
+        r->{
+          model.update(r);
+        },
         e->{  FxAlerts.error(menuBar,  "エラー：" + e.getMessage()); }
       );  
   }
