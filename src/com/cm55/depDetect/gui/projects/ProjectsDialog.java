@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import com.cm55.depDetect.gui.model.*;
+import com.cm55.depDetect.gui.resources.*;
 import com.cm55.depDetect.gui.settings.*;
 import com.cm55.fx.*;
 import com.cm55.fx.FxSingleSelectionModel.*;
@@ -35,6 +36,7 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
 
   public static class RowWrapper {
     Project project;
+    SimpleStringProperty mode = new SimpleStringProperty();
     SimpleStringProperty name = new SimpleStringProperty();
     SimpleIntegerProperty paths = new SimpleIntegerProperty();
     RowWrapper(Project project) {
@@ -43,6 +45,7 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
     
     void setProject(Project project) {
       this.project = project;
+      mode.set(project.getMode().desc);
       name.set(project.name);
       paths.set(project.sourcePaths.size());
     }
@@ -63,6 +66,7 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
       ).setSpacing(5)
     );    
     projectTable.setColumns(
+      new FxTable.TextColumn<RowWrapper>("モード", t->t.mode).setPrefWidth(100),
       new FxTable.TextColumn<RowWrapper>("プロジェクト名", t->t.name).setPrefWidth(200),
       new FxTable.Column<RowWrapper, Number>("パス数", t->t.paths)
     );
@@ -73,7 +77,10 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
 
   protected boolean initialize(FxNode node) {
     boolean result = super.initialize(node);
-    this.dialog.setResizable(true);
+    if (result) {
+      Resources.setStyleToDialog(this.dialog);
+      this.dialog.setResizable(true);
+    }
     return result;
   }
   

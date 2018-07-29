@@ -56,7 +56,6 @@ public class Model {
   
   /** 
    * プロジェクトを設定する
-   * この操作は時間がかかるのでイベントスレッド以外で実行されることに注意
    * @param project
    * @throws IOException
    */
@@ -76,7 +75,6 @@ public class Model {
   
   /** 
    * 現在の プロジェクトを更新する
-   * この操作は時間がかかるのでイベントスレッド以外で実行されることに注意
    * @throws IOException
    */
   public void update(PkgNode root) {

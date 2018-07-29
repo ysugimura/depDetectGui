@@ -18,18 +18,30 @@ public class Project {
   /** プロジェクトの複数のソースパス。.javaソースツリーフォルダ  */
   public List<String>sourcePaths = new ArrayList<>();
 
+  private int mode;
+    
   /** 枝刈されたパッケージ名称集合 */
   private Set<String>prunedPkgs;
   
   public Project() {    
   }
+
+  public Mode getMode() {
+    return Mode.values()[mode];
+  }
   
-  public Project(String name, String...paths) {
+  public void setMode(Mode mode) {
+    this.mode = mode.ordinal();
+  }
+  
+  public Project(Mode mode, String name, String...paths) {
+    this.mode = mode.ordinal();
     this.name = name;
     sourcePaths = new ArrayList<>(Arrays.asList(paths));
   }
   
-  public Project(String name, List<String>paths) {
+  public Project(Mode mode, String name, List<String>paths) {
+    this.mode = mode.ordinal();
     this.name = name;
     sourcePaths = new ArrayList<>(paths);
   }

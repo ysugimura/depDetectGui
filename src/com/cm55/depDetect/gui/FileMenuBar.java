@@ -1,5 +1,6 @@
 package com.cm55.depDetect.gui;
 
+import java.io.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -56,8 +57,7 @@ public class FileMenuBar {
     
     loadingDialog.<PkgNode>show(
       ()-> { 
-        List<String>list = project.sourcePaths().collect(Collectors.toList());    
-        return SrcTreeCreator.create(list);
+        return load(project);
       },
       r->{
         model.setProject(project, r);
@@ -75,13 +75,23 @@ public class FileMenuBar {
     loadingDialog = new FxProgressMessageDialog(menuBar, "ロード中。お待ちください");
     loadingDialog.show(
         ()-> { 
-          return SrcTreeCreator.create(project.sourcePaths().collect(Collectors.toList()));
+          return load(project);
         },
         r->{
           model.update(r);
         },
         e->{  FxAlerts.error(menuBar,  "エラー：" + e.getMessage()); }
       );  
+  }
+  
+  private PkgNode load(Project project) throws IOException {
+    List<String>list = project.sourcePaths().collect(Collectors.toList());   
+    switch (project.getMode()) {
+    case SRC: 
+      return SrcTreeCreator.create(list);
+    default:
+      return BinTreeCreator.create(null, list.stream());
+    }
   }
   
   public static class NodeAdapter implements Adapter<TreeNode> {

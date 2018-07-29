@@ -6,7 +6,6 @@ import com.cm55.fx.*;
 
 import javafx.application.*;
 import javafx.collections.*;
-import javafx.scene.control.*;
 import javafx.stage.*;
 
 public class Resources {
@@ -25,7 +24,7 @@ public class Resources {
     setStyle(_stage, _stage.getScene().getStylesheets());
   }
   
-  public static void setStyleToDialog(Dialog<?> dialog) {
+  public static void setStyleToDialog(FxDialog<?> dialog) {
     setStyle((Stage)dialog.getDialogPane().getScene().getWindow(), dialog.getDialogPane().getStylesheets());
   }
   
