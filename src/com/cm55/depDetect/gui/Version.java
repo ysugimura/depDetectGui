@@ -5,5 +5,5 @@ package com.cm55.depDetect.gui;
  */
 public class Version {
   // !!! This version number was automatically set by gradle !!!
-  public static String version = "0.4.5";
+  public static String version = "0.4.6";
 }
