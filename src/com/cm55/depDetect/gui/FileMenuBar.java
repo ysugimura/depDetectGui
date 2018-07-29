@@ -57,7 +57,7 @@ public class FileMenuBar {
     loadingDialog.<PkgNode>show(
       ()-> { 
         List<String>list = project.sourcePaths().collect(Collectors.toList());    
-        return TreeCreator.create(list);
+        return SrcTreeCreator.create(list);
       },
       r->{
         model.setProject(project, r);
@@ -75,7 +75,7 @@ public class FileMenuBar {
     loadingDialog = new FxProgressMessageDialog(menuBar, "ロード中。お待ちください");
     loadingDialog.show(
         ()-> { 
-          return TreeCreator.create(project.sourcePaths().collect(Collectors.toList()));
+          return SrcTreeCreator.create(project.sourcePaths().collect(Collectors.toList()));
         },
         r->{
           model.update(r);
