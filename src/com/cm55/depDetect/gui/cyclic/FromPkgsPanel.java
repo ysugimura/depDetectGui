@@ -14,7 +14,7 @@ import javafx.scene.*;
  * すべての循環依存パッケージ一覧を表示する
  * @author ysugimura
  */
-public class AllCyclicsPanel implements FxNode {
+public class FromPkgsPanel implements FxNode {
 
   private Model model;
   private FxTitledBorder titledBorder;
@@ -23,7 +23,7 @@ public class AllCyclicsPanel implements FxNode {
   
   @SuppressWarnings("restriction")
   @Inject
-  public AllCyclicsPanel(Model model, CyclicModel cyclicModel) {
+  public FromPkgsPanel(Model model, CyclicModel cyclicModel) {
     this.model = model;
     this.cyclicModel = cyclicModel;
     

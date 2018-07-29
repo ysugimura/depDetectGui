@@ -11,17 +11,17 @@ public class CyclicPanels implements FxNode{
   
   @Inject
   public CyclicPanels(
-      AllCyclicsPanel allCyclicsPanel,
-      AllCyclicToPanel allCyclicToPanel,
+      FromPkgsPanel fromPkgsPanel,
+      ToPkgsPanel toPkgsPanel,
       FromClassesPanel fromClassesPanel,
       ToClassesPanel toClassesPanel
   ) {
     FxSplitPane.Ver leftPanel = new FxSplitPane.Ver(
-      allCyclicsPanel,
-      allCyclicToPanel
+      fromPkgsPanel,
+      fromClassesPanel
     );
     FxSplitPane.Ver rightPanel = new FxSplitPane.Ver(
-      fromClassesPanel,
+      toPkgsPanel,
       toClassesPanel
     );
     splitPane = new FxSplitPane.Hor(leftPanel, rightPanel);

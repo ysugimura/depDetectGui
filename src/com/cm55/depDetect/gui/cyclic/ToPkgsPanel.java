@@ -10,13 +10,13 @@ import com.google.inject.*;
  * いずれかが選択された場合には、toPkgNode選択イベントを発行する
  * @author ysugimura
  */
-public class AllCyclicToPanel implements FxNode {
+public class ToPkgsPanel implements FxNode {
 
   private FxTitledBorder titledBorder;
   private PackagesPanel packagesPanel;
   
   @Inject
-  public AllCyclicToPanel(CyclicModel cyclicModel) {
+  public ToPkgsPanel(CyclicModel cyclicModel) {
     cyclicModel.bus.listen(CyclicModel.FromPkgEvent.class, this::fromPkgSelection);
     packagesPanel = new PackagesPanel().setSelectionCallback(node->cyclicModel.setToPkgNode(node));
     titledBorder = new FxTitledBorder("循環依存先パッケージ一覧", new FxJustBox(packagesPanel));
