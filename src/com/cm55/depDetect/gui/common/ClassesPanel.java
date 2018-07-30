@@ -23,7 +23,7 @@ public class ClassesPanel implements FxNode {
   public ClassesPanel() {
     table = new FxTable<ClsNode>();
     table.setColumns(
-      new FxTable.ButtonColumn<ClsNode>("詳細",  "詳細", this::showDetail).setPrefWidth(80),
+      new FxTable.ButtonColumn<ClsNode>("詳細",  "詳細", this::showDetail).setAlign(FxAlign.CENTER).setPrefWidth(50),
       new FxTable.TextColumn<ClsNode>("クラス", t->FixedValue.w(t.getPath())).setPrefWidth(400)
     );
     rows = table.getRows();

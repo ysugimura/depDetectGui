@@ -15,6 +15,9 @@ import com.google.inject.*;
 public class Model {
 
   public final EventBus bus = new EventBus();
+
+  /** JDepsのパス */
+  private JDepsPath jdepsPath;
   
   /** 現在のプロジェクトリスト */
   private ProjectList projectList;
@@ -47,12 +50,25 @@ public class Model {
   /** プロジェクトリストを設定する */
   public void setProjectList(ProjectList projectList) {
     this.projectList = projectList;
+    saveProjectList();
   }
   
   /** プロジェクトリストをセーブする */
   private void saveProjectList() {
     new ProjectList.Serializer().put(projectList);        
   }
+  
+  /** JDepsPathを取得する */
+  public JDepsPath getJDepsPath() {
+    if (jdepsPath == null) jdepsPath = new JDepsPath.Serializer().get();
+    return jdepsPath;
+  }
+  
+  /** JDepsPathを設定する */
+  public void setJDepsPath(JDepsPath path) {
+    new JDepsPath.Serializer().put(jdepsPath = path);
+  }
+
   
   /** 
    * プロジェクトを設定する

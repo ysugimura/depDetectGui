@@ -19,11 +19,13 @@ import com.google.inject.*;
 public class FileMenuBar {
 
   @Inject private Model model;
+  @Inject private Provider<JDepsPathDialog>jdepsDlgProvider;
   
   public final FxMenuBar menuBar;
   FxProgressMessageDialog loadingDialog;
   TreeNode listNode;
   TreeNode updateNode;
+  TreeNode jdepsNode;
   
   public FileMenuBar() {
     FxMenu<TreeNode> projectMenu = new FxMenu<TreeNode>(new NodeAdapter(), 
@@ -32,18 +34,31 @@ public class FileMenuBar {
         updateNode = new TreeNode("Update")
       )
     );
-    projectMenu.listenSelection(this::menuItemClicked);  
-    menuBar = new FxMenuBar(projectMenu);    
+    projectMenu.listenSelection(this::projectMenuClicked);  
+    FxMenu<TreeNode>settingMenu = new FxMenu<TreeNode>(new NodeAdapter(), 
+      new TreeNode("Setting",
+        jdepsNode = new TreeNode("jdeps")
+      )
+    );
+    settingMenu.listenSelection(this::settingMenuClicked);
+    menuBar = new FxMenuBar(projectMenu, settingMenu);    
 
   }
 
-  void menuItemClicked(SelectionEvent<TreeNode>e) {
+  void projectMenuClicked(SelectionEvent<TreeNode>e) {
     javafx.scene.Node node = menuBar.node().getParent();
     if (e.node == listNode) {
       projectList();
     }
     if (e.node == updateNode) {
       update();
+    }
+  }
+  
+  void settingMenuClicked(SelectionEvent<TreeNode>e) {
+
+    if (e.node == jdepsNode) {
+      setting();
     }
   }
   
@@ -83,6 +98,10 @@ public class FileMenuBar {
         e->{  FxAlerts.error(menuBar,  "エラー：" + e.getMessage()); }
       );  
   }
+
+  private void setting() {
+    jdepsDlgProvider.get().show(menuBar, null);
+  }
   
   private PkgNode load(Project project) throws IOException {
     List<String>list = project.sourcePaths().collect(Collectors.toList());   
@@ -90,7 +109,8 @@ public class FileMenuBar {
     case SRC: 
       return SrcTreeCreator.create(list);
     default:
-      return BinTreeCreator.create(null, list.stream());
+      //ystem.out.println("" + model.getJDepsPath().path);
+      return BinTreeCreator.create(model.getJDepsPath().path, list.stream());
     }
   }
   

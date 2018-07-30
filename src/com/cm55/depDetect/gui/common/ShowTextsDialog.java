@@ -1,6 +1,9 @@
 package com.cm55.depDetect.gui.common;
 
+import com.cm55.depDetect.gui.settings.*;
 import com.cm55.fx.*;
+import com.cm55.fx.winBounds.*;
+import com.cm55.miniSerial.*;
 
 import javafx.scene.*;
 
@@ -10,7 +13,9 @@ public class ShowTextsDialog extends FxCloseDlg<String, Object> {
   private FxTextArea textArea;
 
   public ShowTextsDialog() {
-    titledBorder = new FxTitledBorder("テキスト", textArea = new FxTextArea().setEditable(false));
+    titledBorder = new FxTitledBorder("テキスト", new FxJustBox(
+      textArea = new FxTextArea().setEditable(false)
+    ));
   }
 
   @Override
@@ -45,20 +50,20 @@ public class ShowTextsDialog extends FxCloseDlg<String, Object> {
     super.showAndWait(node, text);
   }
   
-//  private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;  
-//  
-//  @Override
-//  protected void onShowing() {
-//    windowBoundsPersister = new WindowBoundsPersister<>(dialog, new WindowBoundsSerializer<>(MyWindowBounds.class));
-//  }
-//  
-//  @Override 
-//  protected void onHiding() {
-//    windowBoundsPersister.finish();
-//    window.hide();
-//  }
-//  
-//  @Serialized(key=2222336655578215844L)
-//  public static class MyWindowBounds extends WindowBounds {
-//  }
+  private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;  
+  
+  @Override
+  protected void onShowing() {
+    windowBoundsPersister = new WindowBoundsPersister<>(dialog, new WindowBoundsSerializer<>(MyWindowBounds.class));
+  }
+  
+  @Override 
+  protected void onHiding() {
+    windowBoundsPersister.finish();
+    window.hide();
+  }
+  
+  @Serialized(key=986532124578981584L)
+  public static class MyWindowBounds extends WindowBounds {
+  }
 }

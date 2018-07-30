@@ -11,12 +11,21 @@ public class ShowClassDetail {
 
   @Inject private Model model;
   
-  public void show(FxNode parent, ClsNode node) {
-    String text = BinTreeDetail.getClassDetail(null, model.getProject().sourcePaths(), node);
-    if (text == null) {
-      FxAlerts.error(parent,  "見つかりません");
-      return;
+  public void show(FxNode parent, ClsNode clsNode) {
+    String text = "";
+    
+    if (model.getProject().getMode() == Mode.BIN) {
+      text = BinTreeDetail.getClassDetail(model.getJDepsPath().path, model.getProject().sourcePaths(), clsNode);
+      if (text == null) {
+        FxAlerts.error(parent,  "見つかりません");
+        return;
+      }
+    } else {
+      text = SrcTreeDetail.getClassDetail(model.getProject().sourcePaths(), clsNode);
     }
+    
     new ShowTextsDialog().show(parent, text);
   }
+  
+  
 }
