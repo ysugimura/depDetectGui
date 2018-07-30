@@ -17,8 +17,8 @@ public class ToClassesPanel implements FxNode {
   private ClassesPanel classesPanel;
   
   @Inject
-  public ToClassesPanel(CyclicModel guiEvent) {
-    classesPanel = new ClassesPanel();
+  public ToClassesPanel(CyclicModel guiEvent, ClassesPanel classesPanel) {
+    this.classesPanel = classesPanel;
     titledBorder = new FxTitledBorder("参照先クラス", new FxJustBox(classesPanel));
     guiEvent.bus.listen(CyclicModel.ToPkgEvent.class,  this::toPackageSelection);
   }

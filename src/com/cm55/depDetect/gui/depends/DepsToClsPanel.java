@@ -10,8 +10,8 @@ public class DepsToClsPanel implements FxNode {
   ClassesPanel classesPanel;
   
   @Inject
-  public DepsToClsPanel(DependModel dependModel) {
-    classesPanel = new ClassesPanel();
+  public DepsToClsPanel(DependModel dependModel, ClassesPanel classesPanel) {
+    this.classesPanel = classesPanel;
     titledBorder = new FxTitledBorder("ソースクラス", new FxJustBox(classesPanel));
     dependModel.bus.listen(DependModel.DepToPkgEvent.class,  this::dependToPkgChanged);
   }
