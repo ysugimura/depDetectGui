@@ -66,17 +66,14 @@ public class ProjectEditDialog extends FxOkCancelDlg<Project, Project> {
   }
   
   /** ソースパスの追加 */
-  @SuppressWarnings("restriction")
   private void add(FxButton b) {
-    File init = null;
-    if (pathRows.size() > 0) {
-      init = new File(pathRows.get(pathRows.size() - 1));
-      init = init.getParentFile();
-    }
     FxDirectoryChooser dc = new FxDirectoryChooser().setTitle(msg.get(Msg.classフォルダパス));
-    if (init != null) dc.setInitDir(init);
+    OpenedPath.Serializer serializer = new OpenedPath.Serializer();
+    OpenedPath openedPath = serializer.get();
+    if (openedPath.getPath() != null) dc.setInitDir(openedPath.getPath());
     File newPath = dc.showDialog(borderPane);    
     if (newPath == null) return;
+    serializer.put(new OpenedPath(newPath.getAbsolutePath()));
     pathTable.getRows().add(newPath.toString());
   }
 
