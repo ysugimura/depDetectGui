@@ -84,9 +84,9 @@ public class MainPanel {
         stage.setTitle(AppName.APPLICATION_NAME + " Ver. " + Version.version);
         return;
       }
-      String msg = e.focusPkg.getPath();
-      if (e.focusPruned) msg += "（刈）";
-      stage.setTitle(msg);
+      String title = e.focusPkg.getPath();
+      if (e.focusPruned) title += "（" + msg.get(Msg.刈) + "）";
+      stage.setTitle(title);
     });
     stage.show();    
   }
