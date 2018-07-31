@@ -267,4 +267,22 @@ public class Msg {
     "見つかりません",
     "Not found"
   );
+  
+  public static final Key クラス = new Key(
+    "Classes",
+    "クラス",
+    "Classes"
+  );
+  
+  public static final Key 刈 = new Key(
+    "Pruned",
+    "刈",
+    "Pruned"
+  );
+  
+  public static final Key 全パッケージ = new Key(
+    "AllPackages",
+    "全パッケージ",
+    "All packages"
+  );
 }

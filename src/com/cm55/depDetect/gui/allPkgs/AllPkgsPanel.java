@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import com.cm55.depDetect.*;
+import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.fx.*;
 import com.cm55.fx.FxTable.*;
@@ -27,11 +28,11 @@ public class AllPkgsPanel implements FxNode  {
   
   @SuppressWarnings("restriction")
   @Inject
-  public AllPkgsPanel(Model model) {    
+  public AllPkgsPanel(Model model, Msg msg) {    
     table = new FxTable<Row>();
     table.setColumns(
-      new FxTable.CheckColumn<Row>("刈",  r->r.pruned).setAlign(FxAlign.CENTER).setPrefWidth(30),
-      new FxTable.TextColumn<Row>("パッケージ", r->FixedValue.w(r.pkgNode.getPath())).setPrefWidth(400)
+      new FxTable.CheckColumn<Row>(msg.get(Msg.刈),  r->r.pruned).setAlign(FxAlign.CENTER).setPrefWidth(30),
+      new FxTable.TextColumn<Row>(msg.get(Msg.パッケージ), r->FixedValue.w(r.pkgNode.getPath())).setPrefWidth(400)
     );    
     rows = table.getRows();
     table.getSelectionModel().listenSelection(e-> {
@@ -46,7 +47,7 @@ public class AllPkgsPanel implements FxNode  {
       table,
       new FxButton("clear", this::clear)
     );
-    titledBorder = new FxTitledBorder("全パッケージ", new FxJustBox(borderPane));
+    titledBorder = new FxTitledBorder(msg.get(Msg.全パッケージ), new FxJustBox(borderPane));
   }
 
   /** 行選択時 */

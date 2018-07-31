@@ -4,6 +4,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import com.cm55.depDetect.*;
+import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.fx.*;
 import com.cm55.fx.FxTable.*;
 import com.google.inject.*;
@@ -19,12 +20,13 @@ public class ClassesPanel implements FxNode {
   Consumer<ClsNode>selectionCallback;
   @Inject private ShowClassDetail showClassDetail;
   
+  @Inject
   @SuppressWarnings("restriction")
-  public ClassesPanel() {
+  public ClassesPanel(Msg msg) {
     table = new FxTable<ClsNode>();
     table.setColumns(
-      new FxTable.ButtonColumn<ClsNode>("詳細",  "詳細", this::showDetail).setAlign(FxAlign.CENTER).setPrefWidth(50),
-      new FxTable.TextColumn<ClsNode>("クラス", t->FixedValue.w(t.getPath())).setPrefWidth(400)
+      new FxTable.ButtonColumn<ClsNode>(msg.get(Msg.詳細),  msg.get(Msg.詳細), this::showDetail).setAlign(FxAlign.CENTER).setPrefWidth(50),
+      new FxTable.TextColumn<ClsNode>(msg.get(Msg.クラス), t->FixedValue.w(t.getPath())).setPrefWidth(400)
     );
     rows = table.getRows();
     table.getSelectionModel().listenSelection(e-> {
