@@ -68,7 +68,7 @@ public class SystemMenuBar {
     }
     if (e.node == helpNode) {
       try {
-        Desktop.getDesktop().browse(new URI("http://www.gwtcenter.com/depDetectGui"));
+        Desktop.getDesktop().browse(new URI(msg.get(Msg.HelpURL)));
       } catch (Exception ex) {
         FxAlerts.error(menuBar, msg.get(Msg.ブラウザをオープンできません));
       }

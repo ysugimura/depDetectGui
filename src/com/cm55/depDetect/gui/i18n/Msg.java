@@ -285,4 +285,11 @@ public class Msg {
     "全パッケージ",
     "All packages"
   );
+  
+  public static final Key HelpURL = new Key(
+    "HelpURL",
+    "http://www.gwtcenter.com/depDetectGui",
+    "http://www.gwtcenter.com/depDetectGui-en"
+  );
 }
+
