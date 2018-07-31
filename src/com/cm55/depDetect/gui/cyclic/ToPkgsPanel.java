@@ -2,6 +2,7 @@ package com.cm55.depDetect.gui.cyclic;
 
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.common.*;
+import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.fx.*;
 import com.google.inject.*;
 
@@ -16,10 +17,11 @@ public class ToPkgsPanel implements FxNode {
   private PackagesPanel packagesPanel;
   
   @Inject
-  public ToPkgsPanel(CyclicModel cyclicModel) {
+  public ToPkgsPanel(CyclicModel cyclicModel, Msg msg, PackagesPanel packagesPanel) {
     cyclicModel.bus.listen(CyclicModel.FromPkgEvent.class, this::fromPkgSelection);
-    packagesPanel = new PackagesPanel().setSelectionCallback(node->cyclicModel.setToPkgNode(node));
-    titledBorder = new FxTitledBorder("循環依存先パッケージ一覧", new FxJustBox(packagesPanel));
+    this.packagesPanel = packagesPanel;
+    packagesPanel.setSelectionCallback(node->cyclicModel.setToPkgNode(node));
+    titledBorder = new FxTitledBorder(msg.get(Msg.循環依存先パッケージ一覧), new FxJustBox(packagesPanel));
   }
 
   void fromPkgSelection(CyclicModel.FromPkgEvent e) {

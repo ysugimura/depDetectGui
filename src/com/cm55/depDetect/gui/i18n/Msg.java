@@ -198,7 +198,7 @@ public class Msg {
   public static final Key 依存先元 = new Key(
     "DepsToFrom",
     "依存先・元",
-    "DepsTo/From"
+    "Deps-To/From"
    );
   
   public static final Key 外部参照 = new Key(
@@ -207,4 +207,64 @@ public class Msg {
     "External Refs"
   );
   
+  public static final Key 依存先パッケージ = new Key(
+    "DepsToPackages",
+    "依存先パッケージ",
+    "Deps-To packages"
+  );
+  
+  public static final Key 依存ソースクラス = new Key(
+    "DepsToSourceClass",
+    "依存ソースクラス",
+    "Deps-To source classes"
+  );
+  
+  public static final Key 詳細 = new Key(
+    "Detail",
+    "詳細",
+    "Detail"
+  );
+  
+  public static final Key 被依存先パッケージ = new Key(
+    "DepsFromPackages",
+    "被依存先パッケージ",
+    "Deps-From packages"
+  );
+  
+  public static final Key 循環依存先パッケージ一覧 = new Key(
+    "CyclicDepsToPackages",
+    "循環依存先パッケージ一覧",
+    "Cyclic deps-to packages"
+  );
+  
+  public static final Key 循環依存パッケージ一覧 = new Key(
+    "CyclicDepsPackages",
+    "循環依存パッケージ一覧",
+    "Cyclic deps packages"
+  );
+  
+  
+  public static final Key 参照先クラス = new Key(
+    "RefsToClasses",
+    "参照先クラス",
+    "Refs-To classes"
+  );
+  
+  public static final Key 参照元クラス = new Key(
+    "RefsFromClasses",
+    "参照元クラス",
+    "Refs-From classes"
+  );
+  
+  public static final Key テキスト = new Key(
+      "Text",
+      "テキスト",
+      "Text"
+  );
+  
+  public static final Key 見つかりません = new Key(
+    "NotFound",
+    "見つかりません",
+    "Not found"
+  );
 }

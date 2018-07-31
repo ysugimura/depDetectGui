@@ -1,6 +1,7 @@
 package com.cm55.depDetect.gui.depends;
 
 import com.cm55.depDetect.gui.common.*;
+import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.fx.*;
 import com.google.inject.*;
 
@@ -14,10 +15,11 @@ public class DepsToPkgPanel implements FxNode {
   PackagesPanel packagesPanel;
   
   @Inject
-  public DepsToPkgPanel(DependModel dependModel) {    
-    packagesPanel = new PackagesPanel();
+  public DepsToPkgPanel(DependModel dependModel, Msg msg, PackagesPanel packagesPanel) {    
+    this.packagesPanel = packagesPanel;
+    
     packagesPanel.setSelectionCallback(pkgNode->dependModel.setDepToPkg(pkgNode));
-    titledBorder = new FxTitledBorder("依存先パッケージ", new FxJustBox(packagesPanel));
+    titledBorder = new FxTitledBorder(msg.get(Msg.依存先パッケージ), new FxJustBox(packagesPanel));
     dependModel.bus.listen(DependModel.FocusPkgEvent.class, this::focusPkgChanged);
   }
 

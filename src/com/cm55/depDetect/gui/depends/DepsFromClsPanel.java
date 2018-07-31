@@ -2,6 +2,7 @@ package com.cm55.depDetect.gui.depends;
 
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.common.*;
+import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.fx.*;
 import com.google.inject.*;
 
@@ -11,9 +12,9 @@ public class DepsFromClsPanel implements FxNode {
   ClassesPanel classesPanel;
   
   @Inject
-  public DepsFromClsPanel(DependModel dependModel, ClassesPanel classesPanel) {
+  public DepsFromClsPanel(DependModel dependModel, ClassesPanel classesPanel, Msg msg) {
     this.classesPanel = classesPanel;
-    titledBorder = new FxTitledBorder("ソースクラス", new FxJustBox(classesPanel));
+    titledBorder = new FxTitledBorder(msg.get(Msg.依存ソースクラス), new FxJustBox(classesPanel));
     dependModel.bus.listen(DependModel.DepFromPkgEvent.class,  this::dependFromPkgChanged);
   }
   

@@ -5,8 +5,10 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import com.cm55.depDetect.*;
+import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.fx.*;
 import com.cm55.fx.FxTable.*;
+import com.google.inject.*;
 
 /**
  * パッケージ一覧を表示するパネル
@@ -18,10 +20,11 @@ public class PackagesPanel implements FxNode {
   FxObservableList<PkgNode>rows;
   Consumer<PkgNode>selectionCallback;
   
+  @Inject
   @SuppressWarnings("restriction")
-  public PackagesPanel() {
+  public PackagesPanel(Msg msg) {
     table = new FxTable<PkgNode>();
-    table.setColumns(new FxTable.TextColumn<PkgNode>("パッケージ", t->FixedValue.w(t.getPath())).setPrefWidth(400));
+    table.setColumns(new FxTable.TextColumn<PkgNode>(msg.get(Msg.パッケージ), t->FixedValue.w(t.getPath())).setPrefWidth(400));
     rows = table.getRows();
     table.getSelectionModel().listenSelection(e-> {
       PkgNode node = null;

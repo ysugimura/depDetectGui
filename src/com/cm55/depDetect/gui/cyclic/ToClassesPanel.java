@@ -2,6 +2,7 @@ package com.cm55.depDetect.gui.cyclic;
 
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.common.*;
+import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.fx.*;
 import com.google.inject.*;
 
@@ -17,9 +18,9 @@ public class ToClassesPanel implements FxNode {
   private ClassesPanel classesPanel;
   
   @Inject
-  public ToClassesPanel(CyclicModel guiEvent, ClassesPanel classesPanel) {
+  public ToClassesPanel(CyclicModel guiEvent, ClassesPanel classesPanel, Msg msg) {
     this.classesPanel = classesPanel;
-    titledBorder = new FxTitledBorder("参照先クラス", new FxJustBox(classesPanel));
+    titledBorder = new FxTitledBorder(msg.get(Msg.参照先クラス), new FxJustBox(classesPanel));
     guiEvent.bus.listen(CyclicModel.ToPkgEvent.class,  this::toPackageSelection);
   }
 

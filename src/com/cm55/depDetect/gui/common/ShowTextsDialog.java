@@ -1,9 +1,11 @@
 package com.cm55.depDetect.gui.common;
 
+import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.depDetect.gui.settings.*;
 import com.cm55.fx.*;
 import com.cm55.fx.winBounds.*;
 import com.cm55.miniSerial.*;
+import com.google.inject.*;
 
 import javafx.scene.*;
 
@@ -11,9 +13,12 @@ public class ShowTextsDialog extends FxCloseDlg<String, Object> {
 
   private FxTitledBorder titledBorder;
   private FxTextArea textArea;
-
-  public ShowTextsDialog() {
-    titledBorder = new FxTitledBorder("テキスト", new FxJustBox(
+  private Msg msg;
+  
+  @Inject
+  public ShowTextsDialog(Msg msg) {
+    this.msg = msg;
+    titledBorder = new FxTitledBorder(msg.get(Msg.テキスト), new FxJustBox(
       textArea = new FxTextArea().setEditable(false)
     ));
   }
@@ -27,7 +32,7 @@ public class ShowTextsDialog extends FxCloseDlg<String, Object> {
   
   @Override
   protected String getTitle() {
-    return "テキスト";
+    return msg.get(Msg.テキスト);
   }
 
   @Override

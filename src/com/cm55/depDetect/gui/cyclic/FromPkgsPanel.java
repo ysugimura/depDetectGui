@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.common.*;
+import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.fx.*;
 import com.google.inject.*;
@@ -23,19 +24,19 @@ public class FromPkgsPanel implements FxNode {
   
   @SuppressWarnings("restriction")
   @Inject
-  public FromPkgsPanel(Model model, CyclicModel cyclicModel) {
+  public FromPkgsPanel(Model model, CyclicModel cyclicModel, Msg msg, PackagesPanel packagesPanel) {
     this.model = model;
     this.cyclicModel = cyclicModel;
     
     model.bus.listen(ModelEvent.ProjectChanged.class, this::projectChanged);
     
-    packagesPanel = new PackagesPanel();
+    this.packagesPanel = packagesPanel;
     packagesPanel.getTable().getSelectionModel().listenSelection(e-> {
       int index = e.value;
       if (index < 0) return;
       cyclicModel.setFromPkgNode(packagesPanel.getRows().get(index));
     });
-    titledBorder = new FxTitledBorder("循環依存パッケージ一覧", new FxJustBox(packagesPanel.getTable()));
+    titledBorder = new FxTitledBorder(msg.get(Msg.循環依存パッケージ一覧), new FxJustBox(packagesPanel.getTable()));
   } 
   
   /**
