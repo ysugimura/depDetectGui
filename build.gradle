@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-version = '0.4.8'
+version = '0.4.9'
 
 def APP_NAME = 'depDetectGui'
 def FAT_JAR_BASE = 'release/depDetectGui'
