@@ -1,6 +1,7 @@
 package com.cm55.depDetect.gui.i18n;
 
 
+import java.util.*;
 import java.util.regex.*;
 
 import com.google.inject.*;
@@ -14,6 +15,19 @@ public class Msg {
   /** 言語種類を変更する */
   public void setLang(Lang lang) {
     this.lang = lang;
+  }
+  
+  /** 
+   * ロケールを取得して、メッセージ言語を変更。
+   * 現在は日本語と英語だけ。
+   */
+  public void ensureLocale() {
+    Locale locale = Locale.getDefault();
+    if (locale == Locale.JAPAN) {
+      setLang(Lang.JA);
+    } else {
+      setLang(Lang.EN);
+    }
   }
 
   /** 置換パターン */
@@ -97,5 +111,82 @@ public class Msg {
     "データベース読み込み中に以下のエラーを検出しました",
     "While reading database, the following error detected");
   
+  public static final Key ブラウザをオープンできません = new Key(
+    "CouldNotOpenBrowser",
+    "ブラウザをオープンできません",
+    "Could not open browser"
+   );
+  
+  public static final Key プロジェクトがありません = new Key(
+    "NoCurrentProject",
+    "現在のプロジェクトがありません",
+    "No Current Project openning"
+  );
+  
+  public static final Key ロード中お待ち下さい = new Key(
+    "LoadingWait",
+    "ロード中。お待ちください",
+    "Now loading, wait for a while"
+  );
+  
+  public static final Key エラー = new Key(
+    "Error",
+    "エラー：",
+    "Error:" 
+  );
+  
+  public static final Key パッケージ = new Key(
+    "Package",
+    "パッケージ",
+    "Package"
+  );
+  
+  public static final Key 外部パッケージ = new Key(
+    "ExternalPackage",
+    "外部パッケージ",
+    "External Package"
+  );
+  
+  public static final Key 新規 = new Key(
+    "New",
+    "新規",
+    "New"
+  );
+  
+  public static final Key 編集 = new Key(
+    "Edit",
+    "編集",
+    "Edit"
+  );
+  
+  public static final Key 削除 = new Key(
+    "Delete",
+    "削除",
+    "Delete"
+  );
+  
+  public static final Key モード = new Key(
+    "Mode",
+    "モード",
+    "Mode"
+  );
+  
+  public static final Key プロジェクト名 = new Key(
+    "ProjectName",
+    "プロジェクト名",
+    "Project Name"
+  );
+  
+  public static final Key パス数 = new Key(
+    "PathCount",
+    "パス数",
+    "Path Count"
+  );
+  
+  public static final Key このプロジェクトを削除します = new Key(
+    "DeletingThisProject",
+    "このプロジェクトを削除します",
+    "Deleting this project"
+  );
   
 }

@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.stream.*;
 
 import com.cm55.depDetect.*;
+import com.cm55.depDetect.gui.i18n.*;
+import com.cm55.depDetect.gui.i18n.Msg.Key;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.depDetect.gui.projects.*;
 import com.cm55.depDetect.impl.*;
@@ -21,6 +23,7 @@ import com.google.inject.*;
  */
 public class FileMenuBar {
 
+  @Inject private Msg msg;
   @Inject private Model model;
   @Inject private Provider<JDepsPathDialog>jdepsDlgProvider;
   
@@ -68,7 +71,7 @@ public class FileMenuBar {
       try {
         Desktop.getDesktop().browse(new URI("http://www.gwtcenter.com/depDetectGui"));
       } catch (Exception ex) {
-        FxAlerts.error(menuBar, "ブラウザをオープンできません");
+        FxAlerts.error(menuBar, msg.get(Msg.ブラウザをオープンできません));
       }
     }
   }
@@ -95,10 +98,10 @@ public class FileMenuBar {
   private void update() {
     Project project = model.getProject();
     if (project == null) {
-      FxAlerts.error(menuBar,  "プロジェクトがありません");
+      FxAlerts.error(menuBar, msg.get(Msg.プロジェクトがありません));
       return;
     }
-    loadingDialog = new FxProgressMessageDialog(menuBar, "ロード中。お待ちください");
+    loadingDialog = new FxProgressMessageDialog(menuBar, msg.get(Msg.ロード中お待ち下さい));
     loadingDialog.show(
         ()-> { 
           return load(project);
@@ -106,7 +109,7 @@ public class FileMenuBar {
         r->{
           model.update(r);
         },
-        e->{  FxAlerts.error(menuBar,  "エラー：" + e.getMessage()); }
+        e->{  FxAlerts.error(menuBar,  msg.get(Msg.エラー) + e.getMessage()); }
       );  
   }
 

@@ -3,6 +3,7 @@ package com.cm55.depDetect.gui.projects;
 import java.util.*;
 import java.util.stream.*;
 
+import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.depDetect.gui.resources.*;
 import com.cm55.depDetect.gui.settings.*;
@@ -26,6 +27,7 @@ import javafx.scene.layout.*;
 public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
 
   @Inject private Model model;
+  @Inject private Msg msg;
   FxBorderPane.Hor borderPane;
   FxTable<RowWrapper>projectTable;
   FxSingleSelectionModel<RowWrapper>selectionModel;
@@ -60,15 +62,15 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
       null,
       projectTable = new FxTable<>(),
       new FxBox.Ver(
-        addButton = new FxButton("新規", this::add),
-        editButton = new FxButton("編集", this::edit),
-        deleteButton = new FxButton("削除", this::delete)
+        addButton = new FxButton(msg.get(Msg.新規), this::add),
+        editButton = new FxButton(msg.get(Msg.編集), this::edit),
+        deleteButton = new FxButton(msg.get(Msg.削除), this::delete)
       ).setSpacing(5)
     );    
     projectTable.setColumns(
-      new FxTable.TextColumn<RowWrapper>("モード", t->t.mode).setPrefWidth(100),
-      new FxTable.TextColumn<RowWrapper>("プロジェクト名", t->t.name).setPrefWidth(200),
-      new FxTable.Column<RowWrapper, Number>("パス数", t->t.paths)
+      new FxTable.TextColumn<RowWrapper>(msg.get(Msg.モード), t->t.mode).setPrefWidth(100),
+      new FxTable.TextColumn<RowWrapper>(msg.get(Msg.プロジェクト名), t->t.name).setPrefWidth(200),
+      new FxTable.Column<RowWrapper, Number>(msg.get(Msg.パス数), t->t.paths)
     );
     selectionModel = projectTable.getSelectionModel();
     selectionModel.listenSelection(this::rowSelection);
@@ -104,7 +106,7 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
   private void delete(FxButton b) {
     RowWrapper p = projectTable.getSelection();
     if (p == null) return;
-    if (!FxAlerts.confirmYes(projectTable,  "このプロジェクトを削除します")) return;
+    if (!FxAlerts.confirmYes(projectTable, msg.get(Msg.このプロジェクトを削除します))) return;
     projectTable.getRows().remove(p);
   }
 

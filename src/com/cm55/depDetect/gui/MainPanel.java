@@ -1,6 +1,7 @@
 package com.cm55.depDetect.gui;
 
 import java.io.*;
+import java.util.*;
 
 import com.cm55.depDetect.gui.allPkgs.*;
 import com.cm55.depDetect.gui.cyclic.*;
@@ -40,6 +41,9 @@ public class MainPanel {
   
   public void execute(Parameters params, HostServices hostServices, FxStage stage)  {
 
+    msg.ensureLocale();
+    
+    
     // Uncatched exceptions
     Thread.currentThread().setUncaughtExceptionHandler((thread, th) -> {
       System.out.println(GetFullStackTrace.get(th));
