@@ -9,7 +9,6 @@ import java.util.stream.*;
 
 import com.cm55.depDetect.*;
 import com.cm55.depDetect.gui.i18n.*;
-import com.cm55.depDetect.gui.i18n.Msg.Key;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.depDetect.gui.projects.*;
 import com.cm55.depDetect.impl.*;
@@ -21,7 +20,7 @@ import com.google.inject.*;
  * ファイルメニューバー
  * @author ysugimura
  */
-public class FileMenuBar {
+public class SystemMenuBar {
 
   @Inject private Msg msg;
   @Inject private Model model;
@@ -34,7 +33,7 @@ public class FileMenuBar {
   TreeNode jdepsNode;
   TreeNode helpNode;
   
-  public FileMenuBar() {
+  public SystemMenuBar() {
     FxMenu<TreeNode> projectMenu = new FxMenu<TreeNode>(new NodeAdapter(), 
       new TreeNode("Project", 
         listNode = new TreeNode("List"),

@@ -189,4 +189,22 @@ public class Msg {
     "Deleting this project"
   );
   
+  public static final Key 循環依存 = new Key(
+    "CyclicDeps",
+    "循環依存",
+    "Cyclic Deps"
+  );
+  
+  public static final Key 依存先元 = new Key(
+    "DepsToFrom",
+    "依存先・元",
+    "DepsTo/From"
+   );
+  
+  public static final Key 外部参照 = new Key(
+    "ExternalRefs",
+    "外部参照",
+    "External Refs"
+  );
+  
 }

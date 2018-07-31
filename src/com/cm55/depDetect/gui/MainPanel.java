@@ -1,7 +1,6 @@
 package com.cm55.depDetect.gui;
 
 import java.io.*;
-import java.util.*;
 
 import com.cm55.depDetect.gui.allPkgs.*;
 import com.cm55.depDetect.gui.cyclic.*;
@@ -22,9 +21,13 @@ import javafx.application.Application.*;
 
 public class MainPanel {
 
+  /** メッセージ */
   @Inject private Msg msg;
-  @Inject private FileMenuBar fileMenuBar;
   
+  /** システムメニューバー */
+  @Inject private SystemMenuBar systemMenuBar;
+
+  /** データモデル */
   @Inject private Model model;
 
   /** 全パッケージ表示、枝刈りパネル */
@@ -42,8 +45,7 @@ public class MainPanel {
   public void execute(Parameters params, HostServices hostServices, FxStage stage)  {
 
     msg.ensureLocale();
-    
-    
+        
     // Uncatched exceptions
     Thread.currentThread().setUncaughtExceptionHandler((thread, th) -> {
       System.out.println(GetFullStackTrace.get(th));
@@ -55,12 +57,12 @@ public class MainPanel {
     FocusControlPolicy.setDefaultFocusable(false);
   
     FxTabPane tabPane = new FxTabPane();
-    tabPane.add("循環依存", cyclicPanels);
-    tabPane.add("依存先・元", dependPanels);
-    tabPane.add("外部参照",  unknownPanels);
+    tabPane.add(msg.get(Msg.循環依存), cyclicPanels);
+    tabPane.add(msg.get(Msg.依存先元), dependPanels);
+    tabPane.add(msg.get(Msg.外部参照),  unknownPanels);
     
     FxBorderPane.Ver borderPane = new FxBorderPane.Ver(
-      fileMenuBar.menuBar,
+      systemMenuBar.menuBar,
       new FxSplitPane.Hor(
         allPkgsPanel,        
         tabPane
@@ -76,10 +78,10 @@ public class MainPanel {
     windowBoundsPersister = new WindowBoundsPersister<>(
       stage, new WindowBoundsSerializer<MyWindowBounds>(MyWindowBounds.class)
     );
-    stage.setTitle("depDetectGui Ver. " + Version.version);
+    stage.setTitle(AppName.APPLICATION_NAME + " Ver. " + Version.version);
     model.bus.listen(ModelEvent.PkgFocused.class, e-> {
       if (e.isEmpty()) {
-        stage.setTitle("depDetectGui Ver. " + Version.version);
+        stage.setTitle(AppName.APPLICATION_NAME + " Ver. " + Version.version);
         return;
       }
       String msg = e.focusPkg.getPath();

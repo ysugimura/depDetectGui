@@ -1,7 +1,5 @@
 package com.cm55.depDetect.gui;
 
-import java.util.*;
-
 import javax.swing.*;
 
 import com.cm55.fx.*;
