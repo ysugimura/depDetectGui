@@ -1,7 +1,10 @@
 package com.cm55.depDetect.gui;
 
+import java.awt.*;
 import java.io.*;
+import java.net.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.*;
 
 import com.cm55.depDetect.*;
@@ -26,6 +29,7 @@ public class FileMenuBar {
   TreeNode listNode;
   TreeNode updateNode;
   TreeNode jdepsNode;
+  TreeNode helpNode;
   
   public FileMenuBar() {
     FxMenu<TreeNode> projectMenu = new FxMenu<TreeNode>(new NodeAdapter(), 
@@ -36,11 +40,12 @@ public class FileMenuBar {
     );
     projectMenu.listenSelection(this::projectMenuClicked);  
     FxMenu<TreeNode>settingMenu = new FxMenu<TreeNode>(new NodeAdapter(), 
-      new TreeNode("Setting",
-        jdepsNode = new TreeNode("jdeps")
+      new TreeNode("Others",
+        jdepsNode = new TreeNode("jdeps"),
+        helpNode = new TreeNode("HELP")
       )
     );
-    settingMenu.listenSelection(this::settingMenuClicked);
+    settingMenu.listenSelection(this::othersMenuClicked);
     menuBar = new FxMenuBar(projectMenu, settingMenu);    
 
   }
@@ -55,10 +60,16 @@ public class FileMenuBar {
     }
   }
   
-  void settingMenuClicked(SelectionEvent<TreeNode>e) {
-
+  void othersMenuClicked(SelectionEvent<TreeNode>e) {
     if (e.node == jdepsNode) {
       setting();
+    }
+    if (e.node == helpNode) {
+      try {
+        Desktop.getDesktop().browse(new URI("http://www.gwtcenter.com/depDetectGui"));
+      } catch (Exception ex) {
+        FxAlerts.error(menuBar, "ブラウザをオープンできません");
+      }
     }
   }
   
