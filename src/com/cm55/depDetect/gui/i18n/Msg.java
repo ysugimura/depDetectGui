@@ -286,6 +286,30 @@ public class Msg {
     "All packages"
   );
   
+  public static final Key classフォルダパス = new Key(
+    "ClassFolderPath",
+    ".classフォルダパス",
+    ".class Folder Path"
+  );
+  
+  public static final Key 追加 = new Key(
+    "Append",
+    "追加",
+    "Append"
+  );
+  
+  public static final Key プロジェクト編集 = new Key(
+    "EditProject",
+    "プロジェクト編集",
+    "Edit project"
+  );
+  
+  public static final Key このパスを削除します = new Key(
+    "DeletingThisPath",
+    "このパスを削除します",
+    "Deleting this path"
+  );
+  
   public static final Key HelpURL = new Key(
     "HelpURL",
     "http://www.gwtcenter.com/depDetectGui",

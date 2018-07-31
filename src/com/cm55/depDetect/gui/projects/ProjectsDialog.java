@@ -27,6 +27,8 @@ import javafx.scene.layout.*;
 public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
 
   @Inject private Model model;
+  @Inject private Provider<ProjectEditDialog>editDlgProvider;
+  
   private Msg msg;
   FxBorderPane.Hor borderPane;
   FxTable<RowWrapper>projectTable;
@@ -89,18 +91,20 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
   
   /** 新規作成 */
   private void add(FxButton b) {    
-    Project result = new ProjectEditDialog().showAndWait(projectTable, null);
+    Project result = editDlgProvider.get().showAndWait(projectTable, null);
     if (result == null) return;
     projectTable.getRows().add(new RowWrapper(result));
+    saveProjectList();
   }
   
   /** 編集 */
   private void edit(FxButton b) {    
     RowWrapper p = projectTable.getSelection();
     if (p == null) return;
-    Project result = new ProjectEditDialog().showAndWait(projectTable, p.getProject());
+    Project result = editDlgProvider.get().showAndWait(projectTable, p.getProject());
     if (result == null) return;
     p.setProject(result);
+    saveProjectList();
   }
   
   /** 削除 */
@@ -109,6 +113,7 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
     if (p == null) return;
     if (!FxAlerts.confirmYes(projectTable, msg.get(Msg.このプロジェクトを削除します))) return;
     projectTable.getRows().remove(p);
+    saveProjectList();
   }
 
   private void rowSelection(FxSingleSelection e) {
@@ -144,12 +149,14 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
     buttonsEnabled();
   }
 
-  @Override
-  protected Project getOutput() {   
+  private void saveProjectList() {
     List<Project>list = projectTable.getRows().stream().map(r->r.project).collect(Collectors.toList());
     ProjectList projectList = new ProjectList(list);   
     model.setProjectList(projectList);
-
+  }
+  
+  @Override
+  protected Project getOutput() {   
     RowWrapper row = projectTable.getSelection();
     if (row == null) return null;
     return row.project;

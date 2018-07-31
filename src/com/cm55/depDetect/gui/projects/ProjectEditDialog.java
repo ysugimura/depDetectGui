@@ -3,6 +3,7 @@ package com.cm55.depDetect.gui.projects;
 import java.io.*;
 import java.util.stream.*;
 
+import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.depDetect.gui.model.*;
 import com.cm55.depDetect.gui.resources.*;
 import com.cm55.depDetect.gui.settings.*;
@@ -10,6 +11,7 @@ import com.cm55.fx.*;
 import com.cm55.fx.FxTable.*;
 import com.cm55.fx.winBounds.*;
 import com.cm55.miniSerial.*;
+import com.google.inject.*;
 
 import javafx.scene.Node;
 
@@ -26,24 +28,27 @@ public class ProjectEditDialog extends FxOkCancelDlg<Project, Project> {
   FxSingleSelectionModel<String>selectionModel;
   FxButton addButton;
   FxButton deleteButton;
+  private Msg msg;  
   
-  public ProjectEditDialog() {
+  @Inject
+  public ProjectEditDialog(Msg msg) {
+    this.msg = msg;
     borderPane = new FxBorderPane.Ver(      
-      new FxTitledBorder("プロジェクト名称", new FxBox.Ver( 
+      new FxTitledBorder(msg.get(Msg.プロジェクト名), new FxBox.Ver( 
         nameField = new FxTextField().setFocusable(true)
       ).setSpacing(10)),      
-      new FxTitledBorder("ソースパス", new FxBorderPane.Hor(
+      new FxTitledBorder(msg.get(Msg.classフォルダパス), new FxBorderPane.Hor(
         null,
         pathTable = new FxTable<>(),
         new FxBox.Ver(
-          addButton = new FxButton("追加", this::add),
-          deleteButton = new FxButton("削除", this::delete)
+          addButton = new FxButton(msg.get(Msg.追加), this::add),
+          deleteButton = new FxButton(msg.get(Msg.削除), this::delete)
         )
       )),
       null
     );
     pathTable.setColumns(
-      new FxTable.TextColumn<String>("ソースパス", t->FixedValue.w(t)).setPrefWidth(400)
+      new FxTable.TextColumn<String>(msg.get(Msg.classフォルダパス), t->FixedValue.w(t)).setPrefWidth(400)
     );
     pathRows = pathTable.getRows();
     selectionModel = pathTable.getSelectionModel();  
@@ -68,7 +73,7 @@ public class ProjectEditDialog extends FxOkCancelDlg<Project, Project> {
       init = new File(pathRows.get(pathRows.size() - 1));
       init = init.getParentFile();
     }
-    FxDirectoryChooser dc = new FxDirectoryChooser().setTitle("ソースパスの指定");
+    FxDirectoryChooser dc = new FxDirectoryChooser().setTitle(msg.get(Msg.classフォルダパス));
     if (init != null) dc.setInitDir(init);
     File newPath = dc.showDialog(borderPane);    
     if (newPath == null) return;
@@ -79,7 +84,7 @@ public class ProjectEditDialog extends FxOkCancelDlg<Project, Project> {
   private void delete(FxButton b) {    
     int index = selectionModel.getSelectedIndex();
     if (index < 0) return;
-    if (!FxAlerts.confirmYes(pathTable,  "このパスを削除します")) return ;    
+    if (!FxAlerts.confirmYes(pathTable, msg.get(Msg.このパスを削除します))) return ;    
     pathTable.getRows().remove(index);
   }
   
@@ -89,7 +94,7 @@ public class ProjectEditDialog extends FxOkCancelDlg<Project, Project> {
   }
   @Override
   protected String getTitle() {
-    return "プロジェクト編集";
+    return msg.get(Msg.プロジェクト編集);
   }
 
   @Override
