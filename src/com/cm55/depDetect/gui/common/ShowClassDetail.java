@@ -14,16 +14,11 @@ public class ShowClassDetail {
   public void show(FxNode parent, ClsNode clsNode) {
     String text = "";
     
-    if (model.getProject().getMode() == Mode.BIN) {
-      text = BinTreeDetail.getClassDetail(model.getJDepsPath().path, model.getProject().sourcePaths(), clsNode);
-      if (text == null) {
-        FxAlerts.error(parent,  "見つかりません");
-        return;
-      }
-    } else {
-      text = SrcTreeDetail.getClassDetail(model.getProject().sourcePaths(), clsNode);
-    }
-    
+    text = BinTreeDetail.getClassDetail(model.getJDepsPath().path, model.getProject().sourcePaths(), clsNode);
+    if (text == null) {
+      FxAlerts.error(parent,  "見つかりません");
+      return;
+    }    
     new ShowTextsDialog().show(parent, text);
   }
   

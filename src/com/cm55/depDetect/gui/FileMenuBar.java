@@ -119,13 +119,7 @@ public class FileMenuBar {
   
   private PkgNode load(Project project) throws IOException {
     List<String>list = project.sourcePaths().collect(Collectors.toList());   
-    switch (project.getMode()) {
-    case SRC: 
-      return SrcTreeCreator.create(list);
-    default:
-      //ystem.out.println("" + model.getJDepsPath().path);
-      return BinTreeCreator.create(model.getJDepsPath().path, list.stream());
-    }
+    return BinTreeCreator.create(model.getJDepsPath().path, list.stream());    
   }
   
   public static class NodeAdapter implements Adapter<TreeNode> {

@@ -27,7 +27,7 @@ import javafx.scene.layout.*;
 public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
 
   @Inject private Model model;
-  @Inject private Msg msg;
+  private Msg msg;
   FxBorderPane.Hor borderPane;
   FxTable<RowWrapper>projectTable;
   FxSingleSelectionModel<RowWrapper>selectionModel;
@@ -38,7 +38,7 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
 
   public static class RowWrapper {
     Project project;
-    SimpleStringProperty mode = new SimpleStringProperty();
+
     SimpleStringProperty name = new SimpleStringProperty();
     SimpleIntegerProperty paths = new SimpleIntegerProperty();
     RowWrapper(Project project) {
@@ -47,7 +47,7 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
     
     void setProject(Project project) {
       this.project = project;
-      mode.set(project.getMode().desc);
+
       name.set(project.name);
       paths.set(project.sourcePaths.size());
     }
@@ -57,7 +57,9 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
     }    
   }
   
-  public ProjectsDialog() {
+  @Inject
+  public ProjectsDialog(Msg msg) {
+    this.msg = msg;
     borderPane = new FxBorderPane.Hor(
       null,
       projectTable = new FxTable<>(),
@@ -68,7 +70,6 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
       ).setSpacing(5)
     );    
     projectTable.setColumns(
-      new FxTable.TextColumn<RowWrapper>(msg.get(Msg.モード), t->t.mode).setPrefWidth(100),
       new FxTable.TextColumn<RowWrapper>(msg.get(Msg.プロジェクト名), t->t.name).setPrefWidth(200),
       new FxTable.Column<RowWrapper, Number>(msg.get(Msg.パス数), t->t.paths)
     );

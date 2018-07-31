@@ -24,15 +24,13 @@ public class ProjectEditDialog extends FxOkCancelDlg<Project, Project> {
   FxTable<String>pathTable;
   FxObservableList<String>pathRows;
   FxSingleSelectionModel<String>selectionModel;
-  FxRadioButtons modeButtons;
   FxButton addButton;
   FxButton deleteButton;
   
   public ProjectEditDialog() {
     borderPane = new FxBorderPane.Ver(      
-      new FxTitledBorder("プロジェクト名称/モード", new FxBox.Ver( 
-        nameField = new FxTextField().setFocusable(true),
-        modeButtons = new FxRadioButtons.Hor(Mode.descs)
+      new FxTitledBorder("プロジェクト名称", new FxBox.Ver( 
+        nameField = new FxTextField().setFocusable(true)
       ).setSpacing(10)),      
       new FxTitledBorder("ソースパス", new FxBorderPane.Hor(
         null,
@@ -104,11 +102,9 @@ public class ProjectEditDialog extends FxOkCancelDlg<Project, Project> {
     if (input == null) {
       nameField.setText("");
       pathTable.getRows().clear();    
-      modeButtons.select(1);
     } else {
       nameField.setText(input.name);
       pathTable.getRows().addAll(input.sourcePaths);
-      modeButtons.select(input.getMode().ordinal());
     }
     buttonsEnabled();
   }
@@ -116,7 +112,6 @@ public class ProjectEditDialog extends FxOkCancelDlg<Project, Project> {
   @Override
   protected Project getOutput() {   
     return new Project(
-      Mode.values()[modeButtons.getSelectionIndex()],
       nameField.getText(), 
       pathTable.getRows().stream().collect(Collectors.toList())
     );
