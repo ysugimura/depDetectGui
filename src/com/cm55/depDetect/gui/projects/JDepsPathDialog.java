@@ -4,8 +4,12 @@ import java.io.*;
 
 import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.depDetect.gui.model.*;
+import com.cm55.depDetect.gui.projects.ProjectEditDialog.*;
 import com.cm55.depDetect.gui.resources.*;
+import com.cm55.depDetect.gui.settings.*;
 import com.cm55.fx.*;
+import com.cm55.fx.winBounds.*;
+import com.cm55.miniSerial.*;
 import com.google.inject.*;
 
 import javafx.geometry.*;
@@ -90,4 +94,21 @@ public class JDepsPathDialog extends FxOkCancelDlg<Object, Object> {
     super.showAndWait(node, o);
   }
 
+  private WindowBoundsPersister<MyWindowBounds> windowBoundsPersister;  
+  
+  @Override
+  protected void onShowing() {
+    windowBoundsPersister = new WindowBoundsPersister<>(dialog, new WindowBoundsSerializer<>(MyWindowBounds.class));
+  }
+  
+  @Override 
+  protected void onHiding() {
+    windowBoundsPersister.finish();
+    window.hide();
+  }
+  
+  @Serialized(key=1133665595875452844L)
+  public static class MyWindowBounds extends WindowBounds {
+  }
+  
 }

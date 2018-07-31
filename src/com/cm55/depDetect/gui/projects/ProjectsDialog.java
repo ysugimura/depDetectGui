@@ -133,7 +133,7 @@ public class ProjectsDialog extends FxOkCancelDlg<Object, Project> {
 
   @Override
   protected String getTitle() {
-    return "プロジェクト一覧";
+    return msg.get(Msg.プロジェクト一覧);
   }
 
   @Override

@@ -2,6 +2,7 @@ package com.cm55.depDetect.gui;
 
 import javax.swing.*;
 
+import com.cm55.depDetect.gui.i18n.*;
 import com.cm55.fx.*;
 import com.google.inject.*;
 
@@ -27,6 +28,9 @@ public class AppMain extends Application {
     Parameters params = getParameters();
     
     Injector injector = Guice.createInjector();
+
+    // 他のクラスがロードされる以前に設定が必要
+    injector.getInstance(Msg.class).ensureLocale();
     
     // メニューパネルの実行
     injector.getInstance(MainPanel.class).execute(params, getHostServices(), new FxStage(stage));

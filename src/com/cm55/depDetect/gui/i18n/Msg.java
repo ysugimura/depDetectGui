@@ -322,6 +322,12 @@ public class Msg {
     "Set"
   );
   
+  public static final Key プロジェクト一覧 = new Key(
+    "ProjectList",
+    "プロジェクト一覧",
+    "Project list"
+  );
+  
   public static final Key HelpURL = new Key(
     "HelpURL",
     "http://www.gwtcenter.com/depDetectGui",

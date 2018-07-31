@@ -43,8 +43,6 @@ public class MainPanel {
   @Inject private UnknownPanels unknownPanels;  
   
   public void execute(Parameters params, HostServices hostServices, FxStage stage)  {
-
-    msg.ensureLocale();
         
     // Uncatched exceptions
     Thread.currentThread().setUncaughtExceptionHandler((thread, th) -> {
