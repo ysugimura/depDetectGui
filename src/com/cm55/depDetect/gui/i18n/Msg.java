@@ -310,6 +310,18 @@ public class Msg {
     "Deleting this path"
   );
   
+  public static final Key jdepsのパス = new Key(
+    "jdepsPath",
+    "jdepsのパス",
+    "jdeps path"
+  );
+  
+  public static final Key 設定 = new Key(
+    "Set",
+    "設定",
+    "Set"
+  );
+  
   public static final Key HelpURL = new Key(
     "HelpURL",
     "http://www.gwtcenter.com/depDetectGui",
