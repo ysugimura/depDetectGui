@@ -146,8 +146,31 @@ eclipse {
 
 compileJava.dependsOn(['versionSet'])
 
+task rel(dependsOn: 'relCopy') << {
+  execCmd("java.exe -jar ${DIRINDEX} ${GITHUB_DIST}")
+}
+
+task relCopy(type: Copy, dependsOn:'relJar') {
+  into GITHUB_DIST
+  from FAT_JAR_BASE + '-' + version + '.jar'
+}
+
+
+def execCmd(command) {
+  def proc = command.execute();
+  def stdout = new StringBuffer();
+  def stderr = new StringBuffer();
+  proc.consumeProcessOutputStream(stdout);
+  proc.consumeProcessErrorStream(stderr);
+  if (proc.waitFor() != 0) {
+    println stderr.toString();
+    throw new RuntimeException("Failed command: " + command);
+  }
+  stdout.toString()
+}
+
 // fat-jarを作成する。これはテスト用に作成するもので難読化とは無関係
-task rel(type: Jar, dependsOn:jar) {
+task relJar(type: Jar, dependsOn:jar) {
 
   // 出力先ファイル
   destinationDir = file('.')
@@ -172,3 +195,5 @@ task rel(type: Jar, dependsOn:jar) {
     exclude 'META-INF/services/**' 
   }
 }
+
+
