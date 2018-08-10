@@ -23,7 +23,7 @@ public class Msg {
    */
   public void ensureLocale() {
     Locale locale = Locale.getDefault();
-    if (locale == Locale.JAPAN) {
+    if (locale.getLanguage().equals("ja")) {
       setLang(Lang.JA);
     } else {
       setLang(Lang.EN);
