@@ -146,9 +146,9 @@ eclipse {
 
 compileJava.dependsOn(['versionSet'])
 
-task rel(dependsOn: 'relCopy') << {
+task rel(dependsOn: 'relCopy') { doLast  {
   execCmd("java.exe -jar ${DIRINDEX} ${GITHUB_DIST}")
-}
+}}
 
 task relCopy(type: Copy, dependsOn:'relJar') {
   into GITHUB_DIST
