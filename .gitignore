@@ -5,3 +5,17 @@
 /depDetectGui.jar
 /build/
 /release/
+
+# Covers JetBrains IDEs: IntelliJ Platform
+*.iml
+.idea/
+/out/
+*/out/
+
+# gradle wrapper resources
+gradlew
+gradlew.bat
+/gradle/wrapper/
+
+# macOS(OS X) Directory Information file
+.DS_Store
